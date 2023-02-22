@@ -1,0 +1,27 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: "lato", sans-serif;
+	background-color: #f7f7f7;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	letter-spacing: 1px;
+	text-align: center;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	align-items: center;
+	justify-content: center;
+}

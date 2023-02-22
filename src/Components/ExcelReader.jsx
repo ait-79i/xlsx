@@ -1,53 +1,29 @@
 import React, { useState } from 'react';
-import * as XLSX from 'xlsx';
+import DragAndDrop from './Drag&Drop/DragAndDrop';
 
-function readExcelFile(file) {
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsArrayBuffer(file);
-
-    fileReader.onload = (e) => {
-      const bufferArray = e.target.result;
-      const wb = XLSX.read(bufferArray, { type: "buffer" });
-      const wsname = wb.SheetNames[0];
-      const ws = wb.Sheets[wsname];
-      const data = XLSX.utils.sheet_to_json(ws);
-
-      resolve(data);
-    };
-
-    fileReader.onerror = (error) => {
-      reject(error);
-    };
-  });
-}
 
 function ExcelReader() {
+
   const [data, setData] = useState([]);
+  const culomns = Object.keys(data[0] === undefined ? [] : data[0]);
+  // const [culomns, setculomns] = useState(['culomn1', 'culomn2', 'culomn3', 'culomn4',])
+
+  //todo make table culomns updateable
+
+  // const keys = Object.keys(data[0] === undefined ? [] : data[0]);
+  // const [culomns, setculomns] = useState([...keys])
+  // console.log('keys : ', keys);
+  // console.log('culomns : ', culomns);
+
+  // console.log(data);
   const [key, setkey] = useState(null);
   const [selctedColons, setselctedColons] = useState([]);
   const [wrap, setWrap] = useState(false);
-
-  function handleFileUpload(e) {
-    const file = e.target.files[0];
-    readExcelFile(file)
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  const [nombreWrrap, setnombreWrrap] = useState(1);
 
 
 
-  // const handeleClick = (elm) => {
-  //   setNewData([...newData, elm])
-  // }
-
-  const keys = Object.keys(data[0] === undefined ? [] : data[0])
-
-
+  //checked boxes
   const handleChangeChk = (e) => {
     setselctedColons([...selctedColons, e.target.value])
   }
@@ -64,7 +40,7 @@ function ExcelReader() {
     for (const item of data) {
       var json = {}
       var obj = {}
-      for (const elm of keys) {
+      for (const elm of culomns) {
 
         if (!selctedColons.includes(elm)) {
           json[elm] = item[elm]
@@ -72,38 +48,44 @@ function ExcelReader() {
           obj[elm] = item[elm]
         }
       }
-      json[key] = obj
+      if (key !== null) json[key] = obj
       arr.push(json)
     }
     console.log(arr);
   }
 
   // change culomns value
-  const changeCulomn = (e) => {
+  const updateCulomns = (e) => {
 
+    // setculomns([...culomns, culomns[e.target.id] = e.target.value])
   }
 
 
   const sendRequest = () => {
 
-    //     fetch('https://jsonplaceholder.typicode.com/posts', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     title: 'foo',
-    //     body: 'bar',
-    //     userId: 1,
-    //   }),
-    //   headers: {
-    //     'Content-type': 'application/json; charset=UTF-8',
-    //   },
-    // })
 
+  }
+
+
+  const items = [];
+  for (let i = 0; i < nombreWrrap; i++) {
+    items.push(<div key={i} className='wrapper'>
+      <input type="text" name="key" id="key" onChange={(e) => keyHandle(e)} />
+      {culomns.map((key, index) =>
+        <div key={index}>
+
+          <input type="checkbox" id={key} value={key} onChange={handleChangeChk} />
+          <label htmlFor={key}>{key}</label>
+
+        </div>)}
+    </div>);
   }
 
 
   return (
     <div>
-      <input type="file" onChange={handleFileUpload} />
+      <DragAndDrop setData={setData} />
+
       <div>
         {data.length > 0
           &&
@@ -111,8 +93,8 @@ function ExcelReader() {
             <table border='1'>
               <thead>
                 <tr>
-                  {keys.map((key, index) => <th key={index}>
-                    <input id={index} type='text' value={key} onChange={(e) => changeCulomn(e)} /></th>)}
+                  {culomns.map((key, index) => <th key={index}>
+                    <input id={index} type='text' value={key} onChange={(e) => updateCulomns(e)} /></th>)}
 
                 </tr>
               </thead>
@@ -121,7 +103,7 @@ function ExcelReader() {
                   data.map((item, index) => (
                     <tr key={index}>
 
-                      {keys.map((value, index) => <td key={index}>{item[value]}</td>)}
+                      {culomns.map((value, index) => <td key={index}>{item[value]}</td>)}
 
                     </tr>
                   ))
@@ -134,7 +116,6 @@ function ExcelReader() {
               wrap
             </button>
             <button onClick={generateJsonFile}>Generate</button>
-
             <button onClick={sendRequest}>Send Request</button>
 
           </div>
@@ -144,15 +125,9 @@ function ExcelReader() {
 
       {wrap &&
         <div>
-          <input type="text" name="key" id="key" onChange={(e) => keyHandle(e)} />
-          {keys.map((key, index) =>
-            <div key={index}>
+          <input type="number" name="key" id="key" onChange={(e) => setnombreWrrap(e.target.value)} />
 
-              <input type="checkbox" id={key} value={key} onChange={handleChangeChk} />
-              <label htmlFor={key}>{key}</label>
-
-            </div>)}
-
+          <div style={{ display: 'flex' }}>{items}</div>
 
         </div>
       }
