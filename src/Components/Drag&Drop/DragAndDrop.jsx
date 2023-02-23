@@ -1,8 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 import './style.css';
-
-
 
 
 function readExcelFile(file) {
@@ -28,13 +26,16 @@ function readExcelFile(file) {
 
 const DragAndDrop = ({ setData }) => {
 
+  const [error, seterror] = useState([])
+
   const inputRef = useRef();
-
-
 
   function handleFileUpload(e) {
 
     const file = e.target.files[0];
+
+    // if (validateFile(file.name)) {
+
     readExcelFile(file)
       .then((data) => {
         setData(data);
@@ -42,6 +43,7 @@ const DragAndDrop = ({ setData }) => {
       .catch((error) => {
         console.log(error);
       });
+    // }
   }
 
   const handleDragOver = (e) => {
@@ -60,24 +62,38 @@ const DragAndDrop = ({ setData }) => {
       });
 
   }
+
+
+  // const validateFile = (fname) => {
+
+  //   var re = /(\.xlsx|\.xlsm|\.xlsb|\.xls|\.xlam)$/i;
+  //   if (!re.exec(fname)) {
+  //     seterror("File extension not supported!")
+  //     return false;
+  //   }
+  //   return true;
+
+  // }
   return (
-    <div className='dropzone'
-      onDragOver={(e) => handleDragOver(e)}
-      onDrop={(e) => handleDrop(e)}
-    >
-      <h4>Drag and Drop your excel file</h4>
-      <h4>Or</h4>
-      <input
-        type="file"
-        onChange={handleFileUpload}
-        hidden
-        ref={inputRef}
-      />
-      <button
-        onClick={() => inputRef.current.click()}
-      >Select file</button>
+    <div>
+      <div className='dropzone'
+        onDragOver={(e) => handleDragOver(e)}
+        onDrop={(e) => handleDrop(e)}
+      >
+        <h4>Drag and Drop your excel file</h4>
+        <h4>Or</h4>
+        <input
+          type="file"
+          onChange={handleFileUpload}
+          hidden
+          ref={inputRef}
+        />
+        <button
+          onClick={() => inputRef.current.click()}
+        >Select file</button>
+      </div>
 
-
+      {error !== '' ? <small>{error}</small> : null}
     </div>
   )
 }

@@ -1,0 +1,65 @@
+.content-table {
+	border-collapse: collapse;
+	margin: 15px 0;
+	font-size: 0.9rem;
+	min-width: 900px;
+	border-radius: 5px 5px 0 0;
+	/* overflow: hidden; */
+}
+
+.content-table thead tr {
+	background-color: #009879;
+	color: #ffffff;
+	text-align: left;
+	font-weight: bold;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table th,
+.content-table td {
+	padding: 12px 15px;
+}
+
+.content-table thead tr {
+	border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+	background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+	border-bottom: 2px solid #009879;
+}
+
+/*  ==========================scroll styling ====================== */
+
+.scroll-div {
+	width: 70%;
+	height: 400px;
+	overflow: hidden;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
+.save-col-name {
+	height: 28px;
+	width: 28px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.col-name-div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.enter-col-name {
+	height: 28px;
+}
+
+.fa-sharp {
+	color: #009879;
+}

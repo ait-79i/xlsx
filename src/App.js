@@ -1,10 +1,10 @@
 import "./App.css";
-import ExcelReader from "./Components/ExcelReader";
+import MainPage from "./Components/MainPage";
 
 function App() {
 	return (
 		<div className="App">
-			<ExcelReader />
+			<MainPage />
 		</div>
 	);
 }
