@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
 
 const Culomn = ({ index, name, handleChangeColumns }) => {
 
+  const [columnName, setColumnName] = useState('')
+  useEffect(() => {
+    setColumnName(name)
+  }, [name])
+
+
+
   const [update, setupdate] = useState(false)
-  const [columnName, setColumnName] = useState(name)
   //!need to install packages
   // < FontAwesomeIcon icon = "fa-sharp fa-solid fa-check" />
 
