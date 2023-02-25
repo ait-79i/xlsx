@@ -1,16 +1,6 @@
-import React, { useState } from 'react'
 import Culomn from './Culomn'
 import './style.css'
-const DisplayTable = ({ data, culomns }) => {
-
-
-
-  const updateColumnsName = (e, index) => {
-
-    // if (e.target.id === index) {
-    //   setupdate(true)
-    // }
-  }
+const DisplayTable = ({ data, culomns, handleChangeColumns }) => {
 
   return (
     <div className='scroll-div'>
@@ -22,7 +12,7 @@ const DisplayTable = ({ data, culomns }) => {
                 key={index}
                 index={index}
                 name={name}
-                updateColumnsName={updateColumnsName}
+                handleChangeColumns={handleChangeColumns}
 
               />
             )}
