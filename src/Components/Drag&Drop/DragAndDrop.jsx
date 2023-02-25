@@ -80,15 +80,18 @@ const DragAndDrop = ({ setData }) => {
         onDragOver={(e) => handleDragOver(e)}
         onDrop={(e) => handleDrop(e)}
       >
-        <h4>Drag and Drop your excel file</h4>
-        <h4>Or</h4>
+        <span className="text">
+          Drag and Drop your excel file
+        </span>
+        <span className="text or">Or</span>
+        <span className="text">select a file to upload from your computer</span>
         <input
           type="file"
           onChange={handleFileUpload}
           hidden
           ref={inputRef}
         />
-        <button
+        <button className='file-btn'
           onClick={() => inputRef.current.click()}
         >Select file</button>
       </div>

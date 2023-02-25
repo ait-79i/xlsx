@@ -114,7 +114,12 @@ function MainPage() {
         {data.length > 0
           &&
           <div>
+            {
+              jsondisplay ? <DisplayJson data={jsonFile[0]} /> : null
+            }
             <div className='' style={{ display: 'flex' }}>
+
+
 
               <DisplayTable data={data} culomns={xlsxculomns} handleChangeColumns={handleChangeColumns} />
 
@@ -161,9 +166,6 @@ function MainPage() {
               </div>
             </div>
 
-            {
-              jsondisplay ? <DisplayJson data={jsonFile[0]} /> : null
-            }
 
 
 

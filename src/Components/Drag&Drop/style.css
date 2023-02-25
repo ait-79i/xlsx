@@ -3,13 +3,26 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 200px;
-	border: 4px dashed rgb(117, 112, 112);
+	height: 250px;
 	padding: 10px;
-	background: lightblue;
+	background: #011638;
 }
 
-button {
+button.file-btn {
+	margin-top: 20px;
+	font-weight: bold;
+	color: white;
+	width: 200px;
 	padding: 12px;
 	font-size: medium;
+	background: #4a4e69;
+	border: 1px dashed rgb(117, 112, 112);
+}
+
+.text {
+	color: azure;
+	font-family: cursive;
+}
+.or {
+	margin: 10px 0;
 }
