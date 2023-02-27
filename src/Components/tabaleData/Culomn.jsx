@@ -16,10 +16,6 @@ const Culomn = ({ index, name, handleChangeColumns }) => {
     handleChangeColumns(index, columnName)
     setupdate(false)
   }
-  //!need to install packages
-  // < FontAwesomeIcon icon = "fa-sharp fa-solid fa-check" />
-
-
 
   return (
     <th onDoubleClick={() => { setupdate(true) }}>
