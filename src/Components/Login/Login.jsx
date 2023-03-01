@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import * as Components from './LoginStyleComponents';
 
-function Login({ Customers, setLogged, setAdmin, setUsernm }) {
+function Login({ setLogged, setUsernm }) {
 
   const redirect = useNavigate();
   const [signIn, setSignIn] = useState(true);
 
 
   // #region //! create Local Storage
-  const createLocalStorage = () => {
-    localStorage.setItem("login", 0);
-    localStorage.setItem("admin", 0);
-    localStorage.setItem("username", null);
+  // const createLocalStorage = () => {
+  //   localStorage.setItem("login", 0);
+  //   localStorage.setItem("admin", 0);
+  //   localStorage.setItem("username", null);
 
-  }
+  // }
   // #endregion
 
 
@@ -52,44 +52,44 @@ function Login({ Customers, setLogged, setAdmin, setUsernm }) {
 
   // #region //! Modify local storage Information with  saveToLocalStorage function
 
-  const saveToLocalStorage = (customer) => {
+  // const saveToLocalStorage = (customer) => {
 
-    // //* for login
-    localStorage.setItem("login", 1)
-    //! Change Login Value in App State 
-    setLogged(localStorage.getItem("login"))
-
-
-    localStorage.setItem("admin", customer.admin)
-    setAdmin(parseFloat(localStorage.getItem("admin")))
+  //   // //* for login
+  //   localStorage.setItem("login", 1)
+  //   //! Change Login Value in App State 
+  //   setLogged(localStorage.getItem("login"))
 
 
-    localStorage.setItem("username", customer.username)
-    setUsernm(localStorage.getItem("username"))
-  }
+  //   localStorage.setItem("admin", customer.admin)
+  //   setAdmin(parseFloat(localStorage.getItem("admin")))
+
+
+  //   localStorage.setItem("username", customer.username)
+  //   setUsernm(localStorage.getItem("username"))
+  // }
   // #endregion
 
 
   // #region //! Check Existanse 
-  const chekExistance = (user) => {
+  // const chekExistance = (user) => {
 
-    const customer = Customers.find((item) => item.email === user.email && item.pawd === user.password)
+  //   const customer = Customers.find((item) => item.email === user.email && item.pawd === user.password)
 
-    if (customer) {
+  //   if (customer) {
 
-      saveToLocalStorage(customer)
-      setUsernm(localStorage.getItem("username"))
+  //     saveToLocalStorage(customer)
+  //     setUsernm(localStorage.getItem("username"))
 
-      redirect("/")
-    } else {
-      redirect("/")
-      setLogError(true)
-    }
+  //     redirect("/")
+  //   } else {
+  //     redirect("/")
+  //     setLogError(true)
+  //   }
 
-  }
+  // }
   // #endregion
 
-  
+
   // #region //!Get Sign Up inputs values
   const [data, setdata] = useState({ username: "", email: '', pawd: '' })
 
@@ -141,11 +141,11 @@ function Login({ Customers, setLogged, setAdmin, setUsernm }) {
         <Components.Container >
           <Components.SignUpContainer signinIn={signIn}>
             <Components.Form onSubmit={(e) => {
-              createLocalStorage()
-              e.preventDefault();
-              AddCustomer(data)
+              // createLocalStorage()
+              // e.preventDefault();
+              // AddCustomer(data)
 
-              saveToLocalStorage({ admin: 0, username: data.username })
+              // saveToLocalStorage({ admin: 0, username: data.username })
 
             }}>
               <Components.Title>Create Account</Components.Title>
@@ -165,9 +165,9 @@ function Login({ Customers, setLogged, setAdmin, setUsernm }) {
           <Components.SignInContainer signinIn={signIn}>
             <Components.Form
               onSubmit={(e) => {
-                e.preventDefault()
-                createLocalStorage()
-                chekExistance(user)
+                // e.preventDefault()
+                // createLocalStorage()
+                // chekExistance(user)
               }}
             >
               <Components.Title>Sign in</Components.Title>

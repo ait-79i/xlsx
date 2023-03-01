@@ -142,7 +142,7 @@ function MainPage() {
       }
     }
     setJsonFile(arr_copy)
-    uncheckCheckboxes()
+    // uncheckCheckboxes()
   }
 
 
