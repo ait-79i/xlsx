@@ -6,10 +6,8 @@ const DisplayJson = ({ data }) => {
   return (
     <div >
       <SyntaxHighlighter language="javascript" style={darcula} >
-        {`- Each item in your JSON file looks like :
-        
-          ${JSON.stringify(data)} 
-          
+        {`- Each item in your JSON file looks like :        
+          ${JSON.stringify(data, null, 4)}          
         `}
       </SyntaxHighlighter>
     </div>
