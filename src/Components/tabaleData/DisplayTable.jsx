@@ -1,4 +1,4 @@
-import Culomn from './Culomn'
+import Column from './Column'
 import './style.css'
 const DisplayTable = ({ data, culomns, handleChangeColumns }) => {
 
@@ -8,11 +8,12 @@ const DisplayTable = ({ data, culomns, handleChangeColumns }) => {
         <thead>
           <tr>
             {culomns.map((name, index) =>
-              <Culomn
+              <Column
                 key={index}
                 index={index}
                 name={name}
                 handleChangeColumns={handleChangeColumns}
+
 
               />
             )}

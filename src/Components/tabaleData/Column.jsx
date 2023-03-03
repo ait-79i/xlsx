@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const Culomn = ({ index, name, handleChangeColumns }) => {
+const Column = ({ index, name, handleChangeColumns }) => {
 
 
   const [columnName, setColumnName] = useState('')
@@ -13,6 +13,7 @@ const Culomn = ({ index, name, handleChangeColumns }) => {
 
 
   const SaveColumnName = () => {
+
     handleChangeColumns(index, columnName)
     setupdate(false)
   }
@@ -38,4 +39,4 @@ const Culomn = ({ index, name, handleChangeColumns }) => {
   )
 }
 
-export default Culomn
+export default Column

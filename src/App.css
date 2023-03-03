@@ -13,11 +13,11 @@ body {
 .wrapper {
 	background-color: #fff;
 	margin: 10px 15px;
-	width: 200px;
+	width: 450px;
 	padding: 10px;
 	box-shadow: 0 15px 35px rgba(50, 50, 91, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
 }
-
+/* mm 
 .holder input[type="checkbox"] {
 	-webkit-appearance: none;
 	appearance: none;
@@ -28,7 +28,7 @@ body {
 	padding-left: 8px;
 	cursor: pointer;
 	display: inline-block;
-	/* color: #666; */
+	
 	line-height: 20px;
 }
 
@@ -53,7 +53,7 @@ body {
 	top: -4px;
 	left: -2px;
 }
-
+*/
 .wrapper input[type="text"] {
 	padding: 8px;
 	margin-bottom: 8px;
@@ -91,26 +91,28 @@ body {
 	color: red;
 	font-weight: bold;
 }
+/* <--------  Login  ------->  */
 
-/*  POPUP   */
-
-.popup-content {
-	margin: auto;
-	background: rgb(255, 255, 255);
-	width: 50%;
-	padding: 5px;
-}
-.popup-arrow {
-	color: rgb(255, 255, 255);
-}
-[role="tooltip"].popup-content {
-	width: 200px;
-	box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
+.cc_flex {
+	margin-top: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.popup-overlay {
-	background: rgba(0, 0, 0, 0.5);
+/* PopUp */
+
+.fa-reply {
+	height: 100%;
+	width: 100%;
+	color: rgb(39, 39, 116);
 }
-[data-popup="tooltip"].popup-overlay {
+
+.btn-x {
+	margin-left: 5px;
+	height: 18px;
+	width: 18px;
 	background: transparent;
+	border: transparent;
+	cursor: pointer;
 }

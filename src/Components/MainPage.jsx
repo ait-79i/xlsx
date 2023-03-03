@@ -1,8 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import DragAndDrop from './Drag&Drop/DragAndDrop';
-import DisplayJson from './Popup/DisplayJson';
+import PopUp from './Popup/PopUp';
 import DisplayTable from './tabaleData/DisplayTable';
+import JsonStructure from './JsonStructure/JsonStructure';
+// import SelectComponent from './JsonStructure/SelectComponent';
+import './style.css'
+import DisplayJson from './Popup/DisplayJson';
 
 function MainPage() {
 
@@ -10,6 +14,9 @@ function MainPage() {
   const [error, setError] = useState([]);
   const xlsxculomns = Object.keys(data[0] === undefined ? [] : data[0]);
   const [jsonFile, setJsonFile] = useState([])
+  const [culomns, setCulomns] = useState([])
+  const [key, setkey] = useState('');
+  const [selctedColumns, setselctedColumns] = useState([]);
 
 
   useEffect(() => {
@@ -18,20 +25,15 @@ function MainPage() {
   }, [jsonFile])
 
 
+
   useEffect(() => {
     setkey('')
     setCulomns(xlsxculomns)
     setJsonFile([...data])
-    setjsondisplay(false)
     setselctedColumns([])
   }, [data])
 
 
-
-  const [culomns, setCulomns] = useState([])
-  const [key, setkey] = useState('');
-  const [selctedColumns, setselctedColumns] = useState([]);
-  const [jsondisplay, setjsondisplay] = useState(false)
 
 
 
@@ -45,11 +47,6 @@ function MainPage() {
     }
   }
 
-  const handleChangeColumns = (index, columnName) => {
-    const columns_copy = [...culomns]
-    columns_copy.splice(index, 1, columnName)
-    setCulomns(columns_copy)
-  }
 
   const uncheckCheckboxes = () => {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -60,39 +57,45 @@ function MainPage() {
     });
   }
 
-
+  //-------------gnerate button ---------------//
   const generateJsonFile = () => {
     if (valide(key)) {
       const Json = newJson(jsonFile, culomns)
       setJsonFile(Json)
-      setjsondisplay(true)
       setkey('')
       uncheckCheckboxes()
     }
-
-
   }
 
-  //* newJson genereate a new json file  from a
+  // <----------- ^^ modify excel Cols ----------------->
+
+  //! ---------- M1 ------------  
+  const handleChangeColumns = (index, columnName) => {
+    const columns_copy = [...culomns]
+    columns_copy.splice(index, 1, columnName)
+    setCulomns(columns_copy)
+  }
+
+  //* newJson genereate a new json file  with new cols 
   const newJson = (data, culomns) => {
-
     var jsons_Arr = []
-
     for (const item of data) {
       var json = {}
       var obj = {}
       for (const elm of culomns) {
-
         if (!selctedColumns.includes(elm)) {
+
           item[elm] !== undefined
             ? json[elm] = item[elm]
             : json[elm] = item[xlsxculomns[culomns.indexOf(elm)]]
+
 
         } else {
           item[elm] !== undefined
             ? obj[elm] = item[elm]
             : obj[elm] = item[xlsxculomns[culomns.indexOf(elm)]]
         }
+
       }
       if (key.trim() !== '') json[key.trim()] = { ...json[key.trim()], ...obj }
       jsons_Arr.push(json)
@@ -102,15 +105,30 @@ function MainPage() {
 
 
 
-  const sendRequest = async () => {
-    await axios.post('http://localhost:5000/api/xlsxdata', jsonFile).then((res) => {
-      console.log(res.data);
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
+  //!  ------------ M2 -----------
 
 
+  // function updateNestedObjectKeys(keyMap) {
+  //   var data_copy = []
+  //   for (const obj of jsonFile) {
+  //     Object.keys(obj).forEach((key) => {
+  //       if (keyMap.hasOwnProperty(key)) {
+  //         obj[keyMap[key]] = obj[key];
+  //         delete obj[key];
+  //       }
+  //       if (typeof obj[key] === 'object') {
+  //         updateNestedObjectKeys(obj[key], keyMap);
+  //       }
+  //     });
+  //     data_copy = [...data_copy, obj]
+  //   }
+  //   setJsonFile(data_copy)
+  // }
+
+
+
+
+  // -------------- validatin --------------
   const valide = (text) => {
     if ((text.trim() === '' && selctedColumns.length !== 0) || (!isNaN(text) && selctedColumns.length !== 0) || (selctedColumns.length === 0 && text.trim() !== '')) {
       var errs = []
@@ -132,22 +150,79 @@ function MainPage() {
   }
 
 
-  const updateJsonFile = (name, elm) => {
-    const arr_copy = [...jsonFile]
-    for (const item of arr_copy) {
-      item[elm] = item[name][elm];
-      delete item[name][elm];
-      if (JSON.stringify(item[name]) === '{}') {
-        delete item[name];
+  // ------------------ unstage keys  under test ---------------------
+
+  //---------- remove key function ----------//
+  var value = '';
+  function deleteKey(obj, keyToDelete) {
+
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        if (prop === keyToDelete) {
+          // console.log(obj[prop]);
+          value = obj[prop]
+          delete obj[prop];
+        } else if (typeof obj[prop] === 'object') {
+          deleteKey(obj[prop], keyToDelete);
+        }
+        if (JSON.stringify(obj[prop]) === '{}') {
+          delete obj[prop];
+        }
       }
     }
-    setJsonFile(arr_copy)
-    // uncheckCheckboxes()
+
   }
+
+  //-------------- generate a new json file ----------------//
+  const updateJsonFile = (elm) => {
+    const arr_copy = [...jsonFile]
+    for (const obj of arr_copy) {
+      // remove a spicify key
+      deleteKey(obj, elm)
+      //add The same key and its value to the top level of each Object
+      obj[elm] = value;
+    }
+    setJsonFile(arr_copy)
+    uncheckCheckboxes()
+  }
+
+
+  //------------ PopUp state---------
+  const [openModal, setOpenModal] = useState(false);
+
+
+  // <------------------ Send Data ------------------>
+  const sendRequest = async () => {
+    await axios.post('http://localhost:5000/api/xlsxdata', jsonFile).then((res) => {
+      console.log(res.data);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+
+
+  // --------------------
+
+  // const [options, setoptions] = useState([
+  //   { key: 'name', value: "name" },
+  //   { key: 'data', value: "data" },
+  //   { key: 'school', value: "school" },
+  //   { key: 'work', value: "work" }
+  // ])
+
+  // const [selectedOption, setSelectedOption] = useState("");
 
 
   return (
     <div>
+      {/* ----------------------- PopUp  Component------------- */}
+
+      <PopUp
+        data={jsonFile[0]}
+        open={openModal}
+        onClose={() => setOpenModal(false)} />
+
 
       <DragAndDrop setData={setData} />
 
@@ -155,65 +230,87 @@ function MainPage() {
         {data.length > 0
           &&
           <div>
-            {
-              jsondisplay ? <DisplayJson data={jsonFile[0]} /> : null
-            }
             <div className='' style={{ display: 'flex' }}>
 
-              <DisplayTable data={data} culomns={xlsxculomns} handleChangeColumns={handleChangeColumns} />
+              <DisplayJson data={jsonFile[0]} />
+
+              {/* <DisplayTable data={data} culomns={xlsxculomns} handleChangeColumns={handleChangeColumns} /> */}
+
+
               <div>
                 <div className='wrapper'>
-                  <input
-                    type="text"
-                    value={key}
-                    onChange={(e) => { setkey(e.target.value) }} placeholder=' Give a key to these values ...' />
+                  <div >
+                    {/*// todo */}
+                    {/* <div className="App">
+
+                      <SelectComponent
+                        options={options}
+                        onChange={(item) => {
+                          setkey(item)
+                          setSelectedOption(item)
+                          setoptions([...options, { key: key, value: key }])
+                        }}
+                        selectedKey={selectedOption}
+                        placeholder={"type to search"}
+                      />
+                      <p>selected option: {key}</p>
+                    </div> */}
+
+                    <input
+                      type="text"
+                      value={key}
+                      onChange={(e) => { setkey(e.target.value) }} placeholder=' Give a key to these values ...' />
+                  </div>
+
+
                   {error.length !== 0 && <div className='error'>{error.join('\n')}</div>}
+
+                  {/* //--------------Test----------------- */}
+
                   {culomns.map((key, index) =>
-                    typeof jsonFile[0][key] === 'object'
-                      ? <div className='holder' key={index}>
-
-                        <input
-                          type="checkbox"
-                          id={key}
-                          value={key}
-                          onChange={handleCheckboxes}
-                        />
-                        <label htmlFor={key} >{key}</label>
-                        <div>
-                          {
-                            [...Object.keys(jsonFile[0][key])].map((el, i) =>
-                              <div key={i} style={{ marginLeft: '40px' }}>
-                                <span>{el}</span>
-                                <button
-                                  onClick={
-                                    () => {
-                                      updateJsonFile(key, el)
-                                      setselctedColumns([...selctedColumns.filter(value => value !== el)])
-                                    }
-                                  }
-                                >X</button>
-                              </div>
-                            )
-                          }
-                        </div>
+                    <div className='holder' key={index}>
+                      <input
+                        type="checkbox"
+                        id={key}
+                        value={key}
+                        onChange={handleCheckboxes}
+                      />
+                      <label>{key}</label>
+                      <div>
+                        {
+                          typeof jsonFile[0][key] === 'object'
+                          &&
+                          <JsonStructure
+                            key={index}
+                            name={key}
+                            handleCheckboxes={handleCheckboxes}
+                            data={jsonFile[0]}
+                            updateJsonFile={updateJsonFile}
+                            setselctedColumns={setselctedColumns}
+                            selctedColumns={selctedColumns}
+                          />}
                       </div>
-                      :
+                    </div>
 
-                      <div key={index} className='holder'>
-                        <input
-                          type="checkbox"
-                          id={key}
-                          value={key}
-                          onChange={handleCheckboxes}
-                        />
-                        <label htmlFor={key} >{key}</label>
-                      </div>
-                  )
-                  }
+                  )}
+
+
                 </div>
                 <div className='json-btns'>
                   <button onClick={generateJsonFile}>Generate</button>
-                  <button onClick={sendRequest}>Send Data</button>
+                  <button onClick={() => {
+                    setOpenModal(true)
+                  }}>S</button>
+                  <button
+                    onClick={
+                      () => {
+                        // sendRequest
+
+                        console.log(jsonFile);
+
+                      }
+                    }
+                  >Send Data</button>
                 </div>
               </div>
 
