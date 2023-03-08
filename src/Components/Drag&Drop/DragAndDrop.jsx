@@ -26,7 +26,7 @@ function readExcelFile(file) {
 
 const DragAndDrop = ({ setData }) => {
 
-  const [error, seterror] = useState([])
+  const [err, seterror] = useState([])
 
   const inputRef = useRef();
 
@@ -96,7 +96,7 @@ const DragAndDrop = ({ setData }) => {
         >Select file</button>
       </div>
 
-      {error !== '' ? <small>{error}</small> : null}
+      {err !== '' ? <small>{err}</small> : null}
     </div>
   )
 }

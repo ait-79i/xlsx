@@ -1,28 +1,43 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useState } from "react";
+import {
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Navigate,
+} from "react-router-dom";
 import MainPage from "./Components/MainPage";
 import Login from "./Components/Login/Login";
-import NotFound from "./Components/Login/NotFound";
 import "./App.css";
+import RequireAuth from "./Components/RequireAuth";
+
 function App() {
-	const [Logged, setLogged] = useState(false);
+	const useAuth = () => {
+		const token = localStorage.getItem("token");
+		if (!token || token === undefined) {
+			return false;
+		} else {
+			return true;
+		}
+	};
+
+	const logged = useAuth();
 	return (
-		<>
-			{Logged === false ? (
-				<Router>
-					<Routes>
-						<Route path="/" element={<Login setLogged={setLogged} />} />
-						<Route path="*" element={<NotFound />} />
-					</Routes>
-				</Router>
-			) : (
-				<Router>
-					<Routes>
-						<Route path="*" element={<MainPage />} />
-					</Routes>
-				</Router>
-			)}
-		</>
+		<Router>
+			<Routes>
+				{/* <Route path="/" element={<Layout />}> */}
+				{/* Public routes */}
+				<Route
+					path="/login"
+					element={logged === false ? <Login /> : <Navigate to="/" />}
+				/>
+				{/* Protected routes */}
+				<Route element={<RequireAuth />}>
+					<Route path="/" element={<MainPage />} />
+					<Route path="/mine" element={<h1>mine</h1>} />
+				</Route>
+				{/* Catsh all  */}
+				<Route path="*" element={<h1> Not Found</h1>} />
+			</Routes>
+		</Router>
 	);
 }
 

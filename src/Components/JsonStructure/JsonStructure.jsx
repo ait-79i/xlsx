@@ -1,20 +1,35 @@
+import Name from "./Name"
 
-const JsonStructure = ({ name, handleCheckboxes, data, updateJsonFile, setselctedColumns, selctedColumns
-}) => {
+const JsonStructure = (
+  { changeJsonKeys,
+    name,
+    handleCheckboxes,
+    data,
+    updateJsonFile,
+    setselctedColumns,
+    selctedColumns
+  }
+) => {
 
   return (
     typeof data[name] === 'object'
       ?
       <div className='holder'>
-        <label style={{ marginLeft: '25px' }} htmlFor={name}>{name} <i class="fa-solid fa-hand-point-down"></i></label>
+        <span>
+          <Name name={name} changeJsonKeys={changeJsonKeys} />
+          <i className="fa-solid fa-hand-point-down"></i>
+
+        </span>
+        {/* <label style={{ marginLeft: '25px' }} htmlFor={name}>{name} </label> */}
         <div>
 
           {
             [...Object.keys(data[name])].map((el, i) =>
               <div key={i} style={{ marginLeft: '40px' }}>
-                <label>{el}</label>
+                <label>3{el}</label>
 
                 <button
+                  title={`remove ${el} from here`}
                   className='btn-x'
                   onClick={
                     () => {
@@ -35,6 +50,7 @@ const JsonStructure = ({ name, handleCheckboxes, data, updateJsonFile, setselcte
                       updateJsonFile={updateJsonFile}
                       setselctedColumns={setselctedColumns}
                       selctedColumns={selctedColumns}
+                      changeJsonKeys={changeJsonKeys}
                     />
                   )}
               </div>
@@ -45,6 +61,7 @@ const JsonStructure = ({ name, handleCheckboxes, data, updateJsonFile, setselcte
       : <div className='holder'>
         <label style={{ marginLeft: '25px' }} htmlFor={name}>{name}</label>
         <button
+          title={`remove ${name} from here `}
           className='btn-x'
           onClick={
             () => {

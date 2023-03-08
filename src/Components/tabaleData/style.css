@@ -36,7 +36,7 @@
 /*  ==========================scroll styling ====================== */
 
 .scroll-div {
-	width: 60%;
+	width: 80%;
 	height: 400px;
 	overflow: hidden;
 	overflow-y: auto;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const Column = ({ index, name, handleChangeColumns }) => {
+const Column = ({ index, name, changeJsonKeys }) => {
 
 
   const [columnName, setColumnName] = useState('')
@@ -13,8 +13,8 @@ const Column = ({ index, name, handleChangeColumns }) => {
 
 
   const SaveColumnName = () => {
-
-    handleChangeColumns(index, columnName)
+    console.log(name, columnName);
+    changeJsonKeys(name, columnName)
     setupdate(false)
   }
 

@@ -116,3 +116,7 @@ body {
 	border: transparent;
 	cursor: pointer;
 }
+
+.name-update {
+	display: flex;
+}

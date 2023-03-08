@@ -13,7 +13,6 @@ const PopUp = ({ open, onClose, data }) => {
         className='modalContainer'
       >
         <DisplayJson data={data} />
-
         <p className='closeBtn' onClick={onClose}>
           X
         </p>

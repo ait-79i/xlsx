@@ -1,186 +1,168 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import * as Components from './LoginStyleComponents';
+import axios from "../../api/axios";
 
-function Login({ setLogged, setUsernm }) {
-
-  const redirect = useNavigate();
+const LOGIN_URL = '/login'
+const REGISTER_URL = '/register'
+function Login() {
+  // just for sign in and sign up component
   const [signIn, setSignIn] = useState(true);
 
 
-  // #region //! create Local Storage
-  // const createLocalStorage = () => {
-  //   localStorage.setItem("login", 0);
-  //   localStorage.setItem("admin", 0);
-  //   localStorage.setItem("username", null);
+  const [username, setusername] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [userpwd, setUserPwd] = useState('')
 
-  // }
-  // #endregion
+  const navigate = useNavigate();
 
 
-  // #region //!Get Log in inputs values
 
-  const [user, setUserData] = useState({
-    email: '', password: ''
-  });
+  const register = (e) => {
+    e.preventDefault()
 
-  const SignInhandler = (e) => {
-    switch (e.target.id) {
-      case "mail":
-        setUserData({ ...user, email: e.target.value });
-        break;
-      case "password":
-        setUserData({ ...user, password: e.target.value })
-        break;
-      default:
-        break;
-    }
+    axios.post(REGISTER_URL, JSON.stringify({
+      username: username,
+      pwd: userpwd,
+      email: userEmail
+    }), {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true
+    }).then((res) => {
+
+    }).catch((err) => console.log(err))
+    navigate('/')
+    setusername('')
+    setUserEmail('')
+    setUserPwd('')
   }
 
-  // #endregion
+  // --------------Login Part ------------------>
+  // const { setAuth } = useAuth();
 
 
-  // #region //todo Validation
 
-  const [LogError, setLogError] = useState(false)
+  const emailRef = useRef()
+  const errRef = useRef()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [logginerror, setLogginerror] = useState('')
 
-  const validate = () => {
+  useEffect(() => {
 
-  }
-  // #endregion
+    emailRef.current.focus()
+  }, [])
 
+  useEffect(() => {
 
-  // #region //! Modify local storage Information with  saveToLocalStorage function
-
-  // const saveToLocalStorage = (customer) => {
-
-  //   // //* for login
-  //   localStorage.setItem("login", 1)
-  //   //! Change Login Value in App State 
-  //   setLogged(localStorage.getItem("login"))
+    setLogginerror('')
+  }, [email, password])
 
 
-  //   localStorage.setItem("admin", customer.admin)
-  //   setAdmin(parseFloat(localStorage.getItem("admin")))
+  const login = (e) => {
+    e.preventDefault()
+    axios.post(LOGIN_URL, JSON.stringify({ email: email, pwd: password }), {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true
+    }).then((response) => {
+      if (!response.data.auth) {
+        setLogginerror(response.data.message)
+      } else {
+        const accessToken = response?.data?.token
+        localStorage.setItem("token", accessToken)
+        navigate('/')
+        setEmail('')
+        setPassword('')
 
+      }
+    }).catch((err) => {
+      console.log(err);
+      if (!err?.response) {
+        setLogginerror("No server Response")
 
-  //   localStorage.setItem("username", customer.username)
-  //   setUsernm(localStorage.getItem("username"))
-  // }
-  // #endregion
+      } else if (err?.response.status === 400) {
+        setLogginerror('Missing Email or Password')
 
+      } else if (err?.response.status === 401) {
+        setLogginerror('Unauthorazied')
 
-  // #region //! Check Existanse 
-  // const chekExistance = (user) => {
+      } else {
+        setLogginerror('Login Failed')
 
-  //   const customer = Customers.find((item) => item.email === user.email && item.pawd === user.password)
-
-  //   if (customer) {
-
-  //     saveToLocalStorage(customer)
-  //     setUsernm(localStorage.getItem("username"))
-
-  //     redirect("/")
-  //   } else {
-  //     redirect("/")
-  //     setLogError(true)
-  //   }
-
-  // }
-  // #endregion
-
-
-  // #region //!Get Sign Up inputs values
-  const [data, setdata] = useState({ username: "", email: '', pawd: '' })
-
-  const SignUphandler = (e) => {
-    switch (e.target.id) {
-      case "name":
-        setdata({ ...data, username: e.target.value });
-        break;
-      case "email":
-        setdata({ ...data, email: e.target.value })
-        break;
-      case "pwd":
-        setdata({ ...data, pawd: e.target.value })
-        break;
-      default:
-        break;
-    }
-  }
-
-  // #endregion
-
-
-  // #region //! Add a new user to data base
-
-  const AddCustomer = async (newUserData) => {
-    await fetch('http://localhost:3000/api/custommer', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify(newUserData)
+      }
+      errRef.current.focus()
     })
-
-    setLogged(true)
-
-    redirect("/")
-
-    setUsernm(newUserData.username)
-
-    // setCustomers("rerender useEffect")
   }
-  // #endregion
+
+  // useEffect(() => {
+  //   axios.get("http://localhost:5000/login").then((res) => {
+
+  //   })
+  // })
+
 
 
   return (
 
-    <div className="cc_flex">
+    <section className="cc_flex">
       <div >
         <Components.Container >
           <Components.SignUpContainer signinIn={signIn}>
-            <Components.Form onSubmit={(e) => {
-              // createLocalStorage()
-              // e.preventDefault();
-              // AddCustomer(data)
-
-              // saveToLocalStorage({ admin: 0, username: data.username })
-
-            }}>
+            <Components.Form onSubmit={(e) => register(e)}>
               <Components.Title>Create Account</Components.Title>
-              <Components.Input type='text' id="name" placeholder='User Name' onChange={(e) => {
-                SignUphandler(e)
-              }} />
-              <Components.Input type='email' id="email" placeholder='Email' onChange={(e) => {
-                SignUphandler(e)
-              }} />
-              <Components.Input type='password' id="pwd" placeholder='Password' onChange={(e) => {
-                SignUphandler(e)
-              }} />
+              <Components.Input
+                type='text'
+                value={username}
+                id="username"
+                placeholder='User Name'
+                autoComplete="false"
+                onChange={(e) => {
+                  setusername(e.target.value)
+                }} />
+              <Components.Input
+                type='email'
+                value={userEmail}
+                id="email"
+                autoComplete="false"
+                placeholder='Email'
+                onChange={(e) => {
+                  setUserEmail(e.target.value)
+
+                }} />
+              <Components.Input type='password'
+                value={userpwd}
+                id="password"
+                placeholder='Password' onChange={(e) => {
+                  setUserPwd(e.target.value)
+
+                }} />
               <Components.Button >Sign Up</Components.Button>
             </Components.Form>
           </Components.SignUpContainer>
 
+
           <Components.SignInContainer signinIn={signIn}>
-            <Components.Form
-              onSubmit={(e) => {
-                // e.preventDefault()
-                // createLocalStorage()
-                // chekExistance(user)
-              }}
-            >
+            <Components.Form onSubmit={(e) => login(e)}>
               <Components.Title>Sign in</Components.Title>
-              <Components.Input type='text' id='mail' placeholder='Email' onChange={(e) => {
-                SignInhandler(e)
-              }} />
+              <Components.Input type='text'
+                id='mail'
+                placeholder='Email'
+                value={email}
+                ref={emailRef}
+                required
+                onChange={(e) => { setEmail(e.target.value) }}
+              />
 
 
-              <Components.Input id="password" placeholder='Password' onChange={(e) => {
-                SignInhandler(e)
-              }} />
-              {LogError ? <span style={{ color: "red", fontSize: "10px" }}>Account Not Found</span> : null}
-              <Components.Anchor href='#'>Forgot your password?</Components.Anchor>
+              <Components.Input
+                id="pwd"
+                placeholder='Password'
+                value={password}
+                required
+                onChange={(e) => { setPassword(e.target.value) }}
+              />
+              <small ref={errRef} aria-live="assertive" style={{ color: 'red' }}>{logginerror}</small>
+              {/* <Components.Anchor href='#'>Forgot your password?</Components.Anchor> */}
               <Components.Button >Sigin In</Components.Button>
             </Components.Form>
           </Components.SignInContainer>
@@ -221,7 +203,8 @@ function Login({ setLogged, setUsernm }) {
           </Components.OverlayContainer>
 
         </Components.Container>
-      </div></div>
+      </div>
+    </section>
   )
 }
 

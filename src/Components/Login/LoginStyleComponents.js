@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 export const Container = styled.div`
 	background-color: #fff;
 	border-radius: 10px;
@@ -39,8 +38,7 @@ export const SignInContainer = styled.div`
 	left: 0;
 	width: 50%;
 	z-index: 2;
-	${(props) =>
-		props.signinIn !== true ? `transform: translateX(100%);` : null}
+	${(props) => (props.signinIn !== true ? `transform: translateX(100%);` : null)}
 `;
 
 export const Form = styled.form`

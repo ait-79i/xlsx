@@ -1,6 +1,6 @@
 import Column from './Column'
 import './style.css'
-const DisplayTable = ({ data, culomns, handleChangeColumns }) => {
+const DisplayTable = ({ data, culomns, changeJsonKeys }) => {
 
   return (
     <div className='scroll-div'>
@@ -12,9 +12,7 @@ const DisplayTable = ({ data, culomns, handleChangeColumns }) => {
                 key={index}
                 index={index}
                 name={name}
-                handleChangeColumns={handleChangeColumns}
-
-
+                changeJsonKeys={changeJsonKeys}
               />
             )}
 
