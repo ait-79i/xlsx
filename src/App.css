@@ -1,5 +1,7 @@
 * {
 	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
 body {
@@ -7,9 +9,6 @@ body {
 	background-color: #f7f7f7;
 }
 
-/* .container {
-	margin: 0 20px;
-} */
 .wrapper {
 	background-color: #fff;
 	margin: 10px 15px;
@@ -17,43 +16,7 @@ body {
 	padding: 10px;
 	box-shadow: 0 15px 35px rgba(50, 50, 91, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
 }
-/* mm 
-.holder input[type="checkbox"] {
-	-webkit-appearance: none;
-	appearance: none;
-}
 
-.holder label {
-	position: relative;
-	padding-left: 8px;
-	cursor: pointer;
-	display: inline-block;
-	
-	line-height: 20px;
-}
-
-.holder label:before {
-	content: "";
-	width: 14px;
-	height: 14px;
-	background-color: #ddd;
-	display: inline-block;
-	border: 1px solid #ccc;
-	border-radius: 2px;
-	position: relative;
-	right: 10px;
-}
-
-.holder input[type="checkbox"]:checked + label:after {
-	font-family: "FontAwesome";
-	content: "\f00c";
-	color: rgb(60, 98, 246);
-	font-size: 23px;
-	position: absolute;
-	top: -4px;
-	left: -2px;
-}
-*/
 .wrapper input[type="text"] {
 	padding: 8px;
 	margin-bottom: 8px;
@@ -91,16 +54,12 @@ body {
 	color: red;
 	font-weight: bold;
 }
-/* <--------  Login  ------->  */
 
 .cc_flex {
-	margin-top: 50px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
-
-/* PopUp */
 
 .fa-reply {
 	height: 100%;
@@ -119,4 +78,15 @@ body {
 
 .name-update {
 	display: flex;
+}
+
+.hide {
+	display: none;
+}
+
+.custom-file-upload {
+	border: 1px solid #ccc;
+	display: inline-block;
+	padding: 6px 12px;
+	cursor: pointer;
 }

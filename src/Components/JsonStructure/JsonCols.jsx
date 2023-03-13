@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { changeJsonKeys } from '../CommanFunctions'
 
-const JsonCols = ({ name, handleCheckboxes, changeJsonKeys }) => {
+const JsonCols = ({ data, name, handleCheckboxes, setJsonFile }) => {
   const [update, setupdate] = useState(false)
   const [columnName, setColumnName] = useState('')
   useEffect(() => {
@@ -9,13 +10,16 @@ const JsonCols = ({ name, handleCheckboxes, changeJsonKeys }) => {
 
   const SaveColumnName = () => {
     console.log(name, columnName);
-    changeJsonKeys(name, columnName)
+    console.log(data);
+    const newData = changeJsonKeys(data, name, columnName)
+    setJsonFile(newData)
     setupdate(false)
   }
   return (
     <div className='name-update'>
       <input
         id={name}
+        className="form-check-input mt-0"
         type="checkbox"
         value={name}
         onChange={handleCheckboxes}
@@ -34,7 +38,7 @@ const JsonCols = ({ name, handleCheckboxes, changeJsonKeys }) => {
           </button>
         </div>
         :
-        <label htmlFor={name} onDoubleClick={() => setupdate(true)}>2{columnName}</label>
+        <label className=" ms-1 form-check-label" htmlFor={name} onDoubleClick={() => setupdate(true)}>{columnName}</label>
       }
     </div>
   )

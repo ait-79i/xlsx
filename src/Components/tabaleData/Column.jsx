@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { changeJsonKeys } from '../CommanFunctions'
 
-const Column = ({ index, name, changeJsonKeys }) => {
+const Column = ({ data, index, name, setJsonFile }) => {
 
 
   const [columnName, setColumnName] = useState('')
@@ -13,8 +14,8 @@ const Column = ({ index, name, changeJsonKeys }) => {
 
 
   const SaveColumnName = () => {
-    console.log(name, columnName);
-    changeJsonKeys(name, columnName)
+    const newData = changeJsonKeys(data, name, columnName)
+    setJsonFile(newData)
     setupdate(false)
   }
 

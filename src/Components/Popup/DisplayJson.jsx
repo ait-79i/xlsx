@@ -1,16 +1,17 @@
-import React from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 const DisplayJson = ({ data }) => {
 
   return (
-    <div className='json'>
-      <SyntaxHighlighter language="javascript" style={darcula} >
-        {`- Each item in your JSON file looks like :        
-          ${JSON.stringify(data, null, 4)}          
+    <SyntaxHighlighter
+      language="javascript"
+      style={darcula}
+      wrapLongLines={true}
+    >
+      {`- Each item in your JSON file looks like :        
+          ${JSON.stringify(data[0], null, 4)}          
         `}
-      </SyntaxHighlighter>
-    </div>
+    </SyntaxHighlighter>
   )
 }
 

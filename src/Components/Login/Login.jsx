@@ -6,6 +6,7 @@ import axios from "../../api/axios";
 const LOGIN_URL = '/login'
 const REGISTER_URL = '/register'
 function Login() {
+
   // just for sign in and sign up component
   const [signIn, setSignIn] = useState(true);
 
@@ -29,6 +30,7 @@ function Login() {
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true
     }).then((res) => {
+      console.log(res)
 
     }).catch((err) => console.log(err))
     navigate('/')
@@ -37,8 +39,6 @@ function Login() {
     setUserPwd('')
   }
 
-  // --------------Login Part ------------------>
-  // const { setAuth } = useAuth();
 
 
 
@@ -104,7 +104,7 @@ function Login() {
 
   return (
 
-    <section className="cc_flex">
+    <section style={{ marginTop: '50px' }} className="cc_flex">
       <div >
         <Components.Container >
           <Components.SignUpContainer signinIn={signIn}>

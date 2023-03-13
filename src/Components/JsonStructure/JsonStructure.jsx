@@ -1,13 +1,15 @@
 import Name from "./Name"
 
 const JsonStructure = (
-  { changeJsonKeys,
+  {
     name,
     handleCheckboxes,
     data,
     updateJsonFile,
     setselctedColumns,
-    selctedColumns
+    selctedColumns,
+    setJsonFile,
+    jsonFile
   }
 ) => {
 
@@ -16,17 +18,20 @@ const JsonStructure = (
       ?
       <div className='holder'>
         <span>
-          <Name name={name} changeJsonKeys={changeJsonKeys} />
+          <Name name={name}
+            setJsonFile={setJsonFile}
+            jsonFile={jsonFile}
+
+          />
           <i className="fa-solid fa-hand-point-down"></i>
 
         </span>
-        {/* <label style={{ marginLeft: '25px' }} htmlFor={name}>{name} </label> */}
         <div>
 
           {
             [...Object.keys(data[name])].map((el, i) =>
               <div key={i} style={{ marginLeft: '40px' }}>
-                <label>3{el}</label>
+                <label>{el}</label>
 
                 <button
                   title={`remove ${el} from here`}
@@ -37,7 +42,7 @@ const JsonStructure = (
                       setselctedColumns([...selctedColumns.filter(value => value !== el)])
                     }
                   }
-                ><i className="fa fa-reply"></i></button>
+                ><ion-icon name="arrow-undo-outline"></ion-icon></button>
                 {
                   typeof data[name][el] === 'object'
                   &&
@@ -50,7 +55,8 @@ const JsonStructure = (
                       updateJsonFile={updateJsonFile}
                       setselctedColumns={setselctedColumns}
                       selctedColumns={selctedColumns}
-                      changeJsonKeys={changeJsonKeys}
+                      setJsonFile={setJsonFile}
+                      jsonFile={jsonFile}
                     />
                   )}
               </div>
@@ -69,7 +75,7 @@ const JsonStructure = (
               setselctedColumns([...selctedColumns.filter(value => value !== name)])
             }
           }
-        ><i className="fa fa-reply"></i></button>
+        ><ion-icon name="arrow-undo-outline"></ion-icon></button>
       </div>
   )
 }

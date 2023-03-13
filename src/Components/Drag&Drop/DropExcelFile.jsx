@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
+import { validateFile } from '../CommanFunctions';
 import './style.css';
 
-
 function readExcelFile(file) {
+
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
@@ -14,7 +15,6 @@ function readExcelFile(file) {
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
       const data = XLSX.utils.sheet_to_json(ws);
-
       resolve(data);
     };
 
@@ -24,26 +24,28 @@ function readExcelFile(file) {
   });
 }
 
-const DragAndDrop = ({ setData }) => {
+const DropExcelFile = ({ setData }) => {
 
   const [err, seterror] = useState([])
 
   const inputRef = useRef();
 
+
   function handleFileUpload(e) {
-
     const file = e.target.files[0];
-
-    // if (validateFile(file.name)) {
-
-    readExcelFile(file)
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // }
+    if (validateFile(file.name)) {
+      seterror("");
+      readExcelFile(file)
+        .then((data) => {
+          setData(data);
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+    } else {
+      seterror("File extension not supported!");
+      setData([])
+    }
   }
 
   const handleDragOver = (e) => {
@@ -52,28 +54,28 @@ const DragAndDrop = ({ setData }) => {
 
   const handleDrop = (e) => {
     e.preventDefault();
-
-    readExcelFile(e.dataTransfer.files[0])
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
+    if (e.dataTransfer.files.length !== 1) {
+      seterror("You must choose only One File !!!");
+      setData([])
+    } else {
+      if (validateFile(e.dataTransfer.files[0].name)) {
+        seterror("");
+        readExcelFile(e.dataTransfer.files[0])
+          .then((data) => {
+            setData(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        seterror("File extension not supported!");
+        setData([])
+      }
+    }
   }
 
 
-  // const validateFile = (fname) => {
 
-  //   var re = /(\.xlsx|\.xlsm|\.xlsb|\.xls|\.xlam)$/i;
-  //   if (!re.exec(fname)) {
-  //     seterror("File extension not supported!")
-  //     return false;
-  //   }
-  //   return true;
-
-  // }
   return (
     <div>
       <div className='dropzone'
@@ -95,10 +97,12 @@ const DragAndDrop = ({ setData }) => {
           onClick={() => inputRef.current.click()}
         >Select file</button>
       </div>
+      <div className='d-flex justify-content-center'>
 
-      {err !== '' ? <small>{err}</small> : null}
+        {err !== '' ? <small className='text-danger h2 ' >{err}</small> : null}
+      </div>
     </div>
   )
 }
 
-export default DragAndDrop
+export default DropExcelFile

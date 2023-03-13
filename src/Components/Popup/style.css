@@ -25,3 +25,11 @@
 	cursor: pointer;
 	color: red;
 }
+
+.json {
+	width: 80%;
+	height: 400px;
+	overflow: hidden;
+	overflow-y: auto;
+	overflow-x: auto;
+}
