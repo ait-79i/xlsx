@@ -41,3 +41,35 @@ export const PreventReload = () => {
 		return () => window.removeEventListener("beforeunload", unloadCallback);
 	}, []);
 };
+
+export const useAuth = () => {
+	const token = localStorage.getItem("token");
+	if (!token || token === undefined) {
+		return false;
+	} else {
+		return true;
+	}
+};
+
+export function updateObjectInArray(array, index, newKey, newValue) {
+	const newArray = [...array];
+	const objectToUpdate = {};
+	// delete newArray[index];
+	objectToUpdate[newKey] = newValue;
+	newArray.splice(index, 1, objectToUpdate);
+	return newArray;
+}
+
+export const disableinputs = (method) => {
+	if (method === "GET" || method === "DELETE") {
+		const fieldsetList = document.getElementsByTagName("fieldset");
+		for (var i = 0; i < fieldsetList.length; i++) {
+			fieldsetList[i].disabled = true;
+		}
+	} else {
+		const fieldsetList = document.getElementsByTagName("fieldset");
+		for (var i = 0; i < fieldsetList.length; i++) {
+			fieldsetList[i].disabled = false;
+		}
+	}
+};

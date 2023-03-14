@@ -35,7 +35,7 @@ function MainPage({ setBodyRequestData }) {
   return (
     <div>
       {/* ------------- Drag And Drop Zone ----------- */}
-      <DropExcelFile setData={setData} />
+      <DropExcelFile  setData={setData} />
 
       <div>
         {data.length > 0

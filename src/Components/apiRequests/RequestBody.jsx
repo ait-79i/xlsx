@@ -8,6 +8,7 @@ function RequestBody({ data, setBody }) {
       {!isValid && <p style={{ color: 'red' }}>JSON sythax is not valid.</p>}
 
       <CodeMirror
+        disabled={true}
         value={JSON.stringify(data === '' ? {} : data, null, 2)}
         height="200px"
         extensions={[javascript({ json: true })]}

@@ -1,14 +1,28 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as Components from './LoginStyleComponents';
-import axios from "../../api/axios";
+import axios from "axios";
 
-const LOGIN_URL = '/login'
-const REGISTER_URL = '/register'
+
 function Login() {
 
-  // just for sign in and sign up component
+
+  // just for sign in and sign up ghost
+
   const [signIn, setSignIn] = useState(true);
+
+  const location = useLocation();
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const signInParam = searchParams.get('sign-in');
+
+    if (signInParam === '') {
+      setSignIn(true)
+    } else {
+      setSignIn(false)
+    }
+  }, [])
+
 
 
   const [username, setusername] = useState('')
@@ -22,7 +36,7 @@ function Login() {
   const register = (e) => {
     e.preventDefault()
 
-    axios.post(REGISTER_URL, JSON.stringify({
+    axios.post('http://localhost:5000/register', JSON.stringify({
       username: username,
       pwd: userpwd,
       email: userEmail
@@ -61,7 +75,7 @@ function Login() {
 
   const login = (e) => {
     e.preventDefault()
-    axios.post(LOGIN_URL, JSON.stringify({ email: email, pwd: password }), {
+    axios.post('http://localhost:5000/login', JSON.stringify({ email: email, pwd: password }), {
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true
     }).then((response) => {

@@ -16,7 +16,7 @@ const CopyToClipboard = ({ data }) => {
           }}
         >
           <span>
-            <ion-icon name="clipboard-outline"></ion-icon>
+          <ion-icon name="clipboard-outline"></ion-icon>
           </span>
           Copy
         </button>

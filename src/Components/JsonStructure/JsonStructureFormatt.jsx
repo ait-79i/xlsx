@@ -33,7 +33,6 @@ const JsonStructureFormatt = ({ culomns, setJsonFile, jsonFile, xlsxculomns }) =
 
   var value = '';
   function deleteKey(obj, keyToDelete) {
-
     for (var prop in obj) {
       if (obj.hasOwnProperty(prop)) {
         if (prop === keyToDelete) {
