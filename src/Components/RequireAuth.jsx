@@ -34,16 +34,13 @@ const RequireAuth = () => {
   return (
     <>
       {logged ?
-
         <>
-
           <Navbar />
-
           <Outlet />
-
         </>
-
-        : <Navigate to='/login' state={{ from: location }} replace />}
+        :
+        <Navigate to='/login' state={{ from: location }} replace />
+      }
     </>
   )
 }

@@ -1,48 +1,34 @@
 import Name from "./Name"
-
 const JsonStructure = (
-  {
-    name,
+  { name,
     handleCheckboxes,
     data,
     updateJsonFile,
     setselctedColumns,
     selctedColumns,
     setJsonFile,
-    jsonFile
-  }
-) => {
-
+    jsonFile }) => {
   return (
     typeof data[name] === 'object'
       ?
       <div className='holder'>
-        <span>
-          <Name name={name}
-            setJsonFile={setJsonFile}
-            jsonFile={jsonFile}
+        <span style={{ marginLeft: '25px' }}>
 
-          />
+          <label >{name}</label>
           <i className="fa-solid fa-hand-point-down"></i>
-
         </span>
         <div>
-
           {
             [...Object.keys(data[name])].map((el, i) =>
               <div key={i} style={{ marginLeft: '40px' }}>
-                <label>{el}</label>
-
-                <button
-                  title={`remove ${el} from here`}
-                  className='btn-x'
-                  onClick={
-                    () => {
-                      updateJsonFile(el)
-                      setselctedColumns([...selctedColumns.filter(value => value !== el)])
-                    }
-                  }
-                ><ion-icon name="arrow-undo-outline"></ion-icon></button>
+                <Name
+                  name={el}
+                  setJsonFile={setJsonFile}
+                  jsonFile={jsonFile}
+                  updateJsonFile={updateJsonFile}
+                  setselctedColumns={setselctedColumns}
+                  selctedColumns={selctedColumns}
+                />
                 {
                   typeof data[name][el] === 'object'
                   &&
@@ -64,19 +50,16 @@ const JsonStructure = (
           }
         </div>
       </div>
-      : <div className='holder'>
-        <label style={{ marginLeft: '25px' }} htmlFor={name}>{name}</label>
-        <button
-          title={`remove ${name} from here `}
-          className='btn-x'
-          onClick={
-            () => {
-              updateJsonFile(name)
-              setselctedColumns([...selctedColumns.filter(value => value !== name)])
-            }
-          }
-        ><ion-icon name="arrow-undo-outline"></ion-icon></button>
-      </div>
+      :
+      <Name
+        name={name}
+        setJsonFile={setJsonFile}
+        jsonFile={jsonFile}
+        updateJsonFile={updateJsonFile}
+        setselctedColumns={setselctedColumns}
+        selctedColumns={selctedColumns}
+      />
+
   )
 }
 

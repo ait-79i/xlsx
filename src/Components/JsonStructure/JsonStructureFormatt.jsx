@@ -3,7 +3,7 @@ import { PreventReload } from '../CommanFunctions';
 import JsonCols from './JsonCols';
 import JsonStructure from './JsonStructure';
 
-const JsonStructureFormatt = ({ culomns, setJsonFile, jsonFile, xlsxculomns }) => {
+const JsonStructureFormatt = ({ culomns, setJsonFile, jsonFile, xlsxculomns, setpreventUpdateTableCols }) => {
 
   PreventReload()
 
@@ -58,6 +58,7 @@ const JsonStructureFormatt = ({ culomns, setJsonFile, jsonFile, xlsxculomns }) =
       setkey('')
       uncheckCheckboxes()
     }
+    setpreventUpdateTableCols(true)
   }
 
   const newJson = (data, culomns) => {

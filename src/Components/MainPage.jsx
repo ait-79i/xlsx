@@ -30,12 +30,12 @@ function MainPage({ setBodyRequestData }) {
   }, [data])
 
   PreventReload()
-
+  const [preventUpdateTableCols, setpreventUpdateTableCols] = useState(false)
 
   return (
     <div>
       {/* ------------- Drag And Drop Zone ----------- */}
-      <DropExcelFile  setData={setData} />
+      <DropExcelFile setData={setData} />
 
       <div>
         {data.length > 0
@@ -44,6 +44,7 @@ function MainPage({ setBodyRequestData }) {
             {/* ------------ Excel table ---------- */}
 
             <DisplayTable
+              preventUpdateTableCols={preventUpdateTableCols}
               data={data}
               culomns={xlsxculomns}
               setJsonFile={setJsonFile}
@@ -69,6 +70,7 @@ function MainPage({ setBodyRequestData }) {
                       jsonFile={jsonFile}
                       xlsxculomns={xlsxculomns}
                       JsonCols={JsonCols}
+                      setpreventUpdateTableCols={setpreventUpdateTableCols}
                     />
 
                     : null

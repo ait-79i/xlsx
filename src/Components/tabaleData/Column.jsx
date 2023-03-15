@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { changeJsonKeys } from '../CommanFunctions'
 
-const Column = ({ data, index, name, setJsonFile }) => {
-
+const Column = ({ data, index, name, setJsonFile, preventUpdateTableCols }) => {
 
   const [columnName, setColumnName] = useState('')
   const [update, setupdate] = useState(false)
-
 
   useEffect(() => {
     setColumnName(name)
@@ -21,20 +19,26 @@ const Column = ({ data, index, name, setJsonFile }) => {
 
   return (
     <th onDoubleClick={() => { setupdate(true) }}>
-      {update ?
-        <div className='col-name-div'>
-          <input className='enter-col-name'
-            id={index}
-            type='text'
-            value={columnName}
-            onChange={(e) => setColumnName(e.target.value)} />
-          <button className='save-col-name' id='save' onClick={() => SaveColumnName()} >
-            <i className="fa-sharp fa-solid fa-check"></i>
-          </button>
-        </div>
+      {preventUpdateTableCols === false ?
+        update ?
+          <div className='col-name-div'>
+            < input className='enter-col-name'
+              id={index}
+              type='text'
+              value={columnName}
+              onChange={(e) => setColumnName(e.target.value)} />
+            <button className='save-col-name' id='save' onClick={() => SaveColumnName()} >
+              <i className="fa-sharp fa-solid fa-check"></i>
+            </button>
+          </div>
+          :
+          <span id={index} >{columnName}</span>
         :
-        <span id={index} >{columnName}</span>
+        <span id={index}>{columnName}</span>
       }
+
+
+
 
     </th>
   )

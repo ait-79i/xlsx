@@ -9,8 +9,6 @@ const JsonCols = ({ data, name, handleCheckboxes, setJsonFile }) => {
   }, [name])
 
   const SaveColumnName = () => {
-    console.log(name, columnName);
-    console.log(data);
     const newData = changeJsonKeys(data, name, columnName)
     setJsonFile(newData)
     setupdate(false)
@@ -30,12 +28,9 @@ const JsonCols = ({ data, name, handleCheckboxes, setJsonFile }) => {
           <input className='enter-col-name'
             type='text'
             value={columnName}
+            onMouseLeave={() => SaveColumnName()}
             onChange={(e) => setColumnName(e.target.value)}
           />
-
-          <button className='save-col-name' onClick={() => SaveColumnName()} >
-            <i className="fa-sharp fa-solid fa-check"></i>
-          </button>
         </div>
         :
         <label className=" ms-1 form-check-label" htmlFor={name} onDoubleClick={() => setupdate(true)}>{columnName}</label>

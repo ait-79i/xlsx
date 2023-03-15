@@ -4,6 +4,7 @@ function changeKeysOfNestedObject(obj, oldKey, newKey) {
 	const newObj = {};
 	for (const [key, value] of Object.entries(obj)) {
 		if (typeof value === "object") {
+			if (key === oldKey) newObj[newKey] = value;
 			newObj[key] = changeKeysOfNestedObject(value, oldKey, newKey);
 		} else if (key === oldKey) {
 			newObj[newKey] = value;

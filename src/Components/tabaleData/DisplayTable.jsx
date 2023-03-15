@@ -1,6 +1,6 @@
 import Column from './Column'
 import './style.css'
-const DisplayTable = ({ data, culomns, setJsonFile }) => {
+const DisplayTable = ({ data, culomns, setJsonFile, preventUpdateTableCols }) => {
 
   return (
     <div className='scroll-div'>
@@ -9,6 +9,7 @@ const DisplayTable = ({ data, culomns, setJsonFile }) => {
           <tr>
             {culomns.map((name, index) =>
               <Column
+                preventUpdateTableCols={preventUpdateTableCols}
                 key={index}
                 index={index}
                 name={name}

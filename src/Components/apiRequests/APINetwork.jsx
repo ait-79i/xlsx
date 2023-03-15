@@ -6,6 +6,8 @@ import RequestBody from "../apiRequests/RequestBody";
 import { disableinputs } from '../CommanFunctions';
 import CheckHeader from './checkHeader';
 import NewHeader from './NewHeader';
+import { useJwt } from "react-jwt";
+
 
 
 const APINetwork = ({ bodyRequestData }) => {
@@ -36,6 +38,7 @@ const APINetwork = ({ bodyRequestData }) => {
 
 
   const handleSendRequest = async () => {
+    validateToken()
     setResponse('')
     console.log()
     if (method === "") {
@@ -109,6 +112,21 @@ const APINetwork = ({ bodyRequestData }) => {
 
   }
 
+
+  const { isExpired } = useJwt(localStorage.getItem("token"));
+
+  const validateToken = () => {
+    const token = localStorage.getItem("token");
+    axios
+      .get("http://localhost:5000/isUserAuth", {
+        headers: { "x-access-token": token },
+      }).then((response) => {
+        if (response.data?.auth !== true || isExpired) {
+          localStorage.clear()
+          window.location.href = '/login'
+        }
+      })
+  };
 
 
 

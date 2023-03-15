@@ -15,11 +15,14 @@ function Login() {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const signInParam = searchParams.get('sign-in');
+    const signUpParam = searchParams.get('sign-up');
 
     if (signInParam === '') {
       setSignIn(true)
-    } else {
+    } else if (signUpParam === '') {
       setSignIn(false)
+    } else {
+      setSignIn(true)
     }
   }, [])
 
@@ -63,12 +66,10 @@ function Login() {
   const [logginerror, setLogginerror] = useState('')
 
   useEffect(() => {
-
     emailRef.current.focus()
   }, [])
 
   useEffect(() => {
-
     setLogginerror('')
   }, [email, password])
 
@@ -108,16 +109,10 @@ function Login() {
     })
   }
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:5000/login").then((res) => {
 
-  //   })
-  // })
-
-
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   return (
-
     <section style={{ marginTop: '50px' }} className="cc_flex">
       <div >
         <Components.Container >
@@ -136,19 +131,22 @@ function Login() {
               <Components.Input
                 type='email'
                 value={userEmail}
-                id="email"
+
                 autoComplete="false"
                 placeholder='Email'
                 onChange={(e) => {
                   setUserEmail(e.target.value)
-
                 }} />
               <Components.Input type='password'
                 value={userpwd}
-                id="password"
+
                 placeholder='Password' onChange={(e) => {
                   setUserPwd(e.target.value)
-
+                }} />
+              <Components.Input type='password'
+                value={confirmPassword}
+                placeholder='Confirm Password' onChange={(e) => {
+                  setConfirmPassword(e.target.value)
                 }} />
               <Components.Button >Sign Up</Components.Button>
             </Components.Form>
