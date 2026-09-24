@@ -9,10 +9,12 @@ import CheckHeader from './checkHeader';
 import NewHeader from './NewHeader';
 import VisualizeButton from '../VisualizeButton';
 import { useJwt } from "react-jwt";
+import { useTranslation } from 'react-i18next';
 
 
 
 const APINetwork = ({ bodyRequestData, setVisualData }) => {
+  const { t } = useTranslation()
 
   const [method, setMethod] = useState('')
   const [url, setUrl] = useState('')
@@ -44,10 +46,10 @@ const APINetwork = ({ bodyRequestData, setVisualData }) => {
     setResponse('')
     console.log()
     if (method === "") {
-      setvalidation('U mast choose a method')
+      setvalidation(t('api.errors.chooseMethod'))
 
     } else if (url.trim() === '') {
-      setvalidation("URL can't be empty")
+      setvalidation(t('api.errors.emptyUrl'))
     } else {
       setvalidation("")
 
@@ -124,7 +126,7 @@ const APINetwork = ({ bodyRequestData, setVisualData }) => {
         headers: { "x-access-token": token },
       }).then((response) => {
         if (response.data?.auth !== true || isExpired) {
-          localStorage.clear()
+          localStorage.removeItem("token")
           window.location.href = '/login'
         }
       })
@@ -140,7 +142,7 @@ const APINetwork = ({ bodyRequestData, setVisualData }) => {
           <div className="row gap-0">
             <div className="col-2">
               <select className="form-select" onChange={(e) => setMethod(e.target.value)}>
-                <option value="" >HTTP Method</option>
+                <option value="" >{t('api.httpMethod')}</option>
                 <option value="GET">GET</option>
                 <option value="POST">POST</option>
                 <option value="PATCH">PATCH</option>
@@ -149,7 +151,7 @@ const APINetwork = ({ bodyRequestData, setVisualData }) => {
               </select>
             </div>
             <div className="col-8">
-              <input type="text" className="form-control" placeholder="Enter request URL"
+              <input type="text" className="form-control" dir="ltr" placeholder={t('api.urlPlaceholder')}
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
               />
@@ -157,7 +159,7 @@ const APINetwork = ({ bodyRequestData, setVisualData }) => {
             <div className="col-2">
               <button className="btn btn-outline-secondary"
                 onClick={handleSendRequest}
-              >send
+              >{t('api.send')}
               </button>
             </div>
             <div className="row">
@@ -166,11 +168,11 @@ const APINetwork = ({ bodyRequestData, setVisualData }) => {
               <div className="d-flex  mt-2">
                 <div className="col-4 px-2">
                   <div className="container">
-                    <div className='text-center'>headers </div>
+                    <div className='text-center'>{t('api.headers')}</div>
                     <div className="d-flex">
                       <div className="col"></div>
-                      <div className="col">key</div>
-                      <div className="col">value</div>
+                      <div className="col">{t('api.key')}</div>
+                      <div className="col">{t('api.value')}</div>
                     </div>
 
                     <hr />
@@ -194,7 +196,7 @@ const APINetwork = ({ bodyRequestData, setVisualData }) => {
                   </div>
                 </div>
                 <div className="col-4 px-2">
-                  <div className='text-center'>Body</div>
+                  <div className='text-center'>{t('api.body')}</div>
                   <RequestBody
                     data={bodyRequestData ? bodyRequestData : body}
                     setBody={setBody}
@@ -202,11 +204,12 @@ const APINetwork = ({ bodyRequestData, setVisualData }) => {
                 </div>
                 <div className="col-4 px-2">
                   <div className='d-flex justify-content-between'>
-                    <span>Response</span>
+                    <span>{t('api.response')}</span>
                     {response?.data !== undefined && typeof response.data === 'object' &&
-                      <VisualizeButton data={response.data} setVisualData={setVisualData} label='Visualize response' />}
+                      <VisualizeButton data={response.data} setVisualData={setVisualData} label={t('api.visualizeResponse')} />}
                   </div>
                   <SyntaxHighlighter language="javascript"
+                    dir="ltr"
                     // style={darcula}
                     wrapLongLines={true}
                     customStyle={{ height: '200px', width: '100%', padding: '10px', fontSize: '11px', overflow: 'hidden', overflowY: 'scroll' }}

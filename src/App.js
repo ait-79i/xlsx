@@ -13,6 +13,8 @@ import "./App.css";
 import { lazy, Suspense, useState } from "react";
 import { useAuth } from "./Components/CommanFunctions";
 import Home from "./home/Home";
+import NotFound from "./Components/NotFound";
+import { useTranslation } from "react-i18next";
 import { useSessionState } from "./utils/useSessionState";
 
 // React Flow is only loaded when the visualizer is opened
@@ -26,6 +28,7 @@ function App() {
 	const [visualData, setVisualData] = useSessionState("visualData", null);
 
 	const logged = useAuth();
+	const { t } = useTranslation();
 
 	return (
 		<Router>
@@ -36,7 +39,7 @@ function App() {
 					element={logged === false ? <Login /> : <Navigate to="/" />}
 				/>
 				<Route path="/" element={<Home />} />
-				<Route path="/support" element={<h1>Contact Us</h1>} />
+				<Route path="/support" element={<h1>{t("nav.contactUs")}</h1>} />
 				{/* Protected routes */}
 				<Route element={<RequireAuth />}>
 					<Route
@@ -69,14 +72,14 @@ function App() {
 					<Route
 						path="/visualizer"
 						element={
-							<Suspense fallback={<p className="p-3">Loading…</p>}>
+							<Suspense fallback={<p className="p-3">{t("loading")}</p>}>
 								<VisualizerPage data={visualData} setData={setVisualData} />
 							</Suspense>
 						}
 					/>
 				</Route>
 				{/* Catsh all  */}
-				<Route path="*" element={<h1> Not Found</h1>} />
+				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</Router>
 	);

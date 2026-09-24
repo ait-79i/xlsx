@@ -3,9 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as Components from './LoginStyleComponents';
 import axios from "axios";
 import { API_URL } from "../../config";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 
 function Login() {
+  const { t } = useTranslation();
 
 
   // just for sign in and sign up ghost
@@ -41,7 +44,7 @@ function Login() {
     e.preventDefault()
 
     if (userpwd !== confirmPassword) {
-      setRegisterError('Passwords do not match')
+      setRegisterError(t('login.errors.passwordsMismatch'))
       return
     }
 
@@ -62,7 +65,7 @@ function Login() {
       setSignIn(true)
     }).catch((err) => {
       console.log(err)
-      setRegisterError(err?.response?.data?.message || 'Registration failed')
+      setRegisterError(err?.response?.data?.message || t('login.errors.registrationFailed'))
     })
   }
 
@@ -103,16 +106,16 @@ function Login() {
     }).catch((err) => {
       console.log(err);
       if (!err?.response) {
-        setLogginerror("No server Response")
+        setLogginerror(t('login.errors.noServerResponse'))
 
       } else if (err?.response.status === 400) {
-        setLogginerror('Missing Email or Password')
+        setLogginerror(t('login.errors.missingCredentials'))
 
       } else if (err?.response.status === 401) {
-        setLogginerror('Unauthorazied')
+        setLogginerror(t('login.errors.unauthorized'))
 
       } else {
-        setLogginerror('Login Failed')
+        setLogginerror(t('login.errors.loginFailed'))
 
       }
       errRef.current.focus()
@@ -124,17 +127,18 @@ function Login() {
   const [registerError, setRegisterError] = useState('')
 
   return (
-    <section style={{ marginTop: '50px' }} className="cc_flex">
+    <section style={{ marginTop: '50px' }} className="cc_flex flex-column gap-3">
+      <LanguageSwitcher />
       <div >
         <Components.Container >
           <Components.SignUpContainer signinIn={signIn}>
             <Components.Form onSubmit={(e) => register(e)}>
-              <Components.Title>Create Account</Components.Title>
+              <Components.Title>{t('login.createAccount')}</Components.Title>
               <Components.Input
                 type='text'
                 value={username}
                 id="username"
-                placeholder='User Name'
+                placeholder={t('login.userName')}
                 autoComplete="false"
                 onChange={(e) => {
                   setusername(e.target.value)
@@ -144,33 +148,33 @@ function Login() {
                 value={userEmail}
 
                 autoComplete="false"
-                placeholder='Email'
+                placeholder={t('login.email')}
                 onChange={(e) => {
                   setUserEmail(e.target.value)
                 }} />
               <Components.Input type='password'
                 value={userpwd}
 
-                placeholder='Password' onChange={(e) => {
+                placeholder={t('login.password')} onChange={(e) => {
                   setUserPwd(e.target.value)
                 }} />
               <Components.Input type='password'
                 value={confirmPassword}
-                placeholder='Confirm Password' onChange={(e) => {
+                placeholder={t('login.confirmPassword')} onChange={(e) => {
                   setConfirmPassword(e.target.value)
                 }} />
               <small aria-live="assertive" style={{ color: 'red' }}>{registerError}</small>
-              <Components.Button >Sign Up</Components.Button>
+              <Components.Button >{t('login.signUp')}</Components.Button>
             </Components.Form>
           </Components.SignUpContainer>
 
 
           <Components.SignInContainer signinIn={signIn}>
             <Components.Form onSubmit={(e) => login(e)}>
-              <Components.Title>Sign in</Components.Title>
+              <Components.Title>{t('login.signIn')}</Components.Title>
               <Components.Input type='text'
                 id='mail'
-                placeholder='Email'
+                placeholder={t('login.email')}
                 value={email}
                 ref={emailRef}
                 required
@@ -181,14 +185,14 @@ function Login() {
               <Components.Input
                 type='password'
                 id="pwd"
-                placeholder='Password'
+                placeholder={t('login.password')}
                 value={password}
                 required
                 onChange={(e) => { setPassword(e.target.value) }}
               />
               <small ref={errRef} aria-live="assertive" style={{ color: 'red' }}>{logginerror}</small>
               {/* <Components.Anchor href='#'>Forgot your password?</Components.Anchor> */}
-              <Components.Button >Sigin In</Components.Button>
+              <Components.Button >{t('login.signIn')}</Components.Button>
             </Components.Form>
           </Components.SignInContainer>
 
@@ -200,27 +204,27 @@ function Login() {
             <Components.Overlay signinIn={signIn}>
 
               <Components.LeftOverlayPanel signinIn={signIn}>
-                <Components.Title>Welcome <i className="fa fa-duotone fa-heart"></i>!</Components.Title>
+                <Components.Title>{t('login.welcomeTitle')} <i className="fa fa-duotone fa-heart"></i></Components.Title>
                 <Components.Paragraph>
-                  To keep connected with us please login with your personal info
+                  {t('login.welcomeText')}
                 </Components.Paragraph>
                 <Components.GhostButton
                   onClick={() => {
                     setSignIn(true)
                   }}>
-                  Sign In
+                  {t('login.signIn')}
                 </Components.GhostButton>
               </Components.LeftOverlayPanel>
 
               <Components.RightOverlayPanel signinIn={signIn}>
-                <Components.Title>Hi, Dear!</Components.Title>
+                <Components.Title>{t('login.helloTitle')}</Components.Title>
                 <Components.Paragraph>
-                  Enter Your personal details and start journey with us
+                  {t('login.helloText')}
                 </Components.Paragraph>
                 <Components.GhostButton onClick={() => {
                   setSignIn(false)
                 }}>
-                  Sigin Up
+                  {t('login.signUp')}
                 </Components.GhostButton>
               </Components.RightOverlayPanel>
 

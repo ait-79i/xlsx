@@ -138,7 +138,9 @@ const tableConstraintRe = {
 
 /**
  * @param {string} sql
- * @returns {{ schema: {tables: object[]}, errors: string[] }}
+ * @returns {{ schema: {tables: object[]}, errors: {code: string, params: object}[] }}
+ * Error codes (translated by the UI): missingParenthesis, duplicateTable,
+ * referencedTableNotFound, noCreateTable
  */
 export function parseSqlSchema(sql) {
 	const errors = [];
@@ -155,7 +157,7 @@ export function parseSqlSchema(sql) {
 		const name = unquoteIdentifier(match[1]);
 		const block = balancedBody(clean, match.index + match[0].length - 1);
 		if (!block) {
-			errors.push(`Table "${name}": missing closing parenthesis.`);
+			errors.push({ code: "missingParenthesis", params: { table: name } });
 			break;
 		}
 		createRe.lastIndex = block.end;
@@ -199,7 +201,7 @@ export function parseSqlSchema(sql) {
 			}
 		}
 		if (tables.some((t) => t.id === name)) {
-			errors.push(`Table "${name}" is defined twice, the last definition is used.`);
+			errors.push({ code: "duplicateTable", params: { table: name } });
 			tables.splice(tables.findIndex((t) => t.id === name), 1);
 		}
 		tables.push({ id: name, name, source: "sql", columns, rows: [] });
@@ -224,7 +226,10 @@ export function parseSqlSchema(sql) {
 		const target = byId.get(fk.refTable);
 		if (!table) continue;
 		if (!target) {
-			errors.push(`${fk.table}: referenced table "${fk.refTable}" not found.`);
+			errors.push({
+				code: "referencedTableNotFound",
+				params: { table: fk.table, refTable: fk.refTable },
+			});
 			continue;
 		}
 		const refColumns = fk.refColumns.length
@@ -243,6 +248,6 @@ export function parseSqlSchema(sql) {
 		});
 	}
 
-	if (tables.length === 0) errors.push("No CREATE TABLE statement found.");
+	if (tables.length === 0) errors.push({ code: "noCreateTable", params: {} });
 	return { schema: { tables }, errors };
 }

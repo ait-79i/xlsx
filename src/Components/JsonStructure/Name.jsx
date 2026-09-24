@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { changeJsonKeys } from '../CommanFunctions'
+import { useTranslation } from 'react-i18next'
 
 const Name = ({ name, setJsonFile,
   jsonFile, updateJsonFile, setselctedColumns, selctedColumns }) => {
+  const { t } = useTranslation()
   const [update, setupdate] = useState(false)
   const [columnName, setColumnName] = useState('')
   useEffect(() => {
@@ -34,7 +36,7 @@ const Name = ({ name, setJsonFile,
       <div className='holder' onDoubleClick={() => setupdate(true)}>
         <label style={{ marginLeft: '25px' }} htmlFor={name}>{columnName}</label>
         <button
-          title={`remove ${name} from here `}
+          title={t('structure.moveToTop', { name })}
           className='btn-x'
           onClick={
             () => {
@@ -44,7 +46,7 @@ const Name = ({ name, setJsonFile,
           }
         >
           <ion-icon
-            title={`remove ${columnName} from here `}
+            title={t('structure.moveToTop', { name: columnName })}
             name="arrow-undo-outline"></ion-icon>
         </button>
       </div>

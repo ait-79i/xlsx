@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { DIALECTS, generateMermaid, generateSql } from '../../utils/sqlGenerator'
 import { downloadJsonAsExcel, downloadSchemaAsExcel } from '../../utils/excelExport'
+import { useTranslation } from 'react-i18next'
 
 const PREVIEW_LINES = 400
 
@@ -13,6 +14,7 @@ const downloadText = (text, fileName, type) => {
 }
 
 const ExportPanel = ({ schema, data, hasRows }) => {
+  const { t } = useTranslation()
   const [format, setFormat] = useState('sql')
   const [dialect, setDialect] = useState('postgres')
   const [includeData, setIncludeData] = useState(true)
@@ -35,7 +37,7 @@ const ExportPanel = ({ schema, data, hasRows }) => {
   }
 
   if (!schema || schema.tables.length === 0) {
-    return <div className="alert alert-secondary">No schema yet: load JSON data or draw a diagram from SQL first.</div>
+    return <div className="alert alert-secondary">{t('export.noSchema')}</div>
   }
 
   return (
@@ -44,17 +46,17 @@ const ExportPanel = ({ schema, data, hasRows }) => {
         <div className="card">
           <div className="card-body d-flex flex-column gap-3">
             <div>
-              <label className="form-label fw-bold small">Format</label>
+              <label className="form-label fw-bold small">{t('export.format')}</label>
               <select className="form-select form-select-sm" value={format} onChange={(e) => setFormat(e.target.value)}>
                 <option value="sql">SQL (CREATE TABLE{hasRows ? ' + INSERT' : ''})</option>
-                <option value="mermaid">Mermaid ER diagram</option>
+                <option value="mermaid">{t('export.mermaid')}</option>
               </select>
             </div>
 
             {format === 'sql' && (
               <>
                 <div>
-                  <label className="form-label fw-bold small">Database</label>
+                  <label className="form-label fw-bold small">{t('export.database')}</label>
                   <select className="form-select form-select-sm" value={dialect} onChange={(e) => setDialect(e.target.value)}>
                     {Object.entries(DIALECTS).map(([value, d]) => <option key={value} value={value}>{d.label}</option>)}
                   </select>
@@ -68,36 +70,36 @@ const ExportPanel = ({ schema, data, hasRows }) => {
                       checked={includeData}
                       onChange={(e) => setIncludeData(e.target.checked)}
                     />
-                    <label className="form-check-label small" htmlFor="include-data">Include the data (INSERT)</label>
+                    <label className="form-check-label small" htmlFor="include-data">{t('export.includeData')}</label>
                   </div>
                 )}
               </>
             )}
 
             <div className="d-flex gap-2">
-              <button className="btn btn-sm btn-outline-secondary" onClick={copy}>{copied ? 'Copied ✓' : 'Copy'}</button>
+              <button className="btn btn-sm btn-outline-secondary" onClick={copy}>{copied ? `${t('common.copied')} ✓` : t('common.copy')}</button>
               <button
                 className="btn btn-sm btn-dark"
                 onClick={() => format === 'sql'
                   ? downloadText(output, `schema-${dialect}.sql`, 'application/sql')
                   : downloadText(output, 'schema.mmd', 'text/plain')}
               >
-                Download
+                {t('common.download')}
               </button>
             </div>
 
             <hr className="my-0" />
 
             <div className="d-flex flex-column gap-2">
-              <span className="fw-bold small">Excel</span>
+              <span className="fw-bold small">{t('export.excel')}</span>
               {hasRows && (
                 <button className="btn btn-sm btn-outline-success" onClick={() => downloadSchemaAsExcel(schema)}>
-                  Tables → Excel (one sheet per table)
+                  {t('export.tablesToExcel')}
                 </button>
               )}
               {data !== null && data !== undefined && (
                 <button className="btn btn-sm btn-outline-success" onClick={() => downloadJsonAsExcel(data)}>
-                  JSON → Excel (flattened columns)
+                  {t('export.jsonToExcel')}
                 </button>
               )}
             </div>
@@ -108,10 +110,10 @@ const ExportPanel = ({ schema, data, hasRows }) => {
       <div className="col-lg-9">
         {lines.length > PREVIEW_LINES && (
           <div className="small text-muted mb-1">
-            Preview of the first {PREVIEW_LINES} lines out of {lines.length}. Copy and Download contain everything.
+            {t('export.previewTruncated', { shown: PREVIEW_LINES, total: lines.length })}
           </div>
         )}
-        <pre className="code-preview">{preview}</pre>
+        <pre className="code-preview" dir="ltr">{preview}</pre>
       </div>
     </div>
   )

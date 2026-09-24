@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { PreventReload } from '../CommanFunctions';
 import JsonCols from './JsonCols';
 import JsonStructure from './JsonStructure';
+import { useTranslation } from 'react-i18next';
 
 const JsonStructureFormatt = ({ culomns, setJsonFile, jsonFile, xlsxculomns, setpreventUpdateTableCols }) => {
 
   PreventReload()
+  const { t } = useTranslation();
 
 
   const [error, setError] = useState([]);
@@ -116,13 +118,13 @@ const JsonStructureFormatt = ({ culomns, setJsonFile, jsonFile, xlsxculomns, set
       var errs = []
 
       if (text.trim() === '') {
-        errs = [...errs, "-this field can't be empty."]
+        errs = [...errs, `- ${t('structure.errors.emptyKey')}`]
       }
       if (!isNaN(text)) {
-        errs = [...errs, '-this field must be a string.']
+        errs = [...errs, `- ${t('structure.errors.keyMustBeText')}`]
       }
       if (selctedColumns.length === 0) {
-        errs = [...errs, "-You must select at least one column."]
+        errs = [...errs, `- ${t('structure.errors.selectColumn')}`]
       }
 
       setError([...errs])
@@ -148,8 +150,8 @@ const JsonStructureFormatt = ({ culomns, setJsonFile, jsonFile, xlsxculomns, set
           className="form-control h-50"
           value={key}
           onChange={(e) => { setkey(e.target.value) }}
-          placeholder=' Give a key to these values ...' />
-        <button className="btn h-50" type="button" onClick={generateJsonFile}>Generate</button>
+          placeholder={t('structure.keyPlaceholder')} />
+        <button className="btn h-50" type="button" onClick={generateJsonFile}>{t('structure.generate')}</button>
       </div>
 
       {error.length !== 0 && <div className='error'><pre>{error.join('\n')}</pre></div>}

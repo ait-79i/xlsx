@@ -1,5 +1,6 @@
 import { createContext, memo, useContext } from 'react'
 import { Handle, Position } from '@xyflow/react'
+import { useTranslation } from 'react-i18next'
 import { isRowMatch, ROOT_ID } from '../../utils/jsonGraph'
 
 export const JsonGraphContext = createContext({
@@ -18,6 +19,7 @@ const formatValue = (row) => {
 const sizeLabel = (type, size) => (type === 'array' ? `[${size}]` : `{${size}}`)
 
 function JsonNode({ id, data }) {
+  const { t } = useTranslation()
   const { search, activeId, toggleNode, copyPath } = useContext(JsonGraphContext)
   const term = search.trim().toLowerCase()
   const matched = term !== '' && (
@@ -38,8 +40,8 @@ function JsonNode({ id, data }) {
           key={row.key}
           className={`json-node__row ${isRowMatch(row, search) ? 'is-match' : ''}`}
           title={row.childId
-            ? `${row.jsonPath}\nClick to ${row.collapsed ? 'expand' : 'collapse'}`
-            : `${row.jsonPath}\n${formatValue(row)}\nClick to copy the path`}
+            ? `${row.jsonPath}\n${row.collapsed ? t('graph.clickToExpand') : t('graph.clickToCollapse')}`
+            : `${row.jsonPath}\n${formatValue(row)}\n${t('graph.clickToCopyPath')}`}
           onClick={() => (row.childId ? toggleNode(row.childId) : copyPath(row.jsonPath))}
         >
           <span className="json-node__key">{row.key}</span>
@@ -50,7 +52,7 @@ function JsonNode({ id, data }) {
         </div>
       ))}
 
-      {data.hidden > 0 && <div className="json-node__more">… {data.hidden} more items</div>}
+      {data.hidden > 0 && <div className="json-node__more">… {t('graph.moreItems', { count: data.hidden })}</div>}
     </div>
   )
 }

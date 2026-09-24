@@ -1,0 +1,190 @@
+{
+	"language": "Language",
+	"loading": "Loading…",
+	"notFound": "Page not found",
+	"common": {
+		"copy": "Copy",
+		"copied": "Copied",
+		"download": "Download",
+		"clear": "Clear",
+		"load": "Load"
+	},
+	"nav": {
+		"logo": "logo",
+		"home": "Home",
+		"excelToJson": "Excel to JSON",
+		"jsonStructure": "JSON structure",
+		"testApi": "Test API",
+		"visualizer": "Visualizer",
+		"contactUs": "Contact us",
+		"logout": "Log out",
+		"signIn": "Sign in",
+		"signUp": "Sign up"
+	},
+	"home": {
+		"title": "Excel → JSON",
+		"subtitle": "Convert your spreadsheets to JSON, reshape the structure, test it against your API and visualize it as a graph or a database schema.",
+		"cta": "Get started"
+	},
+	"login": {
+		"createAccount": "Create account",
+		"userName": "User name",
+		"email": "Email",
+		"password": "Password",
+		"confirmPassword": "Confirm password",
+		"signIn": "Sign in",
+		"signUp": "Sign up",
+		"welcomeTitle": "Welcome back!",
+		"welcomeText": "To keep connected with us please log in with your personal info",
+		"helloTitle": "Hello, friend!",
+		"helloText": "Enter your personal details and start your journey with us",
+		"errors": {
+			"passwordsMismatch": "Passwords do not match",
+			"registrationFailed": "Registration failed",
+			"noServerResponse": "No server response",
+			"missingCredentials": "Missing email or password",
+			"unauthorized": "Unauthorized",
+			"loginFailed": "Login failed"
+		}
+	},
+	"dropzone": {
+		"dropExcel": "Drag and drop your Excel file",
+		"dropJson": "Drag and drop your JSON file",
+		"or": "Or",
+		"selectFromComputer": "select a file to upload from your computer",
+		"selectFile": "Select file",
+		"extensionNotSupported": "File extension not supported!",
+		"onlyOneFile": "Please choose only one file."
+	},
+	"errors": {
+		"invalidJson": "Invalid JSON: {{message}}",
+		"excelRead": "Could not read the Excel file"
+	},
+	"clipboard": {
+		"copyYourData": "Copy your data"
+	},
+	"jsonPreview": {
+		"itemLooksLike": "Each item in your JSON file looks like:"
+	},
+	"actions": {
+		"hide": "Hide",
+		"modifyStructure": "Modify the structure",
+		"downloadJson": "Download JSON file",
+		"downloadExcel": "Download Excel file",
+		"sendData": "Send data",
+		"visualize": "Visualize"
+	},
+	"structure": {
+		"title": "Modify JSON structure",
+		"keyPlaceholder": "Give a key to these values…",
+		"generate": "Generate",
+		"moveToTop": "Move {{name}} back to the top level",
+		"errors": {
+			"emptyKey": "This field can't be empty.",
+			"keyMustBeText": "This field must be text, not a number.",
+			"selectColumn": "Select at least one column."
+		}
+	},
+	"api": {
+		"httpMethod": "HTTP method",
+		"urlPlaceholder": "Enter request URL",
+		"send": "Send",
+		"headers": "Headers",
+		"key": "Key",
+		"value": "Value",
+		"body": "Body",
+		"response": "Response",
+		"visualizeResponse": "Visualize response",
+		"invalidBody": "JSON syntax is not valid.",
+		"errors": {
+			"chooseMethod": "You must choose a method",
+			"emptyUrl": "The URL can't be empty"
+		}
+	},
+	"visualizer": {
+		"tabs": {
+			"graph": "JSON graph",
+			"schema": "Database schema",
+			"export": "SQL & export"
+		},
+		"data": "Data:",
+		"noData": "No data loaded",
+		"arrayOf_one": "Array of {{count}} item",
+		"arrayOf_other": "Array of {{count}} items",
+		"objectWith_one": "Object with {{count}} key",
+		"objectWith_other": "Object with {{count}} keys",
+		"value": "Value: {{value}}",
+		"dropHint": "drop a .json or Excel file here",
+		"openFile": "Open file",
+		"pasteJson": "Paste JSON",
+		"loadSample": "Load sample data",
+		"emptyGraph": "Load a JSON or Excel file above, or send data here from the Excel to JSON, JSON structure or Test API pages with the <strong>Visualize</strong> button."
+	},
+	"graph": {
+		"searchPlaceholder": "Search keys or values…",
+		"noMatch": "no match",
+		"previousMatch": "Previous (Shift+Enter)",
+		"nextMatch": "Next (Enter)",
+		"itemsPerArrayTitle": "Items shown per array",
+		"itemsPerArray_one": "{{count}} item / array",
+		"itemsPerArray_other": "{{count}} items / array",
+		"collapseAll": "Collapse all",
+		"expandAll": "Expand all",
+		"relayout": "Re-layout",
+		"relayoutTitle": "Reset node positions",
+		"exportPng": "Export PNG",
+		"copiedPath": "Copied {{path}}",
+		"nodes_one": "{{count}} node",
+		"nodes_other": "{{count}} nodes",
+		"help": "click a nested key to collapse it, a value to copy its path",
+		"truncated": "graph truncated, collapse nodes or show fewer items",
+		"moreItems_one": "{{count}} more item",
+		"moreItems_other": "{{count}} more items",
+		"clickToExpand": "Click to expand",
+		"clickToCollapse": "Click to collapse",
+		"clickToCopyPath": "Click to copy the path"
+	},
+	"schema": {
+		"fromJson": "From the JSON data",
+		"fromSql": "From SQL (CREATE TABLE)",
+		"fromJsonHelp": "Tables inferred from the data: nested objects and arrays become related tables.",
+		"sqlPlaceholder": "Paste CREATE TABLE statements (PostgreSQL, MySQL, SQLite, SQL Server)…",
+		"drawDiagram": "Draw diagram",
+		"loadExample": "Load SQL example",
+		"openSqlFile": "Open .sql file",
+		"emptyJson": "Load some JSON data first, or switch to From SQL.",
+		"tableExists": "A table named \"{{name}}\" already exists.",
+		"tableCount_one": "{{count}} table",
+		"tableCount_other": "{{count}} tables",
+		"relationCount_one": "{{count}} relation",
+		"relationCount_other": "{{count}} relations",
+		"rows_one": "{{count}} row",
+		"rows_other": "{{count}} rows",
+		"relayoutTitle": "Reset table positions",
+		"help": "Double-click a table name to rename it · change a column type with its selector · select a table to highlight its relations",
+		"doubleClickToRename": "Double-click to rename",
+		"primaryKey": "Primary key",
+		"foreignKey": "Foreign key",
+		"nullable": "nullable",
+		"notNull": "not null",
+		"unique": "unique",
+		"changeType": "Change the column type",
+		"parseErrors": {
+			"missingParenthesis": "Table \"{{table}}\": missing closing parenthesis.",
+			"duplicateTable": "Table \"{{table}}\" is defined twice, the last definition is used.",
+			"referencedTableNotFound": "{{table}}: referenced table \"{{refTable}}\" not found.",
+			"noCreateTable": "No CREATE TABLE statement found."
+		}
+	},
+	"export": {
+		"noSchema": "No schema yet: load JSON data or draw a diagram from SQL first.",
+		"format": "Format",
+		"mermaid": "Mermaid ER diagram",
+		"database": "Database",
+		"includeData": "Include the data (INSERT)",
+		"excel": "Excel",
+		"tablesToExcel": "Tables → Excel (one sheet per table)",
+		"jsonToExcel": "JSON → Excel (flattened columns)",
+		"previewTruncated": "Preview of the first {{shown}} lines out of {{total}}. Copy and Download contain everything."
+	}
+}

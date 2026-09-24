@@ -55,12 +55,24 @@ Les pages ci-dessus sont protégées. La connexion se fait par JWT auprès d'un 
 
 Le token est stocké dans `localStorage`.
 
+## Langues
+
+L'interface est disponible en **anglais**, **français** et **arabe** (avec affichage de droite à gauche), grâce à [i18next](https://www.i18next.com/) et [react-i18next](https://react.i18next.com/).
+
+- La langue est détectée depuis le navigateur, puis mémorisée (`localStorage`, clé `lang`) quand on la change avec le sélecteur de la barre de navigation, de l'accueil ou de la page de connexion.
+- En arabe, `<html dir="rtl">` est appliqué et Bootstrap est remplacé par sa version RTL. Les diagrammes, le code et les champs JSON / SQL / URL restent de gauche à droite.
+- Les textes sont dans `src/i18n/locales/<langue>.json`. Les nombres utilisent les formes plurielles d'i18next (`_one`, `_other`, et pour l'arabe `_zero`, `_one`, `_two`, `_few`, `_many`, `_other`).
+- Un test (`src/i18n/locales.test.js`) vérifie que toutes les langues ont les mêmes clés, les bonnes formes plurielles et les mêmes variables, et que chaque clé utilisée dans le code existe.
+
+Pour ajouter une langue : créer `src/i18n/locales/<code>.json` en copiant `en.json`, puis l'ajouter à `LANGUAGES` et à `resources` dans `src/i18n/index.js` (et à `PLURAL_FORMS` dans le test).
+
 ## Structure du code
 
 ```
 src/
 ├── App.js                      # Routes (publiques / protégées) et état partagé du corps de requête
 ├── config.js                   # URL du backend (REACT_APP_API_URL)
+├── i18n/                       # Configuration i18next et traductions (en, fr, ar)
 ├── home/Home.jsx               # Page d'accueil
 ├── utils/                      # Logique pure, testée (*.test.js)
 │   ├── jsonGraph.js            # JSON -> nœuds et liens React Flow

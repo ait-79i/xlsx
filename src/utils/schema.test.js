@@ -259,10 +259,13 @@ describe("SQL parser", () => {
 	});
 
 	test("reports errors", () => {
-		expect(parseSqlSchema("SELECT 1").errors).toEqual(["No CREATE TABLE statement found."]);
-		expect(
-			parseSqlSchema("CREATE TABLE a (b_id int REFERENCES b(id));").errors[0]
-		).toContain('referenced table "b" not found');
+		expect(parseSqlSchema("SELECT 1").errors).toEqual([{ code: "noCreateTable", params: {} }]);
+		expect(parseSqlSchema("CREATE TABLE a (b_id int REFERENCES b(id));").errors).toEqual([
+			{ code: "referencedTableNotFound", params: { table: "a", refTable: "b" } },
+		]);
+		expect(parseSqlSchema("CREATE TABLE a (id int); CREATE TABLE a (id int);").errors).toEqual([
+			{ code: "duplicateTable", params: { table: "a" } },
+		]);
 	});
 
 	test("maps SQL types", () => {

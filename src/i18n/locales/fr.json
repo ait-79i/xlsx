@@ -1,0 +1,190 @@
+{
+	"language": "Langue",
+	"loading": "Chargement…",
+	"notFound": "Page introuvable",
+	"common": {
+		"copy": "Copier",
+		"copied": "Copié",
+		"download": "Télécharger",
+		"clear": "Effacer",
+		"load": "Charger"
+	},
+	"nav": {
+		"logo": "logo",
+		"home": "Accueil",
+		"excelToJson": "Excel vers JSON",
+		"jsonStructure": "Structure JSON",
+		"testApi": "Tester une API",
+		"visualizer": "Visualiseur",
+		"contactUs": "Contact",
+		"logout": "Déconnexion",
+		"signIn": "Connexion",
+		"signUp": "Inscription"
+	},
+	"home": {
+		"title": "Excel → JSON",
+		"subtitle": "Convertissez vos tableurs en JSON, modifiez leur structure, testez-les avec votre API et visualisez-les sous forme de graphe ou de schéma de base de données.",
+		"cta": "Commencer"
+	},
+	"login": {
+		"createAccount": "Créer un compte",
+		"userName": "Nom d'utilisateur",
+		"email": "E-mail",
+		"password": "Mot de passe",
+		"confirmPassword": "Confirmer le mot de passe",
+		"signIn": "Se connecter",
+		"signUp": "S'inscrire",
+		"welcomeTitle": "Bon retour !",
+		"welcomeText": "Pour rester connecté avec nous, connectez-vous avec vos informations personnelles",
+		"helloTitle": "Bonjour !",
+		"helloText": "Saisissez vos informations personnelles et commencez l'aventure avec nous",
+		"errors": {
+			"passwordsMismatch": "Les mots de passe ne correspondent pas",
+			"registrationFailed": "L'inscription a échoué",
+			"noServerResponse": "Le serveur ne répond pas",
+			"missingCredentials": "E-mail ou mot de passe manquant",
+			"unauthorized": "Non autorisé",
+			"loginFailed": "La connexion a échoué"
+		}
+	},
+	"dropzone": {
+		"dropExcel": "Glissez-déposez votre fichier Excel",
+		"dropJson": "Glissez-déposez votre fichier JSON",
+		"or": "Ou",
+		"selectFromComputer": "choisissez un fichier sur votre ordinateur",
+		"selectFile": "Choisir un fichier",
+		"extensionNotSupported": "Extension de fichier non prise en charge !",
+		"onlyOneFile": "Veuillez choisir un seul fichier."
+	},
+	"errors": {
+		"invalidJson": "JSON invalide : {{message}}",
+		"excelRead": "Impossible de lire le fichier Excel"
+	},
+	"clipboard": {
+		"copyYourData": "Copier vos données"
+	},
+	"jsonPreview": {
+		"itemLooksLike": "Chaque élément de votre fichier JSON ressemble à :"
+	},
+	"actions": {
+		"hide": "Masquer",
+		"modifyStructure": "Modifier la structure",
+		"downloadJson": "Télécharger le fichier JSON",
+		"downloadExcel": "Télécharger le fichier Excel",
+		"sendData": "Envoyer les données",
+		"visualize": "Visualiser"
+	},
+	"structure": {
+		"title": "Modifier la structure JSON",
+		"keyPlaceholder": "Donnez une clé à ces valeurs…",
+		"generate": "Générer",
+		"moveToTop": "Remettre {{name}} au premier niveau",
+		"errors": {
+			"emptyKey": "Ce champ ne peut pas être vide.",
+			"keyMustBeText": "Ce champ doit être du texte, pas un nombre.",
+			"selectColumn": "Sélectionnez au moins une colonne."
+		}
+	},
+	"api": {
+		"httpMethod": "Méthode HTTP",
+		"urlPlaceholder": "Saisissez l'URL de la requête",
+		"send": "Envoyer",
+		"headers": "En-têtes",
+		"key": "Clé",
+		"value": "Valeur",
+		"body": "Corps",
+		"response": "Réponse",
+		"visualizeResponse": "Visualiser la réponse",
+		"invalidBody": "La syntaxe JSON n'est pas valide.",
+		"errors": {
+			"chooseMethod": "Vous devez choisir une méthode",
+			"emptyUrl": "L'URL ne peut pas être vide"
+		}
+	},
+	"visualizer": {
+		"tabs": {
+			"graph": "Graphe JSON",
+			"schema": "Schéma de base de données",
+			"export": "SQL et export"
+		},
+		"data": "Données :",
+		"noData": "Aucune donnée chargée",
+		"arrayOf_one": "Tableau de {{count}} élément",
+		"arrayOf_other": "Tableau de {{count}} éléments",
+		"objectWith_one": "Objet avec {{count}} clé",
+		"objectWith_other": "Objet avec {{count}} clés",
+		"value": "Valeur : {{value}}",
+		"dropHint": "déposez un fichier .json ou Excel ici",
+		"openFile": "Ouvrir un fichier",
+		"pasteJson": "Coller du JSON",
+		"loadSample": "Charger des données d'exemple",
+		"emptyGraph": "Chargez un fichier JSON ou Excel ci-dessus, ou envoyez des données ici depuis les pages Excel vers JSON, Structure JSON ou Tester une API avec le bouton <strong>Visualiser</strong>."
+	},
+	"graph": {
+		"searchPlaceholder": "Rechercher des clés ou des valeurs…",
+		"noMatch": "aucun résultat",
+		"previousMatch": "Précédent (Maj+Entrée)",
+		"nextMatch": "Suivant (Entrée)",
+		"itemsPerArrayTitle": "Éléments affichés par tableau",
+		"itemsPerArray_one": "{{count}} élément / tableau",
+		"itemsPerArray_other": "{{count}} éléments / tableau",
+		"collapseAll": "Tout replier",
+		"expandAll": "Tout déplier",
+		"relayout": "Réorganiser",
+		"relayoutTitle": "Réinitialiser la position des nœuds",
+		"exportPng": "Exporter en PNG",
+		"copiedPath": "{{path}} copié",
+		"nodes_one": "{{count}} nœud",
+		"nodes_other": "{{count}} nœuds",
+		"help": "cliquez sur une clé imbriquée pour la replier, sur une valeur pour copier son chemin",
+		"truncated": "graphe tronqué, repliez des nœuds ou affichez moins d'éléments",
+		"moreItems_one": "{{count}} élément de plus",
+		"moreItems_other": "{{count}} éléments de plus",
+		"clickToExpand": "Cliquez pour déplier",
+		"clickToCollapse": "Cliquez pour replier",
+		"clickToCopyPath": "Cliquez pour copier le chemin"
+	},
+	"schema": {
+		"fromJson": "À partir des données JSON",
+		"fromSql": "À partir de SQL (CREATE TABLE)",
+		"fromJsonHelp": "Tables déduites des données : les objets et tableaux imbriqués deviennent des tables liées.",
+		"sqlPlaceholder": "Collez des instructions CREATE TABLE (PostgreSQL, MySQL, SQLite, SQL Server)…",
+		"drawDiagram": "Dessiner le diagramme",
+		"loadExample": "Charger un exemple SQL",
+		"openSqlFile": "Ouvrir un fichier .sql",
+		"emptyJson": "Chargez d'abord des données JSON, ou passez à « À partir de SQL ».",
+		"tableExists": "Une table nommée « {{name}} » existe déjà.",
+		"tableCount_one": "{{count}} table",
+		"tableCount_other": "{{count}} tables",
+		"relationCount_one": "{{count}} relation",
+		"relationCount_other": "{{count}} relations",
+		"rows_one": "{{count}} ligne",
+		"rows_other": "{{count}} lignes",
+		"relayoutTitle": "Réinitialiser la position des tables",
+		"help": "Double-cliquez sur le nom d'une table pour la renommer · changez le type d'une colonne avec son sélecteur · sélectionnez une table pour mettre ses relations en évidence",
+		"doubleClickToRename": "Double-cliquez pour renommer",
+		"primaryKey": "Clé primaire",
+		"foreignKey": "Clé étrangère",
+		"nullable": "peut être vide",
+		"notNull": "obligatoire",
+		"unique": "unique",
+		"changeType": "Changer le type de la colonne",
+		"parseErrors": {
+			"missingParenthesis": "Table « {{table}} » : parenthèse fermante manquante.",
+			"duplicateTable": "La table « {{table}} » est définie deux fois, la dernière définition est utilisée.",
+			"referencedTableNotFound": "{{table}} : table référencée « {{refTable}} » introuvable.",
+			"noCreateTable": "Aucune instruction CREATE TABLE trouvée."
+		}
+	},
+	"export": {
+		"noSchema": "Pas encore de schéma : chargez des données JSON ou dessinez un diagramme à partir de SQL.",
+		"format": "Format",
+		"mermaid": "Diagramme ER Mermaid",
+		"database": "Base de données",
+		"includeData": "Inclure les données (INSERT)",
+		"excel": "Excel",
+		"tablesToExcel": "Tables → Excel (une feuille par table)",
+		"jsonToExcel": "JSON → Excel (colonnes aplaties)",
+		"previewTruncated": "Aperçu des {{shown}} premières lignes sur {{total}}. Copier et Télécharger contiennent tout."
+	}
+}

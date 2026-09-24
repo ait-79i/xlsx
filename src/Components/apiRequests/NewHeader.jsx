@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const NewHeader = ({ setheads, heads }) => {
+  const { t } = useTranslation()
   const [newheaderKey, setNewheaderKey] = useState('')
   const [newheaderValue, setNewheaderValue] = useState('')
 
@@ -20,14 +22,14 @@ const NewHeader = ({ setheads, heads }) => {
         <input type="text"
           onBlur={saveNewHeader}
           onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
-          placeholder='key '
+          placeholder={t('api.key')}
           value={newheaderKey}
           onChange={(e) => { setNewheaderKey(e.target.value) }}
         />
         <input type="text"
           onBlur={saveNewHeader}
           onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
-          placeholder='value'
+          placeholder={t('api.value')}
           value={newheaderValue}
           onChange={(e) => { setNewheaderValue(e.target.value) }}
         />

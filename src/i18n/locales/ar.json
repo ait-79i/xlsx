@@ -1,0 +1,222 @@
+{
+	"language": "اللغة",
+	"loading": "جارٍ التحميل…",
+	"notFound": "الصفحة غير موجودة",
+	"common": {
+		"copy": "نسخ",
+		"copied": "تم النسخ",
+		"download": "تنزيل",
+		"clear": "مسح",
+		"load": "تحميل"
+	},
+	"nav": {
+		"logo": "الشعار",
+		"home": "الرئيسية",
+		"excelToJson": "Excel إلى JSON",
+		"jsonStructure": "بنية JSON",
+		"testApi": "اختبار API",
+		"visualizer": "العارض",
+		"contactUs": "اتصل بنا",
+		"logout": "تسجيل الخروج",
+		"signIn": "تسجيل الدخول",
+		"signUp": "إنشاء حساب"
+	},
+	"home": {
+		"title": "Excel → JSON",
+		"subtitle": "حوّل جداول البيانات إلى JSON، وعدّل بنيتها، واختبرها مع واجهة API الخاصة بك، واعرضها كمخطط أو كمخطط قاعدة بيانات.",
+		"cta": "ابدأ الآن"
+	},
+	"login": {
+		"createAccount": "إنشاء حساب",
+		"userName": "اسم المستخدم",
+		"email": "البريد الإلكتروني",
+		"password": "كلمة المرور",
+		"confirmPassword": "تأكيد كلمة المرور",
+		"signIn": "تسجيل الدخول",
+		"signUp": "إنشاء حساب",
+		"welcomeTitle": "مرحبًا بعودتك!",
+		"welcomeText": "للبقاء على تواصل معنا، سجّل الدخول بمعلوماتك الشخصية",
+		"helloTitle": "أهلًا بك!",
+		"helloText": "أدخل بياناتك الشخصية وابدأ رحلتك معنا",
+		"errors": {
+			"passwordsMismatch": "كلمتا المرور غير متطابقتين",
+			"registrationFailed": "فشل إنشاء الحساب",
+			"noServerResponse": "لا يوجد رد من الخادم",
+			"missingCredentials": "البريد الإلكتروني أو كلمة المرور مفقودة",
+			"unauthorized": "غير مصرّح",
+			"loginFailed": "فشل تسجيل الدخول"
+		}
+	},
+	"dropzone": {
+		"dropExcel": "اسحب ملف Excel وأفلته هنا",
+		"dropJson": "اسحب ملف JSON وأفلته هنا",
+		"or": "أو",
+		"selectFromComputer": "اختر ملفًا من جهازك لرفعه",
+		"selectFile": "اختيار ملف",
+		"extensionNotSupported": "امتداد الملف غير مدعوم!",
+		"onlyOneFile": "الرجاء اختيار ملف واحد فقط."
+	},
+	"errors": {
+		"invalidJson": "JSON غير صالح: {{message}}",
+		"excelRead": "تعذّرت قراءة ملف Excel"
+	},
+	"clipboard": {
+		"copyYourData": "انسخ بياناتك"
+	},
+	"jsonPreview": {
+		"itemLooksLike": "يبدو كل عنصر في ملف JSON كما يلي:"
+	},
+	"actions": {
+		"hide": "إخفاء",
+		"modifyStructure": "تعديل البنية",
+		"downloadJson": "تنزيل ملف JSON",
+		"downloadExcel": "تنزيل ملف Excel",
+		"sendData": "إرسال البيانات",
+		"visualize": "عرض مرئي"
+	},
+	"structure": {
+		"title": "تعديل بنية JSON",
+		"keyPlaceholder": "أعطِ مفتاحًا لهذه القيم…",
+		"generate": "إنشاء",
+		"moveToTop": "إرجاع {{name}} إلى المستوى الأول",
+		"errors": {
+			"emptyKey": "لا يمكن ترك هذا الحقل فارغًا.",
+			"keyMustBeText": "يجب أن يكون هذا الحقل نصًا وليس رقمًا.",
+			"selectColumn": "اختر عمودًا واحدًا على الأقل."
+		}
+	},
+	"api": {
+		"httpMethod": "طريقة HTTP",
+		"urlPlaceholder": "أدخل رابط الطلب",
+		"send": "إرسال",
+		"headers": "الترويسات",
+		"key": "المفتاح",
+		"value": "القيمة",
+		"body": "المحتوى",
+		"response": "الاستجابة",
+		"visualizeResponse": "عرض الاستجابة",
+		"invalidBody": "صيغة JSON غير صالحة.",
+		"errors": {
+			"chooseMethod": "يجب اختيار طريقة",
+			"emptyUrl": "لا يمكن ترك الرابط فارغًا"
+		}
+	},
+	"visualizer": {
+		"tabs": {
+			"graph": "مخطط JSON",
+			"schema": "مخطط قاعدة البيانات",
+			"export": "SQL والتصدير"
+		},
+		"data": "البيانات:",
+		"noData": "لم يتم تحميل أي بيانات",
+		"arrayOf_zero": "مصفوفة فارغة",
+		"arrayOf_one": "مصفوفة من عنصر واحد",
+		"arrayOf_two": "مصفوفة من عنصرين",
+		"arrayOf_few": "مصفوفة من {{count}} عناصر",
+		"arrayOf_many": "مصفوفة من {{count}} عنصرًا",
+		"arrayOf_other": "مصفوفة من {{count}} عنصر",
+		"objectWith_zero": "كائن بلا مفاتيح",
+		"objectWith_one": "كائن بمفتاح واحد",
+		"objectWith_two": "كائن بمفتاحين",
+		"objectWith_few": "كائن بـ {{count}} مفاتيح",
+		"objectWith_many": "كائن بـ {{count}} مفتاحًا",
+		"objectWith_other": "كائن بـ {{count}} مفتاح",
+		"value": "القيمة: {{value}}",
+		"dropHint": "أفلت ملف ‎.json‎ أو Excel هنا",
+		"openFile": "فتح ملف",
+		"pasteJson": "لصق JSON",
+		"loadSample": "تحميل بيانات تجريبية",
+		"emptyGraph": "حمّل ملف JSON أو Excel أعلاه، أو أرسل البيانات إلى هنا من صفحات Excel إلى JSON أو بنية JSON أو اختبار API عبر زر <strong>عرض مرئي</strong>."
+	},
+	"graph": {
+		"searchPlaceholder": "ابحث في المفاتيح أو القيم…",
+		"noMatch": "لا توجد نتائج",
+		"previousMatch": "السابق (Shift+Enter)",
+		"nextMatch": "التالي (Enter)",
+		"itemsPerArrayTitle": "عدد العناصر المعروضة لكل مصفوفة",
+		"itemsPerArray_zero": "{{count}} عنصر / مصفوفة",
+		"itemsPerArray_one": "عنصر واحد / مصفوفة",
+		"itemsPerArray_two": "عنصران / مصفوفة",
+		"itemsPerArray_few": "{{count}} عناصر / مصفوفة",
+		"itemsPerArray_many": "{{count}} عنصرًا / مصفوفة",
+		"itemsPerArray_other": "{{count}} عنصر / مصفوفة",
+		"collapseAll": "طيّ الكل",
+		"expandAll": "توسيع الكل",
+		"relayout": "إعادة الترتيب",
+		"relayoutTitle": "إعادة ضبط مواضع العُقد",
+		"exportPng": "تصدير PNG",
+		"copiedPath": "تم نسخ {{path}}",
+		"nodes_zero": "لا توجد عُقد",
+		"nodes_one": "عقدة واحدة",
+		"nodes_two": "عقدتان",
+		"nodes_few": "{{count}} عُقد",
+		"nodes_many": "{{count}} عقدة",
+		"nodes_other": "{{count}} عقدة",
+		"help": "انقر على مفتاح متداخل لطيّه، وعلى قيمة لنسخ مسارها",
+		"truncated": "تم اقتطاع المخطط، اطوِ بعض العُقد أو اعرض عناصر أقل",
+		"moreItems_zero": "لا توجد عناصر أخرى",
+		"moreItems_one": "عنصر آخر",
+		"moreItems_two": "عنصران آخران",
+		"moreItems_few": "{{count}} عناصر أخرى",
+		"moreItems_many": "{{count}} عنصرًا آخر",
+		"moreItems_other": "{{count}} عنصر آخر",
+		"clickToExpand": "انقر للتوسيع",
+		"clickToCollapse": "انقر للطيّ",
+		"clickToCopyPath": "انقر لنسخ المسار"
+	},
+	"schema": {
+		"fromJson": "من بيانات JSON",
+		"fromSql": "من SQL ‏(CREATE TABLE)",
+		"fromJsonHelp": "جداول مستنتجة من البيانات: تصبح الكائنات والمصفوفات المتداخلة جداول مرتبطة.",
+		"sqlPlaceholder": "الصق أوامر CREATE TABLE ‏(PostgreSQL وMySQL وSQLite وSQL Server)…",
+		"drawDiagram": "رسم المخطط",
+		"loadExample": "تحميل مثال SQL",
+		"openSqlFile": "فتح ملف ‎.sql",
+		"emptyJson": "حمّل بيانات JSON أولًا، أو انتقل إلى «من SQL».",
+		"tableExists": "يوجد جدول باسم «{{name}}» مسبقًا.",
+		"tableCount_zero": "لا توجد جداول",
+		"tableCount_one": "جدول واحد",
+		"tableCount_two": "جدولان",
+		"tableCount_few": "{{count}} جداول",
+		"tableCount_many": "{{count}} جدولًا",
+		"tableCount_other": "{{count}} جدول",
+		"relationCount_zero": "لا توجد علاقات",
+		"relationCount_one": "علاقة واحدة",
+		"relationCount_two": "علاقتان",
+		"relationCount_few": "{{count}} علاقات",
+		"relationCount_many": "{{count}} علاقة",
+		"relationCount_other": "{{count}} علاقة",
+		"rows_zero": "لا توجد صفوف",
+		"rows_one": "صف واحد",
+		"rows_two": "صفّان",
+		"rows_few": "{{count}} صفوف",
+		"rows_many": "{{count}} صفًا",
+		"rows_other": "{{count}} صف",
+		"relayoutTitle": "إعادة ضبط مواضع الجداول",
+		"help": "انقر مرتين على اسم جدول لإعادة تسميته · غيّر نوع العمود من القائمة · اختر جدولًا لإبراز علاقاته",
+		"doubleClickToRename": "انقر مرتين لإعادة التسمية",
+		"primaryKey": "مفتاح أساسي",
+		"foreignKey": "مفتاح خارجي",
+		"nullable": "يقبل القيمة الفارغة",
+		"notNull": "إلزامي",
+		"unique": "فريد",
+		"changeType": "تغيير نوع العمود",
+		"parseErrors": {
+			"missingParenthesis": "الجدول «{{table}}»: قوس الإغلاق مفقود.",
+			"duplicateTable": "الجدول «{{table}}» معرّف مرتين، وسيُستخدم التعريف الأخير.",
+			"referencedTableNotFound": "{{table}}: الجدول المشار إليه «{{refTable}}» غير موجود.",
+			"noCreateTable": "لم يتم العثور على أي أمر CREATE TABLE."
+		}
+	},
+	"export": {
+		"noSchema": "لا يوجد مخطط بعد: حمّل بيانات JSON أو ارسم مخططًا من SQL أولًا.",
+		"format": "الصيغة",
+		"mermaid": "مخطط علاقات Mermaid",
+		"database": "قاعدة البيانات",
+		"includeData": "تضمين البيانات (INSERT)",
+		"excel": "Excel",
+		"tablesToExcel": "الجداول ← Excel (ورقة لكل جدول)",
+		"jsonToExcel": "JSON → Excel (أعمدة مسطّحة)",
+		"previewTruncated": "معاينة أول {{shown}} سطر من أصل {{total}}. يحتوي النسخ والتنزيل على كل شيء."
+	}
+}

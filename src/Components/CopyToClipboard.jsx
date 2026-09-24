@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const CopyToClipboard = ({ data }) => {
+  const { t } = useTranslation()
   const [copy, setCopy] = useState(true)
   return (
     <div style={{ display:"flex", justifyContent:"space-between"}}>
-      <div > Copy your data</div>
+      <div > {t('clipboard.copyYourData')}</div>
       {copy ?
         <button
           onClick={() => {
@@ -18,7 +20,7 @@ const CopyToClipboard = ({ data }) => {
           <span>
           <ion-icon name="clipboard-outline"></ion-icon>
           </span>
-          Copy
+          {t('common.copy')}
         </button>
 
         :
@@ -26,7 +28,7 @@ const CopyToClipboard = ({ data }) => {
           <span>
             <ion-icon name="checkmark-sharp"></ion-icon>
           </span>
-          Copied
+          {t('common.copied')}
         </button>
       }
     </div>

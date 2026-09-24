@@ -22,7 +22,7 @@ const RequireAuth = () => {
         headers: { "x-access-token": token },
       }).then((response) => {
         if (response.data?.auth !== true || isExpired) {
-          localStorage.clear()
+          localStorage.removeItem("token")
           window.location.href = '/login'
         }
       })

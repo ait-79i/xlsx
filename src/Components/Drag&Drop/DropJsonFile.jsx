@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react'
 
 import './style.css';
+import { useTranslation } from 'react-i18next';
 const DropJsonFile = ({ setData }) => {
+  const { t } = useTranslation();
 
   const [err, seterror] = useState('')
 
@@ -11,7 +13,7 @@ const DropJsonFile = ({ setData }) => {
     try {
       setData(JSON.parse(text))
     } catch (e) {
-      seterror(`Invalid JSON: ${e.message}`)
+      seterror(t('errors.invalidJson', { message: e.message }))
       setData([])
     }
   }
@@ -30,12 +32,12 @@ const DropJsonFile = ({ setData }) => {
         reader.readAsText(file);
         reader.onload = () => parseJson(reader.result)
       } else {
-        seterror("File extension not supported!")
+        seterror(t('dropzone.extensionNotSupported'))
         setData([])
       }
 
     } else {
-      seterror("You must choose only One File !!!");
+      seterror(t('dropzone.onlyOneFile'));
       setData([])
     }
 
@@ -56,7 +58,7 @@ const DropJsonFile = ({ setData }) => {
       reader.onload = () => parseJson(reader.result);
       reader.readAsText(file);
     } else {
-      seterror("File extension not supported!")
+      seterror(t('dropzone.extensionNotSupported'))
       setData([])
     }
   };
@@ -68,10 +70,10 @@ const DropJsonFile = ({ setData }) => {
         onDrop={(event) => handleDrop(event)}
       >
         <span className="text">
-          Drag and Drop your JSON file
+          {t('dropzone.dropJson')}
         </span>
-        <span className="text or">Or</span>
-        <span className="text">select a file to upload from your computer</span>
+        <span className="text or">{t('dropzone.or')}</span>
+        <span className="text">{t('dropzone.selectFromComputer')}</span>
         <input
           type="file"
           onChange={handleFileUpload}
@@ -80,7 +82,7 @@ const DropJsonFile = ({ setData }) => {
         />
         <button className='file-btn'
           onClick={() => inputRef.current.click()}
-        >Select file</button>
+        >{t('dropzone.selectFile')}</button>
       </div>
       <div className='d-flex justify-content-center'>
 

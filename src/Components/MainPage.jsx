@@ -11,9 +11,11 @@ import SendButton from './SendButton';
 import VisualizeButton from './VisualizeButton';
 import DownloadExcel from './DownloadExcel';
 import { PreventReload } from './CommanFunctions';
+import { useTranslation } from 'react-i18next';
 
 
 function MainPage({ setBodyRequestData, setVisualData }) {
+  const { t } = useTranslation();
 
   const [data, setData] = useState([]);
   const xlsxculomns = Object.keys(data[0] === undefined ? [] : data[0]);
@@ -82,7 +84,7 @@ function MainPage({ setBodyRequestData, setVisualData }) {
 
                   {/* //--------------display modify json form  ----------------- */}
 
-                  <input type="button" value={modify === true ? 'hide' : 'modifier la structure'} onClick={() => setmodify(!modify)} />
+                  <input type="button" value={modify === true ? t('actions.hide') : t('actions.modifyStructure')} onClick={() => setmodify(!modify)} />
 
                   {/* //--------------Download json data in a file ----------------- */}
 

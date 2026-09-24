@@ -11,6 +11,7 @@ import {
   useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import { useTranslation } from 'react-i18next'
 import './flow.css'
 import JsonNode, { JsonGraphContext } from './JsonNode'
 import { downloadFlowAsPng } from './exportImage'
@@ -33,6 +34,7 @@ const miniMapColor = (node) => {
 }
 
 function JsonGraphFlow({ data }) {
+  const { t } = useTranslation()
   const [maxItems, setMaxItems] = useState(10)
   const [collapsed, setCollapsed] = useState(() => new Set())
   const [search, setSearch] = useState('')
@@ -114,8 +116,8 @@ function JsonGraphFlow({ data }) {
 
   const copyPath = useCallback((path) => {
     navigator.clipboard?.writeText(path)
-    setToast(`Copied ${path}`)
-  }, [])
+    setToast(t('graph.copiedPath', { path }))
+  }, [t])
 
   useEffect(() => {
     if (!toast) return
@@ -135,7 +137,7 @@ function JsonGraphFlow({ data }) {
 
   return (
     <JsonGraphContext.Provider value={context}>
-      <div className="flow-canvas" ref={wrapper}>
+      <div className="flow-canvas" ref={wrapper} dir="ltr">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -156,7 +158,7 @@ function JsonGraphFlow({ data }) {
               <input
                 type="search"
                 className="form-control form-control-sm"
-                placeholder="Search keys or values…"
+                placeholder={t('graph.searchPlaceholder')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && goToMatch(e.shiftKey ? -1 : 1)}
@@ -164,40 +166,40 @@ function JsonGraphFlow({ data }) {
               {search.trim() !== '' && (
                 <>
                   <span className="small text-muted">
-                    {matches.length === 0 ? 'no match' : `${matchIndex + 1 > 0 ? matchIndex + 1 : '–'} / ${matches.length}`}
+                    {matches.length === 0 ? t('graph.noMatch') : `${matchIndex + 1 > 0 ? matchIndex + 1 : '–'} / ${matches.length}`}
                   </span>
-                  <button className="btn btn-sm btn-outline-secondary" title="Previous (Shift+Enter)" onClick={() => goToMatch(-1)}>↑</button>
-                  <button className="btn btn-sm btn-outline-secondary" title="Next (Enter)" onClick={() => goToMatch(1)}>↓</button>
+                  <button className="btn btn-sm btn-outline-secondary" title={t('graph.previousMatch')} onClick={() => goToMatch(-1)}>↑</button>
+                  <button className="btn btn-sm btn-outline-secondary" title={t('graph.nextMatch')} onClick={() => goToMatch(1)}>↓</button>
                 </>
               )}
               <select
                 className="form-select form-select-sm"
-                title="Items shown per array"
+                title={t('graph.itemsPerArrayTitle')}
                 value={maxItems}
                 onChange={(e) => setMaxItems(Number(e.target.value))}
               >
-                {ITEMS_OPTIONS.map((n) => <option key={n} value={n}>{n} items / array</option>)}
+                {ITEMS_OPTIONS.map((n) => <option key={n} value={n}>{t('graph.itemsPerArray', { count: n })}</option>)}
               </select>
               <button className="btn btn-sm btn-outline-secondary" onClick={() => {
                 setCollapsed(new Set(containerIds(data, { maxItems })))
                 refit()
               }}>
-                Collapse all
+                {t('graph.collapseAll')}
               </button>
               <button className="btn btn-sm btn-outline-secondary" onClick={() => {
                 setCollapsed(new Set())
                 refit()
               }}>
-                Expand all
+                {t('graph.expandAll')}
               </button>
-              <button className="btn btn-sm btn-outline-secondary" title="Reset node positions" onClick={() => {
+              <button className="btn btn-sm btn-outline-secondary" title={t('graph.relayoutTitle')} onClick={() => {
                 setNodes(graph.nodes)
                 refit()
               }}>
-                Re-layout
+                {t('graph.relayout')}
               </button>
               <button className="btn btn-sm btn-dark" onClick={() => downloadFlowAsPng(wrapper.current, getNodes(), 'json-graph.png')}>
-                Export PNG
+                {t('graph.exportPng')}
               </button>
             </div>
           </Panel>
@@ -206,8 +208,8 @@ function JsonGraphFlow({ data }) {
             {toast
               ? <div className="flow-toast">{toast}</div>
               : <div className="flow-legend">
-                {graph.nodes.length} nodes · click a nested key to collapse it, a value to copy its path
-                {graph.truncated && <strong className="text-danger"> · graph truncated, collapse nodes or show fewer items</strong>}
+                {t('graph.nodes', { count: graph.nodes.length })} · {t('graph.help')}
+                {graph.truncated && <strong className="text-danger"> · {t('graph.truncated')}</strong>}
               </div>}
           </Panel>
         </ReactFlow>

@@ -12,6 +12,7 @@ import {
   useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import { useTranslation } from 'react-i18next'
 import './flow.css'
 import TableNode, { SchemaContext } from './TableNode'
 import { downloadFlowAsPng } from './exportImage'
@@ -61,6 +62,7 @@ const structureKey = (schema) =>
   )
 
 function SchemaDiagramFlow({ schema, onRenameTable, onColumnTypeChange }) {
+  const { t } = useTranslation()
   const wrapper = useRef(null)
   const lastKey = useRef(null)
   const [selected, setSelected] = useState([])
@@ -112,7 +114,7 @@ function SchemaDiagramFlow({ schema, onRenameTable, onColumnTypeChange }) {
 
   return (
     <SchemaContext.Provider value={context}>
-      <div className="flow-canvas" ref={wrapper}>
+      <div className="flow-canvas" ref={wrapper} dir="ltr">
         <ReactFlow
           nodes={nodes}
           edges={displayedEdges}
@@ -132,21 +134,21 @@ function SchemaDiagramFlow({ schema, onRenameTable, onColumnTypeChange }) {
           <Panel position="top-left">
             <div className="flow-toolbar">
               <span className="small">
-                <strong>{schema.tables.length}</strong> tables · <strong>{edges.length}</strong> relations
-                {rowCount > 0 && <> · <strong>{rowCount}</strong> rows</>}
+                {t('schema.tableCount', { count: schema.tables.length })} · {t('schema.relationCount', { count: edges.length })}
+                {rowCount > 0 && <> · {t('schema.rows', { count: rowCount })}</>}
               </span>
-              <button className="btn btn-sm btn-outline-secondary" title="Reset table positions" onClick={relayout}>
-                Re-layout
+              <button className="btn btn-sm btn-outline-secondary" title={t('schema.relayoutTitle')} onClick={relayout}>
+                {t('graph.relayout')}
               </button>
               <button className="btn btn-sm btn-dark" onClick={() => downloadFlowAsPng(wrapper.current, getNodes(), 'database-schema.png')}>
-                Export PNG
+                {t('graph.exportPng')}
               </button>
             </div>
           </Panel>
 
           <Panel position="bottom-center">
             <div className="flow-legend">
-              Double-click a table name to rename it · change a column type with its selector · select a table to highlight its relations
+              {t('schema.help')}
             </div>
           </Panel>
         </ReactFlow>

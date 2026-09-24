@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 import { validateFile } from '../CommanFunctions';
 import './style.css';
+import { useTranslation } from 'react-i18next';
 
 export function readExcelFile(file) {
 
@@ -25,6 +26,7 @@ export function readExcelFile(file) {
 }
 
 const DropExcelFile = ({ setData }) => {
+  const { t } = useTranslation();
 
   const [err, seterror] = useState([])
 
@@ -43,7 +45,7 @@ const DropExcelFile = ({ setData }) => {
           console.log(error)
         });
     } else {
-      seterror("File extension not supported!");
+      seterror(t('dropzone.extensionNotSupported'));
       setData([])
     }
   }
@@ -55,7 +57,7 @@ const DropExcelFile = ({ setData }) => {
   const handleDrop = (e) => {
     e.preventDefault();
     if (e.dataTransfer.files.length !== 1) {
-      seterror("You must choose only One File !!!");
+      seterror(t('dropzone.onlyOneFile'));
       setData([])
     } else {
       if (validateFile(e.dataTransfer.files[0].name)) {
@@ -68,7 +70,7 @@ const DropExcelFile = ({ setData }) => {
             console.log(error);
           });
       } else {
-        seterror("File extension not supported!");
+        seterror(t('dropzone.extensionNotSupported'));
         setData([])
       }
     }
@@ -83,10 +85,10 @@ const DropExcelFile = ({ setData }) => {
         onDrop={(e) => handleDrop(e)}
       >
         <span className="text">
-          Drag and Drop your excel file
+          {t('dropzone.dropExcel')}
         </span>
-        <span className="text or">Or</span>
-        <span className="text">select a file to upload from your computer</span>
+        <span className="text or">{t('dropzone.or')}</span>
+        <span className="text">{t('dropzone.selectFromComputer')}</span>
         <input
           type="file"
           onChange={handleFileUpload}
@@ -95,7 +97,7 @@ const DropExcelFile = ({ setData }) => {
         />
         <button className='file-btn'
           onClick={() => inputRef.current.click()}
-        >Select file</button>
+        >{t('dropzone.selectFile')}</button>
       </div>
       <div className='d-flex justify-content-center'>
 

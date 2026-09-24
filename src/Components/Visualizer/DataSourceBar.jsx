@@ -2,16 +2,18 @@ import { useRef, useState } from 'react'
 import { readExcelFile } from '../Drag&Drop/DropExcelFile'
 import { validateFile } from '../CommanFunctions'
 import { EXAMPLE_JSON } from './examples'
+import { useTranslation } from 'react-i18next'
 
-const describe = (data) => {
-  if (data === null || data === undefined) return 'No data loaded'
-  if (Array.isArray(data)) return `Array of ${data.length} item${data.length > 1 ? 's' : ''}`
-  if (typeof data === 'object') return `Object with ${Object.keys(data).length} keys`
-  return `Value: ${String(data).slice(0, 40)}`
+const describe = (data, t) => {
+  if (data === null || data === undefined) return t('visualizer.noData')
+  if (Array.isArray(data)) return t('visualizer.arrayOf', { count: data.length })
+  if (typeof data === 'object') return t('visualizer.objectWith', { count: Object.keys(data).length })
+  return t('visualizer.value', { value: String(data).slice(0, 40) })
 }
 
 // Loads the data shown by the visualizer: JSON or Excel file, pasted JSON, or the sample
 const DataSourceBar = ({ data, setData }) => {
+  const { t } = useTranslation()
   const inputRef = useRef()
   const [pasting, setPasting] = useState(false)
   const [text, setText] = useState('')
@@ -26,14 +28,14 @@ const DataSourceBar = ({ data, setData }) => {
         try {
           setData(JSON.parse(reader.result))
         } catch (e) {
-          setError(`Invalid JSON: ${e.message}`)
+          setError(t('errors.invalidJson', { message: e.message }))
         }
       }
       reader.readAsText(file)
     } else if (validateFile(file.name)) {
-      readExcelFile(file).then(setData).catch(() => setError('Could not read the Excel file'))
+      readExcelFile(file).then(setData).catch(() => setError(t('errors.excelRead')))
     } else {
-      setError('File extension not supported!')
+      setError(t('dropzone.extensionNotSupported'))
     }
   }
 
@@ -44,7 +46,7 @@ const DataSourceBar = ({ data, setData }) => {
       setText('')
       setError('')
     } catch (e) {
-      setError(`Invalid JSON: ${e.message}`)
+      setError(t('errors.invalidJson', { message: e.message }))
     }
   }
 
@@ -59,8 +61,8 @@ const DataSourceBar = ({ data, setData }) => {
     >
       <div className="card-body py-2 d-flex flex-wrap align-items-center gap-2">
         <span className="me-auto">
-          <strong>Data:</strong> {describe(data)}
-          <span className="text-muted small ms-2">(drop a .json or Excel file here)</span>
+          <strong>{t('visualizer.data')}</strong> {describe(data, t)}
+          <span className="text-muted small ms-2">({t('visualizer.dropHint')})</span>
         </span>
         <input
           ref={inputRef}
@@ -72,11 +74,11 @@ const DataSourceBar = ({ data, setData }) => {
             e.target.value = ''
           }}
         />
-        <button className="btn btn-sm btn-outline-secondary" onClick={() => inputRef.current.click()}>Open file</button>
-        <button className="btn btn-sm btn-outline-secondary" onClick={() => setPasting(!pasting)}>Paste JSON</button>
-        <button className="btn btn-sm btn-outline-secondary" onClick={() => setData(EXAMPLE_JSON)}>Load sample</button>
+        <button className="btn btn-sm btn-outline-secondary" onClick={() => inputRef.current.click()}>{t('visualizer.openFile')}</button>
+        <button className="btn btn-sm btn-outline-secondary" onClick={() => setPasting(!pasting)}>{t('visualizer.pasteJson')}</button>
+        <button className="btn btn-sm btn-outline-secondary" onClick={() => setData(EXAMPLE_JSON)}>{t('visualizer.loadSample')}</button>
         {data !== null && data !== undefined && (
-          <button className="btn btn-sm btn-outline-danger" onClick={() => setData(null)}>Clear</button>
+          <button className="btn btn-sm btn-outline-danger" onClick={() => setData(null)}>{t('common.clear')}</button>
         )}
       </div>
 
@@ -84,11 +86,12 @@ const DataSourceBar = ({ data, setData }) => {
         <div className="card-body pt-0">
           <textarea
             className="form-control sql-input mb-2"
+            dir="ltr"
             placeholder='[{"id": 1, "name": "..."}]'
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          <button className="btn btn-sm btn-dark" onClick={applyPaste}>Load</button>
+          <button className="btn btn-sm btn-dark" onClick={applyPaste}>{t('common.load')}</button>
         </div>
       )}
 

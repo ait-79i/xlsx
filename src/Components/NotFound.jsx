@@ -1,8 +1,10 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 const NotFound = () => {
+  const { t } = useTranslation()
   return (
-    <div>NotFound</div>
+    <h1>{t('notFound')}</h1>
   )
 }
 

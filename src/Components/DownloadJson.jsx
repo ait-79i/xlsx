@@ -1,6 +1,8 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 const DownloadJson = ({ data }) => {
+  const { t } = useTranslation()
 
   const downloadFile = () => {
     const jsonStr = JSON.stringify(data);
@@ -14,7 +16,7 @@ const DownloadJson = ({ data }) => {
 
   return (
 
-    <button className=' btn ' onClick={downloadFile}>Download json file</button>
+    <button className=' btn ' onClick={downloadFile}>{t('actions.downloadJson')}</button>
   )
 }
 
