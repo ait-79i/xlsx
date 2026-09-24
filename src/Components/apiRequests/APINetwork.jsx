@@ -7,11 +7,12 @@ import RequestBody from "../apiRequests/RequestBody";
 import { disableinputs } from '../CommanFunctions';
 import CheckHeader from './checkHeader';
 import NewHeader from './NewHeader';
+import VisualizeButton from '../VisualizeButton';
 import { useJwt } from "react-jwt";
 
 
 
-const APINetwork = ({ bodyRequestData }) => {
+const APINetwork = ({ bodyRequestData, setVisualData }) => {
 
   const [method, setMethod] = useState('')
   const [url, setUrl] = useState('')
@@ -200,7 +201,11 @@ const APINetwork = ({ bodyRequestData }) => {
                   />
                 </div>
                 <div className="col-4 px-2">
-                  <div className='text-center'>Response</div>
+                  <div className='d-flex justify-content-between'>
+                    <span>Response</span>
+                    {response?.data !== undefined && typeof response.data === 'object' &&
+                      <VisualizeButton data={response.data} setVisualData={setVisualData} label='Visualize response' />}
+                  </div>
                   <SyntaxHighlighter language="javascript"
                     // style={darcula}
                     wrapLongLines={true}

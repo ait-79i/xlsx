@@ -7,6 +7,15 @@ const DropJsonFile = ({ setData }) => {
 
   const inputRef = useRef();
 
+  const parseJson = (text) => {
+    try {
+      setData(JSON.parse(text))
+    } catch (e) {
+      seterror(`Invalid JSON: ${e.message}`)
+      setData([])
+    }
+  }
+
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
@@ -19,10 +28,7 @@ const DropJsonFile = ({ setData }) => {
         seterror("")
         const reader = new FileReader();
         reader.readAsText(file);
-        reader.onload = () => {
-          const jsonData = JSON.parse(reader.result);
-          setData(jsonData);
-        }
+        reader.onload = () => parseJson(reader.result)
       } else {
         seterror("File extension not supported!")
         setData([])
@@ -47,10 +53,7 @@ const DropJsonFile = ({ setData }) => {
       seterror('')
       const file = event.target.files[0];
       const reader = new FileReader();
-      reader.onload = () => {
-        const data = JSON.parse(reader.result);
-        setData(data)
-      };
+      reader.onload = () => parseJson(reader.result);
       reader.readAsText(file);
     } else {
       seterror("File extension not supported!")

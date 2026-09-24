@@ -4,8 +4,10 @@ import DropJsonFile from './Drag&Drop/DropJsonFile'
 import JsonStructureFormatt from './JsonStructure/JsonStructureFormatt'
 import DisplayJson from './Popup/DisplayJson'
 import SendButton from './SendButton'
+import VisualizeButton from './VisualizeButton'
+import DownloadExcel from './DownloadExcel'
 
-const ModifyJsonStructureComp = ({ setBodyRequestData }) => {
+const ModifyJsonStructureComp = ({ setBodyRequestData, setVisualData }) => {
 
   const [data, setData] = useState([])
   const firstJsonColumns = Object.keys(data[0] === undefined ? [] : data[0])
@@ -40,7 +42,11 @@ const ModifyJsonStructureComp = ({ setBodyRequestData }) => {
 
             <DownloadJson data={data} />
 
+            <DownloadExcel data={data} />
+
             <SendButton data={data} setBodyRequestData={setBodyRequestData} />
+
+            <VisualizeButton data={data} setVisualData={setVisualData} />
 
           </div>
         </>

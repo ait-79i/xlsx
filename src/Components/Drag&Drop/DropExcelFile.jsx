@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { validateFile } from '../CommanFunctions';
 import './style.css';
 
-function readExcelFile(file) {
+export function readExcelFile(file) {
 
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();

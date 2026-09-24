@@ -1,0 +1,326 @@
+/* ---------- canvas ---------- */
+.flow-canvas {
+	height: calc(100vh - 210px);
+	min-height: 480px;
+	background: #fff;
+	border: 1px solid #dee2e6;
+	border-radius: 6px;
+	position: relative;
+}
+
+.flow-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.95);
+	border: 1px solid #dee2e6;
+	border-radius: 6px;
+	padding: 6px 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+	max-width: calc(100vw - 80px);
+}
+
+.flow-toolbar .form-control,
+.flow-toolbar .form-select {
+	width: auto;
+}
+
+.flow-toast {
+	background: #011638;
+	color: #fff;
+	font-size: 12px;
+	padding: 6px 10px;
+	border-radius: 4px;
+}
+
+.flow-legend {
+	background: rgba(255, 255, 255, 0.95);
+	border: 1px solid #dee2e6;
+	border-radius: 6px;
+	padding: 4px 8px;
+	font-size: 12px;
+	color: #495057;
+}
+
+/* ---------- JSON node ---------- */
+.json-node {
+	width: 260px;
+	background: #fff;
+	border: 1px solid #c9ced6;
+	border-radius: 6px;
+	font-size: 12px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.json-node.is-match {
+	box-shadow: 0 0 0 2px #f4c430;
+}
+
+.json-node.is-active {
+	box-shadow: 0 0 0 3px #e8590c;
+}
+
+.react-flow__node.selected .json-node {
+	border-color: #4a4e69;
+}
+
+.json-node__header {
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 6px;
+	padding: 0 10px;
+	color: #fff;
+	border-radius: 5px 5px 0 0;
+	font-weight: bold;
+}
+
+.json-node__header--object {
+	background: #011638;
+}
+
+.json-node__header--array {
+	background: #4a4e69;
+}
+
+.json-node__header--value {
+	background: #6c757d;
+}
+
+.json-node__label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.json-node__badge {
+	font-weight: normal;
+	opacity: 0.8;
+	flex-shrink: 0;
+}
+
+.json-node__row,
+.json-node__more {
+	position: relative;
+	height: 22px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 0 10px;
+	border-top: 1px solid #f1f3f5;
+	font-family: SFMono-Regular, Menlo, Consolas, monospace;
+	cursor: pointer;
+}
+
+.json-node__row:hover {
+	background: #f8f9fa;
+}
+
+.json-node__row.is-match {
+	background: #fff3bf;
+}
+
+.json-node__key {
+	color: #4a4e69;
+	font-weight: bold;
+	flex-shrink: 0;
+	max-width: 45%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.json-node__value,
+.json-node__nested {
+	margin-left: auto;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.json-node__value--string {
+	color: #067d17;
+}
+
+.json-node__value--number {
+	color: #1750eb;
+}
+
+.json-node__value--boolean {
+	color: #871094;
+}
+
+.json-node__value--null {
+	color: #868e96;
+	font-style: italic;
+}
+
+.json-node__nested {
+	color: #495057;
+}
+
+.json-node__more {
+	color: #868e96;
+	font-style: italic;
+	cursor: default;
+}
+
+/* handles are anchors only: users cannot draw new edges */
+.json-node .react-flow__handle,
+.db-table .react-flow__handle {
+	width: 6px;
+	height: 6px;
+	min-width: 0;
+	min-height: 0;
+	border: none;
+	background: #adb5bd;
+}
+
+.db-table .react-flow__handle {
+	opacity: 0;
+}
+
+/* ---------- database table node ---------- */
+.db-table {
+	width: 280px;
+	background: #fff;
+	border: 1px solid #c9ced6;
+	border-radius: 6px;
+	font-size: 12px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.react-flow__node.selected .db-table {
+	border-color: #e8590c;
+	box-shadow: 0 0 0 2px rgba(232, 89, 12, 0.35);
+}
+
+.db-table__header {
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 6px;
+	padding: 0 10px;
+	background: #011638;
+	color: #fff;
+	font-weight: bold;
+	font-size: 13px;
+	border-radius: 5px 5px 0 0;
+}
+
+.db-table__header > span:first-child {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.db-table__rename {
+	width: 100%;
+	font-size: 12px;
+	padding: 1px 4px;
+	border: none;
+	border-radius: 3px;
+}
+
+.db-table__count {
+	font-weight: normal;
+	font-size: 11px;
+	opacity: 0.8;
+	flex-shrink: 0;
+}
+
+.db-table__row {
+	position: relative;
+	height: 26px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 0 10px;
+	border-top: 1px solid #f1f3f5;
+}
+
+.db-table__row.is-pk {
+	background: #fff9db;
+}
+
+.db-table__keys {
+	width: 44px;
+	flex-shrink: 0;
+	display: flex;
+	gap: 2px;
+}
+
+.db-badge {
+	font-size: 9px;
+	font-weight: bold;
+	padding: 1px 3px;
+	border-radius: 3px;
+	line-height: 1.2;
+}
+
+.db-badge--pk {
+	background: #f4c430;
+	color: #3d3000;
+}
+
+.db-badge--fk {
+	background: #d0ebff;
+	color: #1864ab;
+}
+
+.db-table__col {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-family: SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.db-table__col.is-nullable::after {
+	content: "?";
+	color: #adb5bd;
+	margin-left: 2px;
+}
+
+.db-table__type {
+	max-width: 105px;
+	font-size: 11px;
+	color: #495057;
+	border: 1px solid transparent;
+	background: transparent;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.db-table__type:hover,
+.db-table__type:focus {
+	border-color: #ced4da;
+	background: #fff;
+}
+
+.react-flow__edge.is-highlighted .react-flow__edge-path {
+	stroke: #e8590c;
+	stroke-width: 2;
+}
+
+/* ---------- export panel ---------- */
+.code-preview {
+	max-height: calc(100vh - 300px);
+	min-height: 300px;
+	overflow: auto;
+	background: #1e1e1e;
+	color: #d4d4d4;
+	border-radius: 6px;
+	padding: 12px;
+	font-size: 12px;
+	white-space: pre;
+}
+
+.sql-input {
+	font-family: SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 12px;
+	min-height: 220px;
+}

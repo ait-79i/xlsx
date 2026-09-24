@@ -8,10 +8,12 @@ import DownloadJson from './DownloadJson';
 import JsonStructureFormatt from './JsonStructure/JsonStructureFormatt';
 import CopyToClipboard from './CopyToClipboard';
 import SendButton from './SendButton';
+import VisualizeButton from './VisualizeButton';
+import DownloadExcel from './DownloadExcel';
 import { PreventReload } from './CommanFunctions';
 
 
-function MainPage({ setBodyRequestData }) {
+function MainPage({ setBodyRequestData, setVisualData }) {
 
   const [data, setData] = useState([]);
   const xlsxculomns = Object.keys(data[0] === undefined ? [] : data[0]);
@@ -87,9 +89,15 @@ function MainPage({ setBodyRequestData }) {
 
                   <DownloadJson data={jsonFile} />
 
+                  <DownloadExcel data={jsonFile} />
+
                   {/* //--------------Send new json format to api component URL ----------------- */}
 
                   <SendButton data={jsonFile} setBodyRequestData={setBodyRequestData} />
+
+                  {/* //--------------Show the json as a graph / database schema ----------------- */}
+
+                  <VisualizeButton data={jsonFile} setVisualData={setVisualData} />
 
                 </div>
               </div>
