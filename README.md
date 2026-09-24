@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# Excel → JSON
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Application web React qui convertit un fichier Excel en JSON, permet de modifier la structure de ce JSON, puis de l'envoyer à une API pour la tester.
 
-## Available Scripts
+Cas d'usage typique : vous avez des données dans un tableur et une API REST qui attend un format JSON précis (par exemple `{ nom, adresse: { ville, cp } }`). L'application fait la conversion, la restructuration et l'envoi sans écrire de code.
 
-In the project directory, you can run:
+## Fonctionnalités
 
-### `npm start`
+### 1. Excel → JSON (`/excel-to-json`)
+- Glisser-déposer ou sélection d'un fichier `.xlsx`, `.xlsm`, `.xlsb`, `.xls` ou `.xlam`.
+- Seule la **première feuille** est lue ([SheetJS](https://sheetjs.com/)). Chaque ligne devient un objet dont les clés sont les en-têtes de colonnes.
+- Affichage des données dans un tableau. Un double-clic sur un en-tête permet de renommer la colonne.
+- Aperçu du premier objet JSON, copie dans le presse-papiers, téléchargement de `data.json`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 2. Restructuration du JSON (`/json-structure`, et aussi dans la page Excel)
+- **Regrouper** : cochez des colonnes, donnez un nom de clé, puis cliquez sur *Generate*. Les colonnes cochées sont déplacées dans un sous-objet.
+  `{ nom, ville, cp }` → `{ nom, adresse: { ville, cp } }`
+- **Renommer** : double-clic sur une clé, puis Entrée ou clic ailleurs pour valider. Le renommage s'applique à tous les objets, y compris aux niveaux imbriqués.
+- **Annuler un regroupement** : le bouton ↶ remet une clé imbriquée au premier niveau et supprime les sous-objets devenus vides.
+- La page `/json-structure` fait la même chose à partir d'un fichier `.json` importé.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 3. Test d'API (`/test-api`)
+- Choix de la méthode (GET, POST, PUT, PATCH, DELETE) et de l'URL.
+- En-têtes modifiables : seuls les en-têtes cochés sont envoyés.
+- Corps de la requête pré-rempli avec le JSON généré (bouton *Send data*) et modifiable dans un éditeur avec validation JSON.
+- Affichage de la réponse ou de l'erreur.
 
-### `npm test`
+### Authentification
+Les pages ci-dessus sont protégées. La connexion se fait par JWT auprès d'un **backend séparé (non inclus dans ce dépôt)**. Ce backend doit exposer :
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Méthode | Route | Corps / en-têtes | Réponse attendue |
+|---|---|---|---|
+| `POST` | `/register` | `{ username, email, pwd }` | 2xx si le compte est créé |
+| `POST` | `/login` | `{ email, pwd }` | `{ auth: true, token }` ou `{ auth: false, message }` |
+| `GET` | `/isUserAuth` | en-tête `x-access-token` | `{ auth: true }` si le token est valide |
 
-### `npm run build`
+Le token est stocké dans `localStorage`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Structure du code
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+src/
+├── App.js                      # Routes (publiques / protégées) et état partagé du corps de requête
+├── config.js                   # URL du backend (REACT_APP_API_URL)
+├── home/Home.jsx               # Page d'accueil
+└── Components/
+    ├── CommanFunctions.js      # Utilitaires : renommage récursif des clés, validation, useAuth…
+    ├── RequireAuth.jsx         # Garde des routes protégées + vérification du token
+    ├── MainPage.jsx            # Page Excel → JSON
+    ├── ModifyJsonStructureComp.jsx  # Page import JSON
+    ├── Drag&Drop/              # Zones de dépôt Excel et JSON
+    ├── tabaleData/             # Tableau des données Excel
+    ├── JsonStructure/          # Éditeur de structure (regrouper, renommer, annuler)
+    ├── Popup/DisplayJson.jsx   # Aperçu JSON coloré
+    ├── apiRequests/            # Client HTTP (méthode, en-têtes, corps, réponse)
+    └── Login/                  # Formulaires de connexion et d'inscription
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Démarrage
 
-### `npm run eject`
+Prérequis : Node.js 18 ou plus, et le backend d'authentification lancé.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm install
+cp .env.example .env   # à adapter si le backend n'est pas sur http://localhost:5000
+npm start              # http://localhost:3000
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Autres scripts :
+- `npm run build` : build de production dans `build/`
+- `npm test` : lance les tests
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Docker
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+L'image construit l'application puis la sert avec nginx :
 
-## Learn More
+```bash
+docker build --build-arg REACT_APP_API_URL=http://localhost:5000 -t excel-to-json .
+docker run -p 8080:80 excel-to-json   # http://localhost:8080
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`REACT_APP_API_URL` est intégrée au moment du build : il faut reconstruire l'image pour la changer.

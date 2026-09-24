@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useJwt } from "react-jwt";
 import { Navigate, Outlet, useLocation } from "react-router-dom"
 import axios from "axios";
+import { API_URL } from "../config";
 import { useAuth } from "./CommanFunctions";
 import Navbar from "./Navbar";
 
@@ -17,7 +18,7 @@ const RequireAuth = () => {
   const validateToken = () => {
     const token = localStorage.getItem("token");
     axios
-      .get("http://localhost:5000/isUserAuth", {
+      .get(`${API_URL}/isUserAuth`, {
         headers: { "x-access-token": token },
       }).then((response) => {
         if (response.data?.auth !== true || isExpired) {

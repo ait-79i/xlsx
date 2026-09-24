@@ -28,7 +28,9 @@ const JsonCols = ({ data, name, handleCheckboxes, setJsonFile }) => {
           <input className='enter-col-name'
             type='text'
             value={columnName}
-            onMouseLeave={() => SaveColumnName()}
+            autoFocus
+            onBlur={() => SaveColumnName()}
+            onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
             onChange={(e) => setColumnName(e.target.value)}
           />
         </div>

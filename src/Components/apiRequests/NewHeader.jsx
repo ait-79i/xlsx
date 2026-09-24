@@ -18,13 +18,15 @@ const NewHeader = ({ setheads, heads }) => {
     <fieldset >
       <div className="d-flex">
         <input type="text"
-          onMouseLeave={saveNewHeader}
+          onBlur={saveNewHeader}
+          onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
           placeholder='key '
           value={newheaderKey}
           onChange={(e) => { setNewheaderKey(e.target.value) }}
         />
         <input type="text"
-          onMouseLeave={saveNewHeader}
+          onBlur={saveNewHeader}
+          onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
           placeholder='value'
           value={newheaderValue}
           onChange={(e) => { setNewheaderValue(e.target.value) }}

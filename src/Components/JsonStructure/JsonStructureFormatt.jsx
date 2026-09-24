@@ -92,9 +92,11 @@ const JsonStructureFormatt = ({ culomns, setJsonFile, jsonFile, xlsxculomns, set
 
   //-------------- generate a new json file ----------------//
   const updateJsonFile = (elm) => {
-    const arr_copy = [...jsonFile]
+    // deep copy: deleteKey mutates nested objects, which must not touch the current state
+    const arr_copy = JSON.parse(JSON.stringify(jsonFile))
     for (const obj of arr_copy) {
       // remove a spicify key
+      value = undefined
       deleteKey(obj, elm)
       //add The same key and its value to the top level of each Object
       obj[elm] = value;

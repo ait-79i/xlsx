@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { API_URL } from '../../config'
 import { useEffect, useState } from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 // import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -118,7 +119,7 @@ const APINetwork = ({ bodyRequestData }) => {
   const validateToken = () => {
     const token = localStorage.getItem("token");
     axios
-      .get("http://localhost:5000/isUserAuth", {
+      .get(`${API_URL}/isUserAuth`, {
         headers: { "x-access-token": token },
       }).then((response) => {
         if (response.data?.auth !== true || isExpired) {

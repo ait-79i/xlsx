@@ -58,7 +58,9 @@ const CheckHeader = ({ hedKey, hedvalue, i, heads, headers, setheads, setHeaders
             type="text"
             id='input'
             onChange={(e) => setKey(e.target.value)}
-            onMouseLeave={() => {
+            autoFocus
+            onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+            onBlur={() => {
               updateHeads()
               setUpdateKey(false)
             }}
@@ -79,7 +81,9 @@ const CheckHeader = ({ hedKey, hedvalue, i, heads, headers, setheads, setHeaders
             type="text"
             id='input'
             onChange={(e) => setValue(e.target.value)}
-            onMouseLeave={() => {
+            autoFocus
+            onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+            onBlur={() => {
               setUpdateValue(false)
               updateHeads()
             }}

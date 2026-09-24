@@ -25,7 +25,9 @@ const Name = ({ name, setJsonFile,
           type='text'
           value={columnName}
           onChange={(e) => setColumnName(e.target.value)}
-          onMouseLeave={() => SaveColumnName()}
+          autoFocus
+          onBlur={() => SaveColumnName()}
+          onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
         />
       </div >
       :

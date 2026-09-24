@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as Components from './LoginStyleComponents';
 import axios from "axios";
+import { API_URL } from "../../config";
 
 
 function Login() {
@@ -39,21 +40,30 @@ function Login() {
   const register = (e) => {
     e.preventDefault()
 
-    axios.post('http://localhost:5000/register', JSON.stringify({
+    if (userpwd !== confirmPassword) {
+      setRegisterError('Passwords do not match')
+      return
+    }
+
+    axios.post(`${API_URL}/register`, JSON.stringify({
       username: username,
       pwd: userpwd,
       email: userEmail
     }), {
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true
-    }).then((res) => {
-      console.log(res)
-
-    }).catch((err) => console.log(err))
-    navigate('/')
-    setusername('')
-    setUserEmail('')
-    setUserPwd('')
+    }).then(() => {
+      // Account created: clear the form and show the sign in panel
+      setusername('')
+      setUserEmail('')
+      setUserPwd('')
+      setConfirmPassword('')
+      setRegisterError('')
+      setSignIn(true)
+    }).catch((err) => {
+      console.log(err)
+      setRegisterError(err?.response?.data?.message || 'Registration failed')
+    })
   }
 
 
@@ -76,7 +86,7 @@ function Login() {
 
   const login = (e) => {
     e.preventDefault()
-    axios.post('http://localhost:5000/login', JSON.stringify({ email: email, pwd: password }), {
+    axios.post(`${API_URL}/login`, JSON.stringify({ email: email, pwd: password }), {
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true
     }).then((response) => {
@@ -111,6 +121,7 @@ function Login() {
 
 
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [registerError, setRegisterError] = useState('')
 
   return (
     <section style={{ marginTop: '50px' }} className="cc_flex">
@@ -148,6 +159,7 @@ function Login() {
                 placeholder='Confirm Password' onChange={(e) => {
                   setConfirmPassword(e.target.value)
                 }} />
+              <small aria-live="assertive" style={{ color: 'red' }}>{registerError}</small>
               <Components.Button >Sign Up</Components.Button>
             </Components.Form>
           </Components.SignUpContainer>
@@ -167,6 +179,7 @@ function Login() {
 
 
               <Components.Input
+                type='password'
                 id="pwd"
                 placeholder='Password'
                 value={password}

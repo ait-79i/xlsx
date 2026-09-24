@@ -1,3 +1,2 @@
 use jsonstructure;
-SELECT * form users
-where 1;
+SELECT * FROM users;
