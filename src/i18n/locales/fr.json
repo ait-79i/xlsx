@@ -1,0 +1,543 @@
+{
+	"language": "Langue",
+	"loading": "Chargement…",
+	"notFound": "Page introuvable",
+	"common": {
+		"copy": "Copier",
+		"copied": "Copié",
+		"download": "Télécharger",
+		"clear": "Effacer",
+		"load": "Charger"
+	},
+	"nav": {
+		"logo": "XLSX",
+		"home": "Accueil",
+		"excelToJson": "Excel vers JSON",
+		"jsonStructure": "Structure JSON",
+		"testApi": "Tester une API",
+		"visualizer": "Visualiseur",
+		"contactUs": "Contact",
+		"logout": "Déconnexion",
+		"signIn": "Connexion",
+		"signUp": "Inscription"
+	},
+	"home": {
+		"title": "Excel → JSON",
+		"subtitle": "Convertissez vos tableurs en JSON, modifiez leur structure, testez-les avec votre API et visualisez-les sous forme de graphe ou de schéma de base de données.",
+		"headline": "Transformez un tableur en JSON, au format qu'attend votre API.",
+		"cta": "Convertir un fichier Excel",
+		"secondaryCta": "Ouvrir le visualiseur",
+		"demo": {
+			"gridLabel": "Exemple de tableur",
+			"jsonLabel": "Aperçu du JSON",
+			"groupUnder": "Regrouper les colonnes cochées sous",
+			"hint": "Cochez un en-tête de colonne pour le déplacer dans un objet imbriqué.",
+			"sheet": "Feuil1",
+			"keyTaken": "Une autre colonne utilise déjà cette clé.",
+			"defaultKey": "adresse",
+			"columns": {
+				"name": "nom",
+				"email": "email",
+				"city": "ville",
+				"zip": "cp"
+			}
+		},
+		"steps": {
+			"heading": "Du fichier à l'API en quatre étapes",
+			"convert": {
+				"title": "Convertir",
+				"text": "Déposez un fichier Excel. Chaque ligne de la première feuille devient un objet dont les clés sont les en-têtes de colonnes.",
+				"link": "Ouvrir Excel vers JSON"
+			},
+			"reshape": {
+				"title": "Restructurer",
+				"text": "Regroupez des colonnes dans des objets imbriqués et renommez les clés à tous les niveaux, ou partez d'un fichier JSON.",
+				"link": "Ouvrir Structure JSON"
+			},
+			"send": {
+				"title": "Envoyer",
+				"text": "Envoyez le résultat à votre API avec la méthode et les en-têtes de votre choix, puis lisez la réponse.",
+				"link": "Ouvrir Tester une API"
+			},
+			"visualize": {
+				"title": "Visualiser",
+				"text": "Explorez les données sous forme de graphe, déduisez un schéma de base de données et exportez-le en SQL, Mermaid ou Excel.",
+				"link": "Ouvrir le visualiseur"
+			}
+		},
+		"formats": {
+			"reads": "Lit",
+			"writes": "Produit"
+		},
+		"closing": {
+			"title": "Créez un compte pour commencer à convertir.",
+			"text": "Les outils s'ouvrent une fois connecté. Vos fichiers sont lus dans le navigateur, jamais envoyés sur un serveur."
+		}
+	},
+	"login": {
+		"tabsLabel": "Compte",
+		"createAccount": "Créer un compte",
+		"userName": "Nom d'utilisateur",
+		"email": "E-mail",
+		"emailPlaceholder": "vous@entreprise.com",
+		"password": "Mot de passe",
+		"confirmPassword": "Confirmer le mot de passe",
+		"signIn": "Se connecter",
+		"signInTitle": "Bon retour",
+		"signInSubtitle": "Connectez-vous pour continuer à convertir et tester vos données.",
+		"signUpTitle": "Créez votre compte",
+		"signUpSubtitle": "Convertissez vos tableurs, restructurez le JSON et testez-le sur votre API.",
+		"showPassword": "Afficher le mot de passe",
+		"hidePassword": "Masquer le mot de passe",
+		"capsLock": "La touche Verr. Maj est activée",
+		"passwordHint": "Au moins {{min}} caractères.",
+		"strength": {
+			"weak": "Faible",
+			"fair": "Moyen",
+			"good": "Bon",
+			"strong": "Fort"
+		},
+		"signingIn": "Connexion…",
+		"creatingAccount": "Création du compte…",
+		"accountCreated": "Compte créé. Saisissez votre mot de passe pour vous connecter.",
+		"noAccount": "Nouveau ici ?",
+		"haveAccount": "Vous avez déjà un compte ?",
+		"showcaseTitle": "Des lignes en entrée. Du JSON en sortie.",
+		"showcaseText": "Regroupez les colonnes de votre tableur en objets imbriqués, au format attendu par votre API, puis envoyez-les en un clic.",
+		"showcaseFigure": "Les colonnes city et zip d'un tableur regroupées dans un objet address du JSON",
+		"errors": {
+			"passwordsMismatch": "Les mots de passe ne correspondent pas",
+			"registrationFailed": "L'inscription a échoué",
+			"emailTaken": "Un compte existe déjà avec cet e-mail.",
+			"invalidData": "Saisissez un nom d’utilisateur, un e-mail valide et un mot de passe d’au moins {{min}} caractères.",
+			"noServerResponse": "Le serveur ne répond pas. Vérifiez votre connexion et réessayez.",
+			"missingCredentials": "Saisissez votre e-mail et votre mot de passe.",
+			"unauthorized": "E-mail ou mot de passe incorrect.",
+			"loginFailed": "La connexion a échoué"
+		}
+	},
+	"dropzone": {
+		"dropExcel": "Glissez-déposez votre fichier Excel",
+		"dropJson": "Glissez-déposez votre fichier JSON",
+		"or": "Ou",
+		"selectFromComputer": "choisissez un fichier sur votre ordinateur",
+		"selectFile": "Choisir un fichier",
+		"extensionNotSupported": "Extension de fichier non prise en charge !",
+		"onlyOneFile": "Veuillez choisir un seul fichier."
+	},
+	"errors": {
+		"invalidJson": "JSON invalide : {{message}}",
+		"excelRead": "Impossible de lire le fichier Excel"
+	},
+	"clipboard": {
+		"copyYourData": "Copier vos données"
+	},
+	"jsonPreview": {
+		"itemLooksLike": "Chaque élément de votre fichier JSON ressemble à :"
+	},
+	"actions": {
+		"hide": "Masquer",
+		"modifyStructure": "Modifier la structure",
+		"downloadJson": "Télécharger le fichier JSON",
+		"downloadExcel": "Télécharger le fichier Excel",
+		"sendData": "Envoyer les données",
+		"visualize": "Visualiser"
+	},
+	"structure": {
+		"title": "Modifier la structure JSON",
+		"keyPlaceholder": "Donnez une clé à ces valeurs…",
+		"generate": "Générer",
+		"moveToTop": "Remettre {{name}} au premier niveau",
+		"errors": {
+			"emptyKey": "Ce champ ne peut pas être vide.",
+			"keyMustBeText": "Ce champ doit être du texte, pas un nombre.",
+			"selectColumn": "Sélectionnez au moins une colonne."
+		}
+	},
+	"api": {
+		"httpMethod": "Méthode HTTP",
+		"urlPlaceholder": "Saisissez l'URL de la requête",
+		"send": "Envoyer",
+		"headers": "En-têtes",
+		"key": "Clé",
+		"value": "Valeur",
+		"body": "Corps",
+		"response": "Réponse",
+		"visualizeResponse": "Visualiser la réponse",
+		"invalidBody": "La syntaxe JSON n'est pas valide.",
+		"errors": {
+			"chooseMethod": "Vous devez choisir une méthode",
+			"emptyUrl": "L'URL ne peut pas être vide"
+		}
+	},
+	"visualizer": {
+		"tabs": {
+			"graph": "Graphe JSON",
+			"schema": "Schéma de base de données",
+			"export": "SQL et export"
+		},
+		"data": "Données :",
+		"noData": "Aucune donnée chargée",
+		"arrayOf_one": "Tableau de {{count}} élément",
+		"arrayOf_other": "Tableau de {{count}} éléments",
+		"objectWith_one": "Objet avec {{count}} clé",
+		"objectWith_other": "Objet avec {{count}} clés",
+		"value": "Valeur : {{value}}",
+		"dropHint": "déposez un fichier .json ou Excel ici",
+		"openFile": "Ouvrir un fichier",
+		"pasteJson": "Coller du JSON",
+		"loadSample": "Charger des données d'exemple",
+		"emptyGraph": "Chargez un fichier JSON ou Excel ci-dessus, ou envoyez des données ici depuis les pages Excel vers JSON, Structure JSON ou Tester une API avec le bouton <strong>Visualiser</strong>."
+	},
+	"graph": {
+		"searchPlaceholder": "Rechercher des clés ou des valeurs…",
+		"noMatch": "aucun résultat",
+		"previousMatch": "Précédent (Maj+Entrée)",
+		"nextMatch": "Suivant (Entrée)",
+		"itemsPerArrayTitle": "Éléments affichés par tableau",
+		"itemsPerArray_one": "{{count}} élément / tableau",
+		"itemsPerArray_other": "{{count}} éléments / tableau",
+		"collapseAll": "Tout replier",
+		"expandAll": "Tout déplier",
+		"relayout": "Réorganiser",
+		"relayoutTitle": "Réinitialiser la position des nœuds",
+		"exportPng": "Exporter en PNG",
+		"copiedPath": "{{path}} copié",
+		"nodes_one": "{{count}} nœud",
+		"nodes_other": "{{count}} nœuds",
+		"help": "cliquez sur une clé imbriquée pour la replier, sur une valeur pour copier son chemin",
+		"truncated": "graphe tronqué, repliez des nœuds ou affichez moins d'éléments",
+		"moreItems_one": "{{count}} élément de plus",
+		"moreItems_other": "{{count}} éléments de plus",
+		"clickToExpand": "Cliquez pour déplier",
+		"clickToCollapse": "Cliquez pour replier",
+		"clickToCopyPath": "Cliquez pour copier le chemin"
+	},
+	"schema": {
+		"fromJson": "À partir des données JSON",
+		"fromSql": "À partir de SQL (CREATE TABLE)",
+		"fromJsonHelp": "Tables déduites des données : les objets et tableaux imbriqués deviennent des tables liées.",
+		"sqlPlaceholder": "Collez des instructions CREATE TABLE (PostgreSQL, MySQL, SQLite, SQL Server)…",
+		"drawDiagram": "Dessiner le diagramme",
+		"loadExample": "Charger un exemple SQL",
+		"openSqlFile": "Ouvrir un fichier .sql",
+		"emptyJson": "Chargez d'abord des données JSON, ou passez à « À partir de SQL ».",
+		"tableExists": "Une table nommée « {{name}} » existe déjà.",
+		"tableCount_one": "{{count}} table",
+		"tableCount_other": "{{count}} tables",
+		"relationCount_one": "{{count}} relation",
+		"relationCount_other": "{{count}} relations",
+		"rows_one": "{{count}} ligne",
+		"rows_other": "{{count}} lignes",
+		"relayoutTitle": "Réinitialiser la position des tables",
+		"help": "Double-cliquez sur le nom d'une table pour la renommer · changez le type d'une colonne avec son sélecteur · sélectionnez une table pour mettre ses relations en évidence",
+		"doubleClickToRename": "Double-cliquez pour renommer",
+		"primaryKey": "Clé primaire",
+		"foreignKey": "Clé étrangère",
+		"nullable": "peut être vide",
+		"notNull": "obligatoire",
+		"unique": "unique",
+		"changeType": "Changer le type de la colonne",
+		"parseErrors": {
+			"missingParenthesis": "Table « {{table}} » : parenthèse fermante manquante.",
+			"duplicateTable": "La table « {{table}} » est définie deux fois, la dernière définition est utilisée.",
+			"referencedTableNotFound": "{{table}} : table référencée « {{refTable}} » introuvable.",
+			"noCreateTable": "Aucune instruction CREATE TABLE trouvée."
+		}
+	},
+	"export": {
+		"noSchema": "Pas encore de schéma : chargez des données JSON ou dessinez un diagramme à partir de SQL.",
+		"format": "Format",
+		"mermaid": "Diagramme ER Mermaid",
+		"database": "Base de données",
+		"includeData": "Inclure les données (INSERT)",
+		"excel": "Excel",
+		"tablesToExcel": "Tables → Excel (une feuille par table)",
+		"jsonToExcel": "JSON → Excel (colonnes aplaties)",
+		"previewTruncated": "Aperçu des {{shown}} premières lignes sur {{total}}. Copier et Télécharger contiennent tout."
+	},
+	"converter": {
+		"empty": {
+			"title": "Ouvrez un classeur",
+			"text": "Déposez un fichier Excel, CSV ou ODS n’importe où sur cette page, ou choisissez-en un sur votre ordinateur. Le fichier est lu dans votre navigateur, jamais envoyé.",
+			"choose": "Choisir un fichier",
+			"sample": "Essayer avec des données d’exemple",
+			"dropHere": "Déposez le fichier pour l’ouvrir",
+			"reading": "Lecture de {{name}}…"
+		},
+		"errors": {
+			"notSpreadsheet": "{{name}} n’est pas un classeur. Choisissez un fichier .xlsx, .xls, .csv ou .ods.",
+			"oneFile": "Déposez un seul fichier à la fois.",
+			"unreadable": "Impossible de lire {{name}}. Vérifiez qu’il n’est ni endommagé ni protégé par un mot de passe.",
+			"emptySheet": "Cette feuille est vide. Choisissez une autre feuille ci-dessous ou ouvrez un autre fichier.",
+			"emptyKey": "Saisissez un nom de clé.",
+			"keyTaken": "Une autre clé de ce niveau porte déjà ce nom.",
+			"sameLevel": "Sélectionnez des clés du même niveau pour les regrouper.",
+			"selectColumn": "Sélectionnez au moins une colonne.",
+			"notFound": "Cette clé n’existe plus.",
+			"concatTwo": "Sélectionnez au moins deux clés à concaténer.",
+			"concatFields": "Seules les clés simples peuvent être concaténées, pas les groupes ni les clés déjà concaténées."
+		},
+		"file": {
+			"replace": "Ouvrir un autre fichier",
+			"undo": "Annuler",
+			"undoTitle": "Annuler la dernière modification (Ctrl+Z)",
+			"reset": "Réinitialiser",
+			"resetConfirm": "Annuler toutes les modifications des clés de cette feuille ?",
+			"sheets": "Feuilles",
+			"rows_one": "{{count}} ligne",
+			"rows_other": "{{count}} lignes",
+			"columns_one": "{{count}} colonne",
+			"columns_other": "{{count}} colonnes"
+		},
+		"sheet": {
+			"label": "Feuille {{name}}",
+			"jsonRow": "JSON",
+			"notIncluded": "exclue",
+			"showMore": "Afficher plus de lignes",
+			"shown": "{{shown}} lignes affichées sur {{total}}",
+			"selectColumn": "Sélectionner la colonne {{name}}"
+		},
+		"keys": {
+			"title": "Clés JSON",
+			"help": "Cochez des colonnes dans la feuille ou des clés ci-dessous pour les regrouper sous une nouvelle clé. Cliquez sur une clé pour la renommer.",
+			"select": "Sélectionner {{key}}",
+			"groupUnder": "Regrouper sous",
+			"groupPlaceholder": "adresse",
+			"group": "Regrouper",
+			"include": "Inclure",
+			"exclude": "Exclure",
+			"clear": "Effacer",
+			"rename": "Renommer {{key}}",
+			"moveUp": "Monter",
+			"moveDown": "Descendre",
+			"moveOut": "Sortir de {{group}}",
+			"ungroup": "Dégrouper {{key}}",
+			"included": "Dans le JSON. Cliquez pour l’exclure",
+			"excluded": "Exclue. Cliquez pour l’inclure",
+			"column": "Colonne {{letter}}",
+			"selected_one": "{{count}} sélectionnée",
+			"selected_other": "{{count}} sélectionnées",
+			"expand": "Déplier {{key}}",
+			"collapse": "Replier {{key}}",
+			"or": "ou"
+		},
+		"preview": {
+			"title": "Résultat",
+			"tabs": {
+				"json": "JSON",
+				"graph": "Graphe",
+				"tables": "Tables"
+			},
+			"emptyCells": "Cellules vides",
+			"emptyNull": "null",
+			"emptyOmit": "Omettre la clé",
+			"emptyEmpty": "Texte vide",
+			"firstItems": "Les {{shown}} premiers objets sur {{total}}. La copie et le téléchargement les contiennent tous.",
+			"sample": "Construit à partir des {{count}} premiers objets.",
+			"nothing": "Toutes les colonnes sont exclues. Incluez-en au moins une pour voir le résultat."
+		},
+		"actions": {
+			"copy": "Copier le JSON",
+			"copied": "Copié",
+			"downloadJson": "Télécharger le JSON",
+			"downloadExcel": "Télécharger en Excel",
+			"send": "Envoyer à une API",
+			"visualize": "Ouvrir dans le visualiseur"
+		},
+		"concat": {
+			"open": "Concaténer…",
+			"title": "Concaténer en une seule clé",
+			"editTitle": "Modifier la clé concaténée",
+			"key": "Nom de la nouvelle clé",
+			"order": "Ordre",
+			"orderHint": "Faites glisser les clés, ou utilisez les flèches, pour changer l’ordre des valeurs.",
+			"moveBefore": "Placer {{key}} avant",
+			"moveAfter": "Placer {{key}} après",
+			"separator": "Séparateur",
+			"separators": {
+				"space": "Espace",
+				"comma": "Virgule",
+				"dash": "Tiret",
+				"slash": "Barre oblique",
+				"underscore": "Tiret bas",
+				"none": "Aucun",
+				"custom": "Autre",
+				"customLabel": "Votre séparateur"
+			},
+			"skipEmpty": "Ignorer les valeurs vides",
+			"skipEmptyHint": "Aucun séparateur n’est ajouté pour une valeur absente : « Louis » reste « Louis » et non « Louis  ».",
+			"preview": "Aperçu sur les premières lignes",
+			"empty": "vide",
+			"combine": "Concaténer",
+			"save": "Enregistrer",
+			"edit": "Modifier {{key}}",
+			"split": "Séparer {{key}} en ses clés d’origine",
+			"partsTitle": "{{parts}}, joints par {{separator}}. Cliquez pour modifier.",
+			"keyEdit": "Nom de la clé"
+		}
+	},
+	"apiTester": {
+		"method": "Méthode",
+		"url": "URL de la requête",
+		"send": "Envoyer",
+		"cancel": "Annuler",
+		"request": "Requête",
+		"hint": "Ctrl+Entrée envoie la requête depuis n’importe où sur la page.",
+		"copyCurl": "Copier en cURL",
+		"via": {
+			"label": "Envoyer depuis",
+			"browser": "Ce navigateur",
+			"server": "Serveur XLSX",
+			"browserTitle": "La requête part directement de votre navigateur. Elle atteint localhost, mais l’API doit autoriser ce site (CORS).",
+			"serverTitle": "Le serveur XLSX envoie la requête pour vous. Cela fonctionne avec les API qui bloquent les navigateurs, mais seulement vers des adresses publiques."
+		},
+		"tabs": {
+			"body": "Corps",
+			"headers": "En-têtes",
+			"auth": "Authentification"
+		},
+		"body": {
+			"notSent": "Les requêtes {{method}} n’envoient pas de corps. Choisissez POST, PUT ou PATCH pour l’envoyer.",
+			"array_one": "Tableau JSON de {{count}} élément",
+			"array_other": "Tableau JSON de {{count}} éléments",
+			"object_one": "Objet JSON avec {{count}} clé",
+			"object_other": "Objet JSON avec {{count}} clés",
+			"value": "Valeur JSON",
+			"empty": "Aucun corps",
+			"format": "Mettre en forme",
+			"restore": "Rétablir les données envoyées ici",
+			"placeholder": "Collez ou saisissez le JSON à envoyer",
+			"imported": "Le corps contient les données envoyées depuis la page précédente."
+		},
+		"headers": {
+			"send": "Envoyer",
+			"name": "Nom",
+			"value": "Valeur",
+			"sendHeader": "Envoyer l’en-tête {{name}}",
+			"valueOf": "Valeur de {{name}}",
+			"remove": "Supprimer {{name}}",
+			"add": "Ajouter un en-tête",
+			"note": "Content-Type n’est envoyé qu’avec un corps."
+		},
+		"auth": {
+			"type": "Authentification",
+			"none": "Aucune",
+			"bearer": "Jeton Bearer",
+			"basic": "Nom d’utilisateur et mot de passe",
+			"token": "Jeton",
+			"user": "Nom d’utilisateur",
+			"password": "Mot de passe",
+			"noneNote": "Choisissez un type pour ajouter un en-tête Authorization.",
+			"note": "Ajouté comme en-tête Authorization. Conservé dans cet onglet uniquement et effacé quand vous quittez la page."
+		},
+		"response": {
+			"title": "Réponse",
+			"waiting": "En attente de {{host}}… {{time}}",
+			"idleTitle": "Pas encore de réponse",
+			"idleText": "Saisissez une URL et cliquez sur Envoyer. Le statut, la durée, les en-têtes et le corps de la réponse s’affichent ici.",
+			"via": {
+				"browser": "envoyée depuis ce navigateur",
+				"server": "envoyée depuis le serveur XLSX"
+			},
+			"body": "Corps",
+			"headers": "En-têtes",
+			"visualize": "Ouvrir dans le visualiseur",
+			"noBody": "La réponse n’a pas de corps.",
+			"truncated": "Le corps a été coupé à 5 Mo.",
+			"browserHeaders": "Les navigateurs n’affichent que les en-têtes que l’API les autorise à lire."
+		},
+		"history": {
+			"title": "Requêtes récentes",
+			"failed": "échec"
+		},
+		"errors": {
+			"emptyUrl": "Saisissez l’URL de l’API à appeler.",
+			"invalidUrl": "Cette URL n’est pas valide. Elle doit ressembler à https://api.example.com/customers.",
+			"invalidBody": "Le corps n’est pas un JSON valide. Corrigez-le ou videz-le avant d’envoyer.",
+			"bodyAt": "Le corps n’est pas un JSON valide : vérifiez la ligne {{line}}, colonne {{column}}."
+		},
+		"failure": {
+			"network": {
+				"title": "Aucune réponse de {{host}}",
+				"text": "Le serveur est peut-être arrêté ou l’URL erronée. Souvent, l’API n’accepte simplement pas les appels d’un navigateur depuis un autre site (CORS). L’envoi depuis le serveur XLSX évite ce problème.",
+				"retry": "Envoyer depuis le serveur XLSX"
+			},
+			"aborted": {
+				"title": "Requête annulée",
+				"text": "Cliquez sur Envoyer pour réessayer."
+			},
+			"timeout": {
+				"title": "{{host}} a mis plus de 30 secondes",
+				"text": "Réessayez plus tard, ou vérifiez que l’URL pointe vers le bon serveur."
+			},
+			"privateAddress": {
+				"title": "Le serveur XLSX ne peut pas joindre {{host}}",
+				"text": "Il n’appelle que des adresses publiques. Pour appeler localhost ou un réseau privé, envoyez depuis ce navigateur."
+			},
+			"dnsFailed": {
+				"title": "{{host}} est introuvable",
+				"text": "Vérifiez l’orthographe de l’adresse."
+			},
+			"unreachable": {
+				"title": "Impossible de joindre {{host}}",
+				"text": "Le serveur XLSX n’a pas pu s’y connecter. Vérifiez l’URL et que l’API est en ligne."
+			},
+			"invalidUrl": {
+				"title": "Cette URL n’est pas valide",
+				"text": "Elle doit commencer par http:// ou https://."
+			},
+			"invalidRequest": {
+				"title": "La requête n’a pas pu être envoyée",
+				"text": "Vérifiez la méthode et l’URL, puis réessayez."
+			},
+			"unauthorized": {
+				"title": "Votre session a expiré",
+				"text": "Reconnectez-vous pour continuer."
+			}
+		}
+	},
+	"reshape": {
+		"keysTitle": "Clés",
+		"pasted": "JSON collé",
+		"close": "Fermer",
+		"oneObject": "1 objet",
+		"objects_one": "{{count}} objet",
+		"objects_other": "{{count}} objets",
+		"keys_one": "{{count}} clé",
+		"keys_other": "{{count}} clés",
+		"resetConfirm": "Revenir à la structure d’origine ? Toutes les modifications seront annulées.",
+		"empty": {
+			"title": "Restructurez votre JSON",
+			"text": "Ouvrez un fichier JSON ou collez du JSON pour renommer des clés, les regrouper dans des objets, aplatir des objets imbriqués ou exclure des clés. Vos données restent dans votre navigateur.",
+			"choose": "Choisir un fichier .json",
+			"paste": "Coller du JSON",
+			"usePasted": "Restructurer ce JSON"
+		},
+		"views": {
+			"result": "Résultat",
+			"original": "Original",
+			"graph": "Graphe"
+		},
+		"missing": {
+			"label": "Clés absentes",
+			"omit": "Omettre",
+			"null": "Mettre à null"
+		},
+		"source": {
+			"from": "depuis {{path}}",
+			"newGroup": "nouveau",
+			"newGroupTitle": "Un groupe que vous avez créé",
+			"inSome": "dans {{count}} sur {{total}}",
+			"inSomeTitle": "Présente dans {{count}} des {{total}} objets"
+		},
+		"errors": {
+			"invalidJson": "Ce n’est pas un JSON valide. Vérifiez les crochets, guillemets et virgules.",
+			"invalidJsonAt": "Ce n’est pas un JSON valide : vérifiez la ligne {{line}}, colonne {{column}}.",
+			"emptyArray": "Le tableau est vide. Il n’y a aucun objet à restructurer.",
+			"notObjects": "Le JSON doit être un objet ou un tableau d’objets pour être restructuré.",
+			"notJsonFile": "{{name}} n’est pas un fichier .json. Pour convertir un classeur, utilisez Excel vers JSON."
+		},
+		"keysHelp": "Cochez des clés pour les regrouper sous une nouvelle clé, ou dégroupez un objet imbriqué pour l’aplatir. Cliquez sur une clé pour la renommer."
+	}
+}

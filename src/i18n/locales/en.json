@@ -1,0 +1,543 @@
+{
+	"language": "Language",
+	"loading": "Loading…",
+	"notFound": "Page not found",
+	"common": {
+		"copy": "Copy",
+		"copied": "Copied",
+		"download": "Download",
+		"clear": "Clear",
+		"load": "Load"
+	},
+	"nav": {
+		"logo": "XLSX",
+		"home": "Home",
+		"excelToJson": "Excel to JSON",
+		"jsonStructure": "JSON structure",
+		"testApi": "Test API",
+		"visualizer": "Visualizer",
+		"contactUs": "Contact us",
+		"logout": "Log out",
+		"signIn": "Sign in",
+		"signUp": "Sign up"
+	},
+	"home": {
+		"title": "Excel → JSON",
+		"subtitle": "Convert your spreadsheets to JSON, reshape the structure, test it against your API and visualize it as a graph or a database schema.",
+		"headline": "Turn a spreadsheet into the JSON your API expects.",
+		"cta": "Convert an Excel file",
+		"secondaryCta": "Open the visualizer",
+		"demo": {
+			"gridLabel": "Sample spreadsheet",
+			"jsonLabel": "JSON preview",
+			"groupUnder": "Group the ticked columns under",
+			"hint": "Tick a column header to move it into a nested object.",
+			"sheet": "Sheet1",
+			"keyTaken": "Another column already uses this key.",
+			"defaultKey": "address",
+			"columns": {
+				"name": "name",
+				"email": "email",
+				"city": "city",
+				"zip": "zip"
+			}
+		},
+		"steps": {
+			"heading": "From file to API in four steps",
+			"convert": {
+				"title": "Convert",
+				"text": "Drop an Excel file. Each row of the first sheet becomes an object, keyed by its column headers.",
+				"link": "Open Excel to JSON"
+			},
+			"reshape": {
+				"title": "Reshape",
+				"text": "Group columns into nested objects and rename keys at any level, or start from a JSON file.",
+				"link": "Open JSON structure"
+			},
+			"send": {
+				"title": "Send",
+				"text": "Send the result to your endpoint with the method and headers you choose, and read the response.",
+				"link": "Open Test API"
+			},
+			"visualize": {
+				"title": "Visualize",
+				"text": "Explore the data as a graph, infer a database schema and export it as SQL, Mermaid or Excel.",
+				"link": "Open the visualizer"
+			}
+		},
+		"formats": {
+			"reads": "Reads",
+			"writes": "Writes"
+		},
+		"closing": {
+			"title": "Create an account to start converting.",
+			"text": "The tools open once you sign in. Your files are read in the browser, never uploaded."
+		}
+	},
+	"login": {
+		"tabsLabel": "Account",
+		"createAccount": "Create account",
+		"userName": "User name",
+		"email": "Email",
+		"emailPlaceholder": "you@company.com",
+		"password": "Password",
+		"confirmPassword": "Confirm password",
+		"signIn": "Sign in",
+		"signInTitle": "Welcome back",
+		"signInSubtitle": "Sign in to keep converting and testing your data.",
+		"signUpTitle": "Create your account",
+		"signUpSubtitle": "Convert spreadsheets, reshape the JSON and test it against your API.",
+		"showPassword": "Show password",
+		"hidePassword": "Hide password",
+		"capsLock": "Caps Lock is on",
+		"passwordHint": "Use at least {{min}} characters.",
+		"strength": {
+			"weak": "Weak",
+			"fair": "Fair",
+			"good": "Good",
+			"strong": "Strong"
+		},
+		"signingIn": "Signing in…",
+		"creatingAccount": "Creating account…",
+		"accountCreated": "Account created. Enter your password to sign in.",
+		"noAccount": "New here?",
+		"haveAccount": "Already have an account?",
+		"showcaseTitle": "Rows in. JSON out.",
+		"showcaseText": "Group spreadsheet columns into the nested objects your API expects, then send them in one click.",
+		"showcaseFigure": "The city and zip columns of a spreadsheet grouped into an address object in the JSON output",
+		"errors": {
+			"passwordsMismatch": "Passwords do not match",
+			"registrationFailed": "Registration failed",
+			"emailTaken": "An account already exists with this email.",
+			"invalidData": "Enter a user name, a valid email and a password of at least {{min}} characters.",
+			"noServerResponse": "The server didn't respond. Check your connection and try again.",
+			"missingCredentials": "Enter your email and password.",
+			"unauthorized": "Email or password is incorrect.",
+			"loginFailed": "Login failed"
+		}
+	},
+	"dropzone": {
+		"dropExcel": "Drag and drop your Excel file",
+		"dropJson": "Drag and drop your JSON file",
+		"or": "Or",
+		"selectFromComputer": "select a file to upload from your computer",
+		"selectFile": "Select file",
+		"extensionNotSupported": "File extension not supported!",
+		"onlyOneFile": "Please choose only one file."
+	},
+	"errors": {
+		"invalidJson": "Invalid JSON: {{message}}",
+		"excelRead": "Could not read the Excel file"
+	},
+	"clipboard": {
+		"copyYourData": "Copy your data"
+	},
+	"jsonPreview": {
+		"itemLooksLike": "Each item in your JSON file looks like:"
+	},
+	"actions": {
+		"hide": "Hide",
+		"modifyStructure": "Modify the structure",
+		"downloadJson": "Download JSON file",
+		"downloadExcel": "Download Excel file",
+		"sendData": "Send data",
+		"visualize": "Visualize"
+	},
+	"structure": {
+		"title": "Modify JSON structure",
+		"keyPlaceholder": "Give a key to these values…",
+		"generate": "Generate",
+		"moveToTop": "Move {{name}} back to the top level",
+		"errors": {
+			"emptyKey": "This field can't be empty.",
+			"keyMustBeText": "This field must be text, not a number.",
+			"selectColumn": "Select at least one column."
+		}
+	},
+	"api": {
+		"httpMethod": "HTTP method",
+		"urlPlaceholder": "Enter request URL",
+		"send": "Send",
+		"headers": "Headers",
+		"key": "Key",
+		"value": "Value",
+		"body": "Body",
+		"response": "Response",
+		"visualizeResponse": "Visualize response",
+		"invalidBody": "JSON syntax is not valid.",
+		"errors": {
+			"chooseMethod": "You must choose a method",
+			"emptyUrl": "The URL can't be empty"
+		}
+	},
+	"visualizer": {
+		"tabs": {
+			"graph": "JSON graph",
+			"schema": "Database schema",
+			"export": "SQL & export"
+		},
+		"data": "Data:",
+		"noData": "No data loaded",
+		"arrayOf_one": "Array of {{count}} item",
+		"arrayOf_other": "Array of {{count}} items",
+		"objectWith_one": "Object with {{count}} key",
+		"objectWith_other": "Object with {{count}} keys",
+		"value": "Value: {{value}}",
+		"dropHint": "drop a .json or Excel file here",
+		"openFile": "Open file",
+		"pasteJson": "Paste JSON",
+		"loadSample": "Load sample data",
+		"emptyGraph": "Load a JSON or Excel file above, or send data here from the Excel to JSON, JSON structure or Test API pages with the <strong>Visualize</strong> button."
+	},
+	"graph": {
+		"searchPlaceholder": "Search keys or values…",
+		"noMatch": "no match",
+		"previousMatch": "Previous (Shift+Enter)",
+		"nextMatch": "Next (Enter)",
+		"itemsPerArrayTitle": "Items shown per array",
+		"itemsPerArray_one": "{{count}} item / array",
+		"itemsPerArray_other": "{{count}} items / array",
+		"collapseAll": "Collapse all",
+		"expandAll": "Expand all",
+		"relayout": "Re-layout",
+		"relayoutTitle": "Reset node positions",
+		"exportPng": "Export PNG",
+		"copiedPath": "Copied {{path}}",
+		"nodes_one": "{{count}} node",
+		"nodes_other": "{{count}} nodes",
+		"help": "click a nested key to collapse it, a value to copy its path",
+		"truncated": "graph truncated, collapse nodes or show fewer items",
+		"moreItems_one": "{{count}} more item",
+		"moreItems_other": "{{count}} more items",
+		"clickToExpand": "Click to expand",
+		"clickToCollapse": "Click to collapse",
+		"clickToCopyPath": "Click to copy the path"
+	},
+	"schema": {
+		"fromJson": "From the JSON data",
+		"fromSql": "From SQL (CREATE TABLE)",
+		"fromJsonHelp": "Tables inferred from the data: nested objects and arrays become related tables.",
+		"sqlPlaceholder": "Paste CREATE TABLE statements (PostgreSQL, MySQL, SQLite, SQL Server)…",
+		"drawDiagram": "Draw diagram",
+		"loadExample": "Load SQL example",
+		"openSqlFile": "Open .sql file",
+		"emptyJson": "Load some JSON data first, or switch to From SQL.",
+		"tableExists": "A table named \"{{name}}\" already exists.",
+		"tableCount_one": "{{count}} table",
+		"tableCount_other": "{{count}} tables",
+		"relationCount_one": "{{count}} relation",
+		"relationCount_other": "{{count}} relations",
+		"rows_one": "{{count}} row",
+		"rows_other": "{{count}} rows",
+		"relayoutTitle": "Reset table positions",
+		"help": "Double-click a table name to rename it · change a column type with its selector · select a table to highlight its relations",
+		"doubleClickToRename": "Double-click to rename",
+		"primaryKey": "Primary key",
+		"foreignKey": "Foreign key",
+		"nullable": "nullable",
+		"notNull": "not null",
+		"unique": "unique",
+		"changeType": "Change the column type",
+		"parseErrors": {
+			"missingParenthesis": "Table \"{{table}}\": missing closing parenthesis.",
+			"duplicateTable": "Table \"{{table}}\" is defined twice, the last definition is used.",
+			"referencedTableNotFound": "{{table}}: referenced table \"{{refTable}}\" not found.",
+			"noCreateTable": "No CREATE TABLE statement found."
+		}
+	},
+	"export": {
+		"noSchema": "No schema yet: load JSON data or draw a diagram from SQL first.",
+		"format": "Format",
+		"mermaid": "Mermaid ER diagram",
+		"database": "Database",
+		"includeData": "Include the data (INSERT)",
+		"excel": "Excel",
+		"tablesToExcel": "Tables → Excel (one sheet per table)",
+		"jsonToExcel": "JSON → Excel (flattened columns)",
+		"previewTruncated": "Preview of the first {{shown}} lines out of {{total}}. Copy and Download contain everything."
+	},
+	"converter": {
+		"empty": {
+			"title": "Open a spreadsheet",
+			"text": "Drop an Excel, CSV or ODS file anywhere on this page, or choose one from your computer. The file is read in your browser and never uploaded.",
+			"choose": "Choose a file",
+			"sample": "Try it with sample data",
+			"dropHere": "Drop the file to open it",
+			"reading": "Reading {{name}}…"
+		},
+		"errors": {
+			"notSpreadsheet": "{{name}} isn't a spreadsheet. Choose an .xlsx, .xls, .csv or .ods file.",
+			"oneFile": "Drop one file at a time.",
+			"unreadable": "{{name}} couldn't be read. Check that it isn't damaged or password protected.",
+			"emptySheet": "This sheet is empty. Pick another sheet below or open another file.",
+			"emptyKey": "Enter a key name.",
+			"keyTaken": "Another key at this level already has this name.",
+			"sameLevel": "Select keys from the same level to group them.",
+			"selectColumn": "Select at least one column.",
+			"notFound": "This key no longer exists.",
+			"concatTwo": "Select at least two keys to combine them.",
+			"concatFields": "Only simple keys can be combined, not groups or combined keys."
+		},
+		"file": {
+			"replace": "Open another file",
+			"undo": "Undo",
+			"undoTitle": "Undo the last change (Ctrl+Z)",
+			"reset": "Reset",
+			"resetConfirm": "Undo every change to the keys of this sheet?",
+			"sheets": "Sheets",
+			"rows_one": "{{count}} row",
+			"rows_other": "{{count}} rows",
+			"columns_one": "{{count}} column",
+			"columns_other": "{{count}} columns"
+		},
+		"sheet": {
+			"label": "Sheet {{name}}",
+			"jsonRow": "JSON",
+			"notIncluded": "left out",
+			"showMore": "Show more rows",
+			"shown": "{{shown}} of {{total}} rows shown",
+			"selectColumn": "Select the column {{name}}"
+		},
+		"keys": {
+			"title": "JSON keys",
+			"help": "Tick columns in the sheet or keys below to group them under a new key. Click a key to rename it.",
+			"select": "Select {{key}}",
+			"groupUnder": "Group under",
+			"groupPlaceholder": "address",
+			"group": "Group",
+			"include": "Include",
+			"exclude": "Leave out",
+			"clear": "Clear",
+			"rename": "Rename {{key}}",
+			"moveUp": "Move up",
+			"moveDown": "Move down",
+			"moveOut": "Move out of {{group}}",
+			"ungroup": "Ungroup {{key}}",
+			"included": "In the JSON. Click to leave it out",
+			"excluded": "Left out. Click to include it",
+			"column": "Column {{letter}}",
+			"selected_one": "{{count}} selected",
+			"selected_other": "{{count}} selected",
+			"expand": "Expand {{key}}",
+			"collapse": "Collapse {{key}}",
+			"or": "or"
+		},
+		"preview": {
+			"title": "Result",
+			"tabs": {
+				"json": "JSON",
+				"graph": "Graph",
+				"tables": "Tables"
+			},
+			"emptyCells": "Empty cells",
+			"emptyNull": "null",
+			"emptyOmit": "Leave the key out",
+			"emptyEmpty": "Empty text",
+			"firstItems": "The first {{shown}} of {{total}} objects. Copy and download include all of them.",
+			"sample": "Built from the first {{count}} objects.",
+			"nothing": "Every column is left out. Include at least one to see the result."
+		},
+		"actions": {
+			"copy": "Copy JSON",
+			"copied": "Copied",
+			"downloadJson": "Download JSON",
+			"downloadExcel": "Download Excel",
+			"send": "Send to an API",
+			"visualize": "Open in visualizer"
+		},
+		"concat": {
+			"open": "Combine…",
+			"title": "Combine into one key",
+			"editTitle": "Edit the combined key",
+			"key": "Name of the new key",
+			"order": "Order",
+			"orderHint": "Drag the keys, or use the arrows, to change the order of the values.",
+			"moveBefore": "Move {{key}} before",
+			"moveAfter": "Move {{key}} after",
+			"separator": "Separator",
+			"separators": {
+				"space": "Space",
+				"comma": "Comma",
+				"dash": "Dash",
+				"slash": "Slash",
+				"underscore": "Underscore",
+				"none": "Nothing",
+				"custom": "Other",
+				"customLabel": "Your separator"
+			},
+			"skipEmpty": "Skip empty values",
+			"skipEmptyHint": "No separator is added for a missing value, so “Louis” stays “Louis” instead of “Louis ”.",
+			"preview": "Preview on the first rows",
+			"empty": "empty",
+			"combine": "Combine",
+			"save": "Save changes",
+			"edit": "Edit {{key}}",
+			"split": "Split {{key}} back into its keys",
+			"partsTitle": "{{parts}}, joined with {{separator}}. Click to edit.",
+			"keyEdit": "Name of the key"
+		}
+	},
+	"apiTester": {
+		"method": "Method",
+		"url": "Request URL",
+		"send": "Send",
+		"cancel": "Cancel",
+		"request": "Request",
+		"hint": "Ctrl+Enter sends the request from anywhere on the page.",
+		"copyCurl": "Copy as cURL",
+		"via": {
+			"label": "Send from",
+			"browser": "This browser",
+			"server": "XLSX server",
+			"browserTitle": "The request goes straight from your browser. It reaches localhost, but the API must allow this site (CORS).",
+			"serverTitle": "The XLSX server sends the request for you. It works with APIs that block browsers, but only reaches public addresses."
+		},
+		"tabs": {
+			"body": "Body",
+			"headers": "Headers",
+			"auth": "Auth"
+		},
+		"body": {
+			"notSent": "{{method}} requests don't send a body. Choose POST, PUT or PATCH to send it.",
+			"array_one": "JSON array of {{count}} item",
+			"array_other": "JSON array of {{count}} items",
+			"object_one": "JSON object with {{count}} key",
+			"object_other": "JSON object with {{count}} keys",
+			"value": "JSON value",
+			"empty": "No body",
+			"format": "Format",
+			"restore": "Restore the data you sent here",
+			"placeholder": "Paste or type the JSON to send",
+			"imported": "The body holds the data you sent from the previous page."
+		},
+		"headers": {
+			"send": "Send",
+			"name": "Name",
+			"value": "Value",
+			"sendHeader": "Send the header {{name}}",
+			"valueOf": "Value of {{name}}",
+			"remove": "Remove {{name}}",
+			"add": "Add a header",
+			"note": "Content-Type is only sent with a body."
+		},
+		"auth": {
+			"type": "Authentication",
+			"none": "None",
+			"bearer": "Bearer token",
+			"basic": "User name and password",
+			"token": "Token",
+			"user": "User name",
+			"password": "Password",
+			"noneNote": "Choose a type to add an Authorization header.",
+			"note": "Added as the Authorization header. It is kept in this tab only and cleared when you leave the page."
+		},
+		"response": {
+			"title": "Response",
+			"waiting": "Waiting for {{host}}… {{time}}",
+			"idleTitle": "No response yet",
+			"idleText": "Enter a URL and press Send. The status, time, headers and body of the response show up here.",
+			"via": {
+				"browser": "sent from this browser",
+				"server": "sent from the XLSX server"
+			},
+			"body": "Body",
+			"headers": "Headers",
+			"visualize": "Open in visualizer",
+			"noBody": "The response has no body.",
+			"truncated": "The body was cut at 5 MB.",
+			"browserHeaders": "Browsers only show the headers the API allows them to read."
+		},
+		"history": {
+			"title": "Recent requests",
+			"failed": "failed"
+		},
+		"errors": {
+			"emptyUrl": "Enter the URL of the API to call.",
+			"invalidUrl": "This URL isn't valid. It should look like https://api.example.com/customers.",
+			"invalidBody": "The body isn't valid JSON. Fix it or clear it before sending.",
+			"bodyAt": "The body isn't valid JSON: check line {{line}}, column {{column}}."
+		},
+		"failure": {
+			"network": {
+				"title": "No response from {{host}}",
+				"text": "The server may be down or the URL wrong. Often the API simply doesn't accept calls from a browser on another site (CORS). Sending it from the XLSX server avoids that.",
+				"retry": "Send from the XLSX server"
+			},
+			"aborted": {
+				"title": "Request cancelled",
+				"text": "Press Send to try again."
+			},
+			"timeout": {
+				"title": "{{host}} took longer than 30 seconds",
+				"text": "Try again later, or check that the URL points to the right server."
+			},
+			"privateAddress": {
+				"title": "The XLSX server can't reach {{host}}",
+				"text": "It only calls public addresses. To call localhost or a private network, send from this browser."
+			},
+			"dnsFailed": {
+				"title": "{{host}} wasn't found",
+				"text": "Check the spelling of the address."
+			},
+			"unreachable": {
+				"title": "{{host}} couldn't be reached",
+				"text": "The XLSX server couldn't connect to it. Check the URL and that the API is online."
+			},
+			"invalidUrl": {
+				"title": "This URL isn't valid",
+				"text": "It should start with http:// or https://."
+			},
+			"invalidRequest": {
+				"title": "The request couldn't be sent",
+				"text": "Check the method and the URL, then try again."
+			},
+			"unauthorized": {
+				"title": "Your session has expired",
+				"text": "Sign in again to keep testing."
+			}
+		}
+	},
+	"reshape": {
+		"keysTitle": "Keys",
+		"pasted": "Pasted JSON",
+		"close": "Close",
+		"oneObject": "1 object",
+		"objects_one": "{{count}} object",
+		"objects_other": "{{count}} objects",
+		"keys_one": "{{count}} key",
+		"keys_other": "{{count}} keys",
+		"resetConfirm": "Go back to the original structure? Every change is undone.",
+		"empty": {
+			"title": "Reshape your JSON",
+			"text": "Open a JSON file or paste JSON to rename keys, nest them into objects, flatten nested objects or leave keys out. Your data stays in your browser.",
+			"choose": "Choose a .json file",
+			"paste": "Paste JSON",
+			"usePasted": "Reshape this JSON"
+		},
+		"views": {
+			"result": "Result",
+			"original": "Original",
+			"graph": "Graph"
+		},
+		"missing": {
+			"label": "Missing keys",
+			"omit": "Leave out",
+			"null": "Set to null"
+		},
+		"source": {
+			"from": "from {{path}}",
+			"newGroup": "new",
+			"newGroupTitle": "A group you created",
+			"inSome": "in {{count}} of {{total}}",
+			"inSomeTitle": "Present in {{count}} of the {{total}} objects"
+		},
+		"errors": {
+			"invalidJson": "This isn't valid JSON. Check the brackets, quotes and commas.",
+			"invalidJsonAt": "This isn't valid JSON: check line {{line}}, column {{column}}.",
+			"emptyArray": "The array is empty. There are no objects to reshape.",
+			"notObjects": "The JSON must be an object or an array of objects to be reshaped.",
+			"notJsonFile": "{{name}} isn't a .json file. To convert a spreadsheet, use Excel to JSON."
+		},
+		"keysHelp": "Tick keys to group them under a new key, or ungroup a nested object to flatten it. Click a key to rename it."
+	}
+}

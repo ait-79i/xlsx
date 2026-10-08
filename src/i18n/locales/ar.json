@@ -1,0 +1,603 @@
+{
+	"language": "اللغة",
+	"loading": "جارٍ التحميل…",
+	"notFound": "الصفحة غير موجودة",
+	"common": {
+		"copy": "نسخ",
+		"copied": "تم النسخ",
+		"download": "تنزيل",
+		"clear": "مسح",
+		"load": "تحميل"
+	},
+	"nav": {
+		"logo": "XLSX",
+		"home": "الرئيسية",
+		"excelToJson": "Excel إلى JSON",
+		"jsonStructure": "بنية JSON",
+		"testApi": "اختبار API",
+		"visualizer": "العارض",
+		"contactUs": "اتصل بنا",
+		"logout": "تسجيل الخروج",
+		"signIn": "تسجيل الدخول",
+		"signUp": "إنشاء حساب"
+	},
+	"home": {
+		"title": "Excel → JSON",
+		"subtitle": "حوّل جداول البيانات إلى JSON، وعدّل بنيتها، واختبرها مع واجهة API الخاصة بك، واعرضها كمخطط أو كمخطط قاعدة بيانات.",
+		"headline": "حوّل جدول البيانات إلى JSON بالشكل الذي تنتظره واجهة API الخاصة بك.",
+		"cta": "حوّل ملف Excel",
+		"secondaryCta": "افتح العارض",
+		"demo": {
+			"gridLabel": "جدول بيانات نموذجي",
+			"jsonLabel": "معاينة JSON",
+			"groupUnder": "اجمع الأعمدة المحددة تحت",
+			"hint": "حدّد رأس عمود لنقله إلى كائن متداخل.",
+			"sheet": "ورقة1",
+			"keyTaken": "هذا المفتاح مستخدم بالفعل في عمود آخر.",
+			"defaultKey": "address",
+			"columns": {
+				"name": "name",
+				"email": "email",
+				"city": "city",
+				"zip": "zip"
+			}
+		},
+		"steps": {
+			"heading": "من الملف إلى API في أربع خطوات",
+			"convert": {
+				"title": "التحويل",
+				"text": "أفلت ملف Excel. يصبح كل صف من الورقة الأولى كائنًا مفاتيحه هي رؤوس الأعمدة.",
+				"link": "افتح Excel إلى JSON"
+			},
+			"reshape": {
+				"title": "إعادة الهيكلة",
+				"text": "اجمع الأعمدة في كائنات متداخلة وأعد تسمية المفاتيح في أي مستوى، أو ابدأ من ملف JSON.",
+				"link": "افتح بنية JSON"
+			},
+			"send": {
+				"title": "الإرسال",
+				"text": "أرسل النتيجة إلى واجهة API بالطريقة والترويسات التي تختارها، ثم اقرأ الاستجابة.",
+				"link": "افتح اختبار API"
+			},
+			"visualize": {
+				"title": "العرض",
+				"text": "استكشف البيانات كمخطط، واستنتج مخطط قاعدة بيانات وصدّره بصيغة SQL أو Mermaid أو Excel.",
+				"link": "افتح العارض"
+			}
+		},
+		"formats": {
+			"reads": "يقرأ",
+			"writes": "يُصدِّر"
+		},
+		"closing": {
+			"title": "أنشئ حسابًا لتبدأ التحويل.",
+			"text": "تُفتح الأدوات بعد تسجيل الدخول. تُقرأ ملفاتك داخل المتصفح ولا تُرفع إلى أي خادم."
+		}
+	},
+	"login": {
+		"tabsLabel": "الحساب",
+		"createAccount": "إنشاء حساب",
+		"userName": "اسم المستخدم",
+		"email": "البريد الإلكتروني",
+		"emailPlaceholder": "you@company.com",
+		"password": "كلمة المرور",
+		"confirmPassword": "تأكيد كلمة المرور",
+		"signIn": "تسجيل الدخول",
+		"signInTitle": "مرحبًا بعودتك",
+		"signInSubtitle": "سجّل الدخول لمتابعة تحويل بياناتك واختبارها.",
+		"signUpTitle": "أنشئ حسابك",
+		"signUpSubtitle": "حوّل جداول البيانات، وأعد هيكلة JSON، واختبره على واجهتك البرمجية.",
+		"showPassword": "إظهار كلمة المرور",
+		"hidePassword": "إخفاء كلمة المرور",
+		"capsLock": "مفتاح الأحرف الكبيرة مفعّل",
+		"passwordHint": "استخدم {{min}} أحرف على الأقل.",
+		"strength": {
+			"weak": "ضعيفة",
+			"fair": "مقبولة",
+			"good": "جيدة",
+			"strong": "قوية"
+		},
+		"signingIn": "جارٍ تسجيل الدخول…",
+		"creatingAccount": "جارٍ إنشاء الحساب…",
+		"accountCreated": "تم إنشاء الحساب. أدخل كلمة المرور لتسجيل الدخول.",
+		"noAccount": "جديد هنا؟",
+		"haveAccount": "لديك حساب بالفعل؟",
+		"showcaseTitle": "صفوف تدخل، و JSON يخرج.",
+		"showcaseText": "اجمع أعمدة جدول البيانات في كائنات متداخلة بالشكل الذي تنتظره واجهتك البرمجية، ثم أرسلها بنقرة واحدة.",
+		"showcaseFigure": "عمودا city و zip من جدول بيانات مجمّعان في كائن address داخل JSON",
+		"errors": {
+			"passwordsMismatch": "كلمتا المرور غير متطابقتين",
+			"registrationFailed": "فشل إنشاء الحساب",
+			"emailTaken": "يوجد حساب مسجل بهذا البريد الإلكتروني.",
+			"invalidData": "أدخل اسم مستخدم وبريدًا إلكترونيًا صالحًا وكلمة مرور لا تقل عن {{min}} أحرف.",
+			"noServerResponse": "لم يستجب الخادم. تحقّق من اتصالك ثم أعد المحاولة.",
+			"missingCredentials": "أدخل بريدك الإلكتروني وكلمة المرور.",
+			"unauthorized": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+			"loginFailed": "فشل تسجيل الدخول"
+		}
+	},
+	"dropzone": {
+		"dropExcel": "اسحب ملف Excel وأفلته هنا",
+		"dropJson": "اسحب ملف JSON وأفلته هنا",
+		"or": "أو",
+		"selectFromComputer": "اختر ملفًا من جهازك لرفعه",
+		"selectFile": "اختيار ملف",
+		"extensionNotSupported": "امتداد الملف غير مدعوم!",
+		"onlyOneFile": "الرجاء اختيار ملف واحد فقط."
+	},
+	"errors": {
+		"invalidJson": "JSON غير صالح: {{message}}",
+		"excelRead": "تعذّرت قراءة ملف Excel"
+	},
+	"clipboard": {
+		"copyYourData": "انسخ بياناتك"
+	},
+	"jsonPreview": {
+		"itemLooksLike": "يبدو كل عنصر في ملف JSON كما يلي:"
+	},
+	"actions": {
+		"hide": "إخفاء",
+		"modifyStructure": "تعديل البنية",
+		"downloadJson": "تنزيل ملف JSON",
+		"downloadExcel": "تنزيل ملف Excel",
+		"sendData": "إرسال البيانات",
+		"visualize": "عرض مرئي"
+	},
+	"structure": {
+		"title": "تعديل بنية JSON",
+		"keyPlaceholder": "أعطِ مفتاحًا لهذه القيم…",
+		"generate": "إنشاء",
+		"moveToTop": "إرجاع {{name}} إلى المستوى الأول",
+		"errors": {
+			"emptyKey": "لا يمكن ترك هذا الحقل فارغًا.",
+			"keyMustBeText": "يجب أن يكون هذا الحقل نصًا وليس رقمًا.",
+			"selectColumn": "اختر عمودًا واحدًا على الأقل."
+		}
+	},
+	"api": {
+		"httpMethod": "طريقة HTTP",
+		"urlPlaceholder": "أدخل رابط الطلب",
+		"send": "إرسال",
+		"headers": "الترويسات",
+		"key": "المفتاح",
+		"value": "القيمة",
+		"body": "المحتوى",
+		"response": "الاستجابة",
+		"visualizeResponse": "عرض الاستجابة",
+		"invalidBody": "صيغة JSON غير صالحة.",
+		"errors": {
+			"chooseMethod": "يجب اختيار طريقة",
+			"emptyUrl": "لا يمكن ترك الرابط فارغًا"
+		}
+	},
+	"visualizer": {
+		"tabs": {
+			"graph": "مخطط JSON",
+			"schema": "مخطط قاعدة البيانات",
+			"export": "SQL والتصدير"
+		},
+		"data": "البيانات:",
+		"noData": "لم يتم تحميل أي بيانات",
+		"arrayOf_zero": "مصفوفة فارغة",
+		"arrayOf_one": "مصفوفة من عنصر واحد",
+		"arrayOf_two": "مصفوفة من عنصرين",
+		"arrayOf_few": "مصفوفة من {{count}} عناصر",
+		"arrayOf_many": "مصفوفة من {{count}} عنصرًا",
+		"arrayOf_other": "مصفوفة من {{count}} عنصر",
+		"objectWith_zero": "كائن بلا مفاتيح",
+		"objectWith_one": "كائن بمفتاح واحد",
+		"objectWith_two": "كائن بمفتاحين",
+		"objectWith_few": "كائن بـ {{count}} مفاتيح",
+		"objectWith_many": "كائن بـ {{count}} مفتاحًا",
+		"objectWith_other": "كائن بـ {{count}} مفتاح",
+		"value": "القيمة: {{value}}",
+		"dropHint": "أفلت ملف ‎.json‎ أو Excel هنا",
+		"openFile": "فتح ملف",
+		"pasteJson": "لصق JSON",
+		"loadSample": "تحميل بيانات تجريبية",
+		"emptyGraph": "حمّل ملف JSON أو Excel أعلاه، أو أرسل البيانات إلى هنا من صفحات Excel إلى JSON أو بنية JSON أو اختبار API عبر زر <strong>عرض مرئي</strong>."
+	},
+	"graph": {
+		"searchPlaceholder": "ابحث في المفاتيح أو القيم…",
+		"noMatch": "لا توجد نتائج",
+		"previousMatch": "السابق (Shift+Enter)",
+		"nextMatch": "التالي (Enter)",
+		"itemsPerArrayTitle": "عدد العناصر المعروضة لكل مصفوفة",
+		"itemsPerArray_zero": "{{count}} عنصر / مصفوفة",
+		"itemsPerArray_one": "عنصر واحد / مصفوفة",
+		"itemsPerArray_two": "عنصران / مصفوفة",
+		"itemsPerArray_few": "{{count}} عناصر / مصفوفة",
+		"itemsPerArray_many": "{{count}} عنصرًا / مصفوفة",
+		"itemsPerArray_other": "{{count}} عنصر / مصفوفة",
+		"collapseAll": "طيّ الكل",
+		"expandAll": "توسيع الكل",
+		"relayout": "إعادة الترتيب",
+		"relayoutTitle": "إعادة ضبط مواضع العُقد",
+		"exportPng": "تصدير PNG",
+		"copiedPath": "تم نسخ {{path}}",
+		"nodes_zero": "لا توجد عُقد",
+		"nodes_one": "عقدة واحدة",
+		"nodes_two": "عقدتان",
+		"nodes_few": "{{count}} عُقد",
+		"nodes_many": "{{count}} عقدة",
+		"nodes_other": "{{count}} عقدة",
+		"help": "انقر على مفتاح متداخل لطيّه، وعلى قيمة لنسخ مسارها",
+		"truncated": "تم اقتطاع المخطط، اطوِ بعض العُقد أو اعرض عناصر أقل",
+		"moreItems_zero": "لا توجد عناصر أخرى",
+		"moreItems_one": "عنصر آخر",
+		"moreItems_two": "عنصران آخران",
+		"moreItems_few": "{{count}} عناصر أخرى",
+		"moreItems_many": "{{count}} عنصرًا آخر",
+		"moreItems_other": "{{count}} عنصر آخر",
+		"clickToExpand": "انقر للتوسيع",
+		"clickToCollapse": "انقر للطيّ",
+		"clickToCopyPath": "انقر لنسخ المسار"
+	},
+	"schema": {
+		"fromJson": "من بيانات JSON",
+		"fromSql": "من SQL ‏(CREATE TABLE)",
+		"fromJsonHelp": "جداول مستنتجة من البيانات: تصبح الكائنات والمصفوفات المتداخلة جداول مرتبطة.",
+		"sqlPlaceholder": "الصق أوامر CREATE TABLE ‏(PostgreSQL وMySQL وSQLite وSQL Server)…",
+		"drawDiagram": "رسم المخطط",
+		"loadExample": "تحميل مثال SQL",
+		"openSqlFile": "فتح ملف ‎.sql",
+		"emptyJson": "حمّل بيانات JSON أولًا، أو انتقل إلى «من SQL».",
+		"tableExists": "يوجد جدول باسم «{{name}}» مسبقًا.",
+		"tableCount_zero": "لا توجد جداول",
+		"tableCount_one": "جدول واحد",
+		"tableCount_two": "جدولان",
+		"tableCount_few": "{{count}} جداول",
+		"tableCount_many": "{{count}} جدولًا",
+		"tableCount_other": "{{count}} جدول",
+		"relationCount_zero": "لا توجد علاقات",
+		"relationCount_one": "علاقة واحدة",
+		"relationCount_two": "علاقتان",
+		"relationCount_few": "{{count}} علاقات",
+		"relationCount_many": "{{count}} علاقة",
+		"relationCount_other": "{{count}} علاقة",
+		"rows_zero": "لا توجد صفوف",
+		"rows_one": "صف واحد",
+		"rows_two": "صفّان",
+		"rows_few": "{{count}} صفوف",
+		"rows_many": "{{count}} صفًا",
+		"rows_other": "{{count}} صف",
+		"relayoutTitle": "إعادة ضبط مواضع الجداول",
+		"help": "انقر مرتين على اسم جدول لإعادة تسميته · غيّر نوع العمود من القائمة · اختر جدولًا لإبراز علاقاته",
+		"doubleClickToRename": "انقر مرتين لإعادة التسمية",
+		"primaryKey": "مفتاح أساسي",
+		"foreignKey": "مفتاح خارجي",
+		"nullable": "يقبل القيمة الفارغة",
+		"notNull": "إلزامي",
+		"unique": "فريد",
+		"changeType": "تغيير نوع العمود",
+		"parseErrors": {
+			"missingParenthesis": "الجدول «{{table}}»: قوس الإغلاق مفقود.",
+			"duplicateTable": "الجدول «{{table}}» معرّف مرتين، وسيُستخدم التعريف الأخير.",
+			"referencedTableNotFound": "{{table}}: الجدول المشار إليه «{{refTable}}» غير موجود.",
+			"noCreateTable": "لم يتم العثور على أي أمر CREATE TABLE."
+		}
+	},
+	"export": {
+		"noSchema": "لا يوجد مخطط بعد: حمّل بيانات JSON أو ارسم مخططًا من SQL أولًا.",
+		"format": "الصيغة",
+		"mermaid": "مخطط علاقات Mermaid",
+		"database": "قاعدة البيانات",
+		"includeData": "تضمين البيانات (INSERT)",
+		"excel": "Excel",
+		"tablesToExcel": "الجداول ← Excel (ورقة لكل جدول)",
+		"jsonToExcel": "JSON → Excel (أعمدة مسطّحة)",
+		"previewTruncated": "معاينة أول {{shown}} سطر من أصل {{total}}. يحتوي النسخ والتنزيل على كل شيء."
+	},
+	"converter": {
+		"empty": {
+			"title": "افتح جدول بيانات",
+			"text": "أفلت ملف Excel أو CSV أو ODS في أي مكان من هذه الصفحة، أو اختر ملفًا من جهازك. يُقرأ الملف في متصفحك ولا يُرفع أبدًا.",
+			"choose": "اختر ملفًا",
+			"sample": "جرّب ببيانات نموذجية",
+			"dropHere": "أفلت الملف لفتحه",
+			"reading": "جارٍ قراءة {{name}}…"
+		},
+		"errors": {
+			"notSpreadsheet": "{{name}} ليس جدول بيانات. اختر ملف xlsx أو xls أو csv أو ods.",
+			"oneFile": "أفلت ملفًا واحدًا في كل مرة.",
+			"unreadable": "تعذّرت قراءة {{name}}. تأكد من أنه غير تالف وغير محمي بكلمة مرور.",
+			"emptySheet": "هذه الورقة فارغة. اختر ورقة أخرى أدناه أو افتح ملفًا آخر.",
+			"emptyKey": "أدخل اسم المفتاح.",
+			"keyTaken": "يوجد مفتاح آخر بهذا الاسم في المستوى نفسه.",
+			"sameLevel": "اختر مفاتيح من المستوى نفسه لتجميعها.",
+			"selectColumn": "اختر عمودًا واحدًا على الأقل.",
+			"notFound": "هذا المفتاح لم يعد موجودًا.",
+			"concatTwo": "اختر مفتاحين على الأقل لدمجهما.",
+			"concatFields": "لا يمكن دمج إلا المفاتيح البسيطة، لا المجموعات ولا المفاتيح المدمجة."
+		},
+		"file": {
+			"replace": "فتح ملف آخر",
+			"undo": "تراجع",
+			"undoTitle": "التراجع عن آخر تعديل (Ctrl+Z)",
+			"reset": "إعادة الضبط",
+			"resetConfirm": "إلغاء كل التعديلات على مفاتيح هذه الورقة؟",
+			"sheets": "الأوراق",
+			"rows_zero": "لا صفوف",
+			"rows_one": "صف واحد",
+			"rows_two": "صفان",
+			"rows_few": "{{count}} صفوف",
+			"rows_many": "{{count}} صفًا",
+			"rows_other": "{{count}} صف",
+			"columns_zero": "لا أعمدة",
+			"columns_one": "عمود واحد",
+			"columns_two": "عمودان",
+			"columns_few": "{{count}} أعمدة",
+			"columns_many": "{{count}} عمودًا",
+			"columns_other": "{{count}} عمود"
+		},
+		"sheet": {
+			"label": "الورقة {{name}}",
+			"jsonRow": "JSON",
+			"notIncluded": "مستبعد",
+			"showMore": "عرض المزيد من الصفوف",
+			"shown": "{{shown}} من {{total}} صفًا معروضة",
+			"selectColumn": "تحديد العمود {{name}}"
+		},
+		"keys": {
+			"title": "مفاتيح JSON",
+			"help": "حدّد أعمدة في الورقة أو مفاتيح أدناه لتجميعها تحت مفتاح جديد. انقر على مفتاح لإعادة تسميته.",
+			"select": "تحديد {{key}}",
+			"groupUnder": "تجميع تحت",
+			"groupPlaceholder": "address",
+			"group": "تجميع",
+			"include": "تضمين",
+			"exclude": "استبعاد",
+			"clear": "مسح",
+			"rename": "إعادة تسمية {{key}}",
+			"moveUp": "نقل لأعلى",
+			"moveDown": "نقل لأسفل",
+			"moveOut": "إخراج من {{group}}",
+			"ungroup": "فك تجميع {{key}}",
+			"included": "ضمن JSON. انقر لاستبعاده",
+			"excluded": "مستبعد. انقر لتضمينه",
+			"column": "العمود {{letter}}",
+			"selected_zero": "لا شيء محدد",
+			"selected_one": "عنصر واحد محدد",
+			"selected_two": "عنصران محددان",
+			"selected_few": "{{count}} عناصر محددة",
+			"selected_many": "{{count}} عنصرًا محددًا",
+			"selected_other": "{{count}} عنصر محدد",
+			"expand": "توسيع {{key}}",
+			"collapse": "طي {{key}}",
+			"or": "أو"
+		},
+		"preview": {
+			"title": "النتيجة",
+			"tabs": {
+				"json": "JSON",
+				"graph": "مخطط",
+				"tables": "جداول"
+			},
+			"emptyCells": "الخلايا الفارغة",
+			"emptyNull": "null",
+			"emptyOmit": "حذف المفتاح",
+			"emptyEmpty": "نص فارغ",
+			"firstItems": "أول {{shown}} من {{total}} كائنًا. النسخ والتنزيل يشملان الكل.",
+			"sample": "مبني من أول {{count}} كائنًا.",
+			"nothing": "كل الأعمدة مستبعدة. ضمّن عمودًا واحدًا على الأقل لرؤية النتيجة."
+		},
+		"actions": {
+			"copy": "نسخ JSON",
+			"copied": "تم النسخ",
+			"downloadJson": "تنزيل JSON",
+			"downloadExcel": "تنزيل Excel",
+			"send": "إرسال إلى API",
+			"visualize": "فتح في العارض"
+		},
+		"concat": {
+			"open": "دمج…",
+			"title": "دمج في مفتاح واحد",
+			"editTitle": "تعديل المفتاح المدمج",
+			"key": "اسم المفتاح الجديد",
+			"order": "الترتيب",
+			"orderHint": "اسحب المفاتيح، أو استخدم الأسهم، لتغيير ترتيب القيم.",
+			"moveBefore": "نقل {{key}} قبل",
+			"moveAfter": "نقل {{key}} بعد",
+			"separator": "الفاصل",
+			"separators": {
+				"space": "مسافة",
+				"comma": "فاصلة",
+				"dash": "شرطة",
+				"slash": "شرطة مائلة",
+				"underscore": "شرطة سفلية",
+				"none": "بدون",
+				"custom": "آخر",
+				"customLabel": "الفاصل الخاص بك"
+			},
+			"skipEmpty": "تجاهل القيم الفارغة",
+			"skipEmptyHint": "لا يُضاف فاصل لقيمة ناقصة، فيبقى «Louis» كما هو بدل «Louis ».",
+			"preview": "معاينة على الصفوف الأولى",
+			"empty": "فارغ",
+			"combine": "دمج",
+			"save": "حفظ التعديلات",
+			"edit": "تعديل {{key}}",
+			"split": "فصل {{key}} إلى مفاتيحه الأصلية",
+			"partsTitle": "{{parts}}، مدمجة بالفاصل {{separator}}. انقر للتعديل.",
+			"keyEdit": "اسم المفتاح"
+		}
+	},
+	"apiTester": {
+		"method": "الطريقة",
+		"url": "رابط الطلب",
+		"send": "إرسال",
+		"cancel": "إلغاء",
+		"request": "الطلب",
+		"hint": "يرسل Ctrl+Enter الطلب من أي مكان في الصفحة.",
+		"copyCurl": "نسخ كأمر cURL",
+		"via": {
+			"label": "الإرسال من",
+			"browser": "هذا المتصفح",
+			"server": "خادم XLSX",
+			"browserTitle": "يُرسل الطلب مباشرة من متصفحك. يصل إلى localhost، لكن يجب أن تسمح الواجهة لهذا الموقع (CORS).",
+			"serverTitle": "يرسل خادم XLSX الطلب نيابةً عنك. يعمل مع الواجهات التي تحظر المتصفحات، لكنه يصل إلى العناوين العامة فقط."
+		},
+		"tabs": {
+			"body": "المحتوى",
+			"headers": "الترويسات",
+			"auth": "المصادقة"
+		},
+		"body": {
+			"notSent": "طلبات {{method}} لا ترسل محتوى. اختر POST أو PUT أو PATCH لإرساله.",
+			"array_zero": "مصفوفة JSON فارغة",
+			"array_one": "مصفوفة JSON من عنصر واحد",
+			"array_two": "مصفوفة JSON من عنصرين",
+			"array_few": "مصفوفة JSON من {{count}} عناصر",
+			"array_many": "مصفوفة JSON من {{count}} عنصرًا",
+			"array_other": "مصفوفة JSON من {{count}} عنصر",
+			"object_zero": "كائن JSON فارغ",
+			"object_one": "كائن JSON بمفتاح واحد",
+			"object_two": "كائن JSON بمفتاحين",
+			"object_few": "كائن JSON بـ {{count}} مفاتيح",
+			"object_many": "كائن JSON بـ {{count}} مفتاحًا",
+			"object_other": "كائن JSON بـ {{count}} مفتاح",
+			"value": "قيمة JSON",
+			"empty": "بدون محتوى",
+			"format": "تنسيق",
+			"restore": "استعادة البيانات المرسلة إلى هنا",
+			"placeholder": "الصق أو اكتب JSON المراد إرساله",
+			"imported": "يحتوي المحتوى على البيانات المرسلة من الصفحة السابقة."
+		},
+		"headers": {
+			"send": "إرسال",
+			"name": "الاسم",
+			"value": "القيمة",
+			"sendHeader": "إرسال الترويسة {{name}}",
+			"valueOf": "قيمة {{name}}",
+			"remove": "حذف {{name}}",
+			"add": "إضافة ترويسة",
+			"note": "لا تُرسل Content-Type إلا مع محتوى."
+		},
+		"auth": {
+			"type": "المصادقة",
+			"none": "بدون",
+			"bearer": "رمز Bearer",
+			"basic": "اسم المستخدم وكلمة المرور",
+			"token": "الرمز",
+			"user": "اسم المستخدم",
+			"password": "كلمة المرور",
+			"noneNote": "اختر نوعًا لإضافة ترويسة Authorization.",
+			"note": "تُضاف كترويسة Authorization. تُحفظ في هذا التبويب فقط وتُمحى عند مغادرة الصفحة."
+		},
+		"response": {
+			"title": "الاستجابة",
+			"waiting": "في انتظار {{host}}… {{time}}",
+			"idleTitle": "لا توجد استجابة بعد",
+			"idleText": "أدخل رابطًا واضغط إرسال. تظهر هنا حالة الاستجابة ومدتها وترويساتها ومحتواها.",
+			"via": {
+				"browser": "أُرسل من هذا المتصفح",
+				"server": "أُرسل من خادم XLSX"
+			},
+			"body": "المحتوى",
+			"headers": "الترويسات",
+			"visualize": "فتح في العارض",
+			"noBody": "الاستجابة بلا محتوى.",
+			"truncated": "قُطع المحتوى عند 5 ميغابايت.",
+			"browserHeaders": "لا تعرض المتصفحات إلا الترويسات التي تسمح الواجهة بقراءتها."
+		},
+		"history": {
+			"title": "الطلبات الأخيرة",
+			"failed": "فشل"
+		},
+		"errors": {
+			"emptyUrl": "أدخل رابط الواجهة المراد استدعاؤها.",
+			"invalidUrl": "هذا الرابط غير صالح. يجب أن يشبه https://api.example.com/customers.",
+			"invalidBody": "المحتوى ليس JSON صالحًا. صحّحه أو امسحه قبل الإرسال.",
+			"bodyAt": "المحتوى ليس JSON صالحًا: تحقق من السطر {{line}}، العمود {{column}}."
+		},
+		"failure": {
+			"network": {
+				"title": "لا استجابة من {{host}}",
+				"text": "قد يكون الخادم متوقفًا أو الرابط خاطئًا. وغالبًا لا تقبل الواجهة الطلبات من متصفح على موقع آخر (CORS). الإرسال من خادم XLSX يتجاوز ذلك.",
+				"retry": "الإرسال من خادم XLSX"
+			},
+			"aborted": {
+				"title": "أُلغي الطلب",
+				"text": "اضغط إرسال للمحاولة مجددًا."
+			},
+			"timeout": {
+				"title": "استغرق {{host}} أكثر من 30 ثانية",
+				"text": "حاول لاحقًا، أو تحقق من أن الرابط يشير إلى الخادم الصحيح."
+			},
+			"privateAddress": {
+				"title": "لا يستطيع خادم XLSX الوصول إلى {{host}}",
+				"text": "يستدعي العناوين العامة فقط. لاستدعاء localhost أو شبكة خاصة، أرسل من هذا المتصفح."
+			},
+			"dnsFailed": {
+				"title": "لم يُعثر على {{host}}",
+				"text": "تحقق من كتابة العنوان."
+			},
+			"unreachable": {
+				"title": "تعذّر الوصول إلى {{host}}",
+				"text": "لم يتمكن خادم XLSX من الاتصال به. تحقق من الرابط ومن أن الواجهة تعمل."
+			},
+			"invalidUrl": {
+				"title": "هذا الرابط غير صالح",
+				"text": "يجب أن يبدأ بـ http:// أو https://."
+			},
+			"invalidRequest": {
+				"title": "تعذّر إرسال الطلب",
+				"text": "تحقق من الطريقة والرابط ثم حاول مجددًا."
+			},
+			"unauthorized": {
+				"title": "انتهت صلاحية جلستك",
+				"text": "سجّل الدخول مجددًا للمتابعة."
+			}
+		}
+	},
+	"reshape": {
+		"keysTitle": "المفاتيح",
+		"pasted": "JSON ملصق",
+		"close": "إغلاق",
+		"oneObject": "كائن واحد",
+		"objects_zero": "لا كائنات",
+		"objects_one": "كائن واحد",
+		"objects_two": "كائنان",
+		"objects_few": "{{count}} كائنات",
+		"objects_many": "{{count}} كائنًا",
+		"objects_other": "{{count}} كائن",
+		"keys_zero": "لا مفاتيح",
+		"keys_one": "مفتاح واحد",
+		"keys_two": "مفتاحان",
+		"keys_few": "{{count}} مفاتيح",
+		"keys_many": "{{count}} مفتاحًا",
+		"keys_other": "{{count}} مفتاح",
+		"resetConfirm": "العودة إلى البنية الأصلية؟ ستُلغى كل التعديلات.",
+		"empty": {
+			"title": "أعد هيكلة JSON",
+			"text": "افتح ملف JSON أو الصق JSON لإعادة تسمية المفاتيح، أو تجميعها في كائنات، أو تسطيح الكائنات المتداخلة، أو استبعاد مفاتيح. تبقى بياناتك في متصفحك.",
+			"choose": "اختر ملف ‎.json",
+			"paste": "لصق JSON",
+			"usePasted": "أعد هيكلة هذا JSON"
+		},
+		"views": {
+			"result": "النتيجة",
+			"original": "الأصل",
+			"graph": "مخطط"
+		},
+		"missing": {
+			"label": "المفاتيح الناقصة",
+			"omit": "حذف",
+			"null": "تعيين null"
+		},
+		"source": {
+			"from": "من {{path}}",
+			"newGroup": "جديد",
+			"newGroupTitle": "مجموعة أنشأتها",
+			"inSome": "في {{count}} من {{total}}",
+			"inSomeTitle": "موجود في {{count}} من أصل {{total}} كائن"
+		},
+		"errors": {
+			"invalidJson": "هذا ليس JSON صالحًا. تحقق من الأقواس وعلامات الاقتباس والفواصل.",
+			"invalidJsonAt": "هذا ليس JSON صالحًا: تحقق من السطر {{line}}، العمود {{column}}.",
+			"emptyArray": "المصفوفة فارغة. لا توجد كائنات لإعادة هيكلتها.",
+			"notObjects": "يجب أن يكون JSON كائنًا أو مصفوفة كائنات لإعادة هيكلته.",
+			"notJsonFile": "{{name}} ليس ملف ‎.json. لتحويل جدول بيانات، استخدم Excel إلى JSON."
+		},
+		"keysHelp": "حدّد مفاتيح لتجميعها تحت مفتاح جديد، أو فك تجميع كائن متداخل لتسطيحه. انقر على مفتاح لإعادة تسميته."
+	}
+}

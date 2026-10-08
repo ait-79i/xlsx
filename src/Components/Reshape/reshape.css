@@ -1,0 +1,102 @@
+/* JSON structure. Builds on the converter's tokens and controls (converter.css). */
+
+/* empty state: braces instead of spreadsheet cells */
+.rs-open__grid {
+	background-image: none;
+}
+
+.rs-open__grid::before {
+	content: "{ } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \" { } [ ] { } : , { } [ ] \" \"";
+	position: absolute;
+	inset: -1rem;
+	font-family: var(--font-code);
+	font-size: 2.25rem;
+	line-height: 1.6;
+	letter-spacing: 0.9em;
+	word-spacing: 0.4em;
+	color: #e6eaf2;
+	overflow: hidden;
+}
+
+.cv.is-dragging .rs-open__grid::before {
+	color: var(--pick-strong);
+}
+
+.rs-paste {
+	display: grid;
+	gap: 0.75rem;
+	width: min(36rem, 80vw);
+	margin: 1.5rem auto 0;
+	text-align: start;
+}
+
+.rs .rs-paste__area {
+	width: 100%;
+	min-height: 14rem;
+	padding: 0.875rem 1rem;
+	font: 0.8125rem/1.6 var(--font-code);
+	color: var(--ink);
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	resize: vertical;
+}
+
+.rs .rs-paste__area:focus-visible {
+	border-color: var(--cobalt);
+	outline-offset: 0;
+}
+
+.rs .rs-paste__area[aria-invalid="true"] {
+	border-color: var(--danger);
+}
+
+.rs-paste__actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5rem;
+}
+
+.rs-file__icon {
+	font: 700 0.9375rem/1 var(--font-code);
+}
+
+/* keys | preview */
+.rs-grid {
+	display: grid;
+	grid-template-columns: minmax(20rem, 28rem) minmax(0, 1fr);
+	gap: 1rem;
+	align-items: start;
+}
+
+.rs-grid__keys {
+	position: sticky;
+	top: 1rem;
+}
+
+.rs .cv-keys__root {
+	max-height: calc(100vh - 16rem);
+}
+
+.rs .rs-code {
+	max-height: calc(100vh - 13rem);
+	min-height: 24rem;
+}
+
+.rs .cv-canvas {
+	height: calc(100vh - 13rem);
+}
+
+@media (max-width: 960px) {
+	.rs-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.rs-grid__keys {
+		position: static;
+	}
+
+	.rs .cv-keys__root {
+		max-height: 24rem;
+	}
+}
