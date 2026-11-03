@@ -26,6 +26,10 @@ import {
   statusTone,
   toCurl,
 } from '../../utils/http'
+import BatchView from './BatchView'
+import RequestsMenu from './RequestsMenu'
+import Mascot from '../Mascot'
+import { fillTemplate, runBatch, templateKeys } from '../../utils/batch'
 import '../Converter/converter.css'
 import './api-tester.css'
 
@@ -70,6 +74,48 @@ const useCopy = () => {
     }
   }
   return [copied, copy]
+}
+
+/**
+ * Sends one request from the browser or through the XLSX server.
+ * @returns {Promise<object>} { status, statusText, headers, body: { json } | { text }, size, ms }
+ * @throws {{ code }} when there is no response (network, aborted, timeout, privateAddress, unauthorized...)
+ */
+async function performRequest({ method, url, headers, body, via, signal }) {
+  const started = performance.now()
+  try {
+    if (via === 'server') {
+      const r = await fetch('/api/proxy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method, url, headers, body }),
+        signal,
+      })
+      const data = await r.json().catch(() => ({ error: 'unreachable' }))
+      if (r.status === 401) throw Object.assign(new Error('unauthorized'), { code: 'unauthorized' })
+      if (data.error) throw Object.assign(new Error(data.error), { code: data.error })
+      const contentType = data.headers.find(([k]) => k.toLowerCase() === 'content-type')?.[1] ?? ''
+      return { ...data, body: readBody(data.body, contentType) }
+    }
+    const r = await fetch(url, { method, headers, body, signal })
+    const raw = await r.text()
+    return {
+      status: r.status,
+      statusText: r.statusText,
+      headers: [...r.headers.entries()],
+      body: readBody(raw, r.headers.get('content-type') ?? ''),
+      size: new TextEncoder().encode(raw).length,
+      ms: performance.now() - started,
+    }
+  } catch (e) {
+    if (e.code) throw e
+    throw Object.assign(e, { code: e.name === 'AbortError' ? 'aborted' : 'network' })
+  }
+}
+
+const shortBody = (body) => {
+  const text = body.json !== undefined ? JSON.stringify(body.json) : body.text
+  return text.length > 300 ? `${text.slice(0, 300)}…` : text
 }
 
 // ------------------------------------------------------------------ request side
@@ -122,6 +168,25 @@ const BodyEditor = ({ req, update, imported, onRestore, error }) => {
         {imported && <button type="button" className="cv-link" onClick={onRestore}>{t('apiTester.body.restore')}</button>}
         {req.bodyText !== '' && <button type="button" className="cv-link" onClick={() => update({ bodyText: '' })}>{t('common.clear')}</button>}
       </div>
+      {sendsBody && info?.kind === 'array' && info.count > 0 && (
+        <div className={`at-batch-switch${req.batch ? ' is-on' : ''}`}>
+          <label className="at-batch-switch__main">
+            <input type="checkbox" className="cv-check" checked={!!req.batch} onChange={(e) => update({ batch: e.target.checked })} />
+            <span>
+              <strong>{t('apiTester.batch.switch', { count: info.count })}</strong>
+              <span className="at-batch-switch__hint">{t('apiTester.batch.switchHint', { id: '{{id}}' })}</span>
+            </span>
+          </label>
+          {req.batch && (
+            <label className="cv-select-label">
+              <span>{t('apiTester.batch.concurrency')}</span>
+              <select className="cv-select" value={req.concurrency ?? 2} onChange={(e) => update({ concurrency: Number(e.target.value) })}>
+                {[1, 2, 4, 8].map((n) => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </label>
+          )}
+        </div>
+      )}
       <div className={`at-editor${sendsBody ? '' : ' is-idle'}${error ? ' has-error' : ''}`} dir="ltr">
         <CodeMirror
           value={req.bodyText}
@@ -246,7 +311,7 @@ const ResponseView = ({ res, onRetryServer, history, onPickHistory, sending, ela
   if (sending) {
     return (
       <div className="at-wait" role="status">
-        <span className="at-wait__dot" aria-hidden="true" />
+        <Mascot pose="working" motion="sway" className="at-wait__mascot" />
         <p>{t('apiTester.response.waiting', { host: hostOf(sending), time: formatMs(elapsed) })}</p>
         <button type="button" className="cv-btn cv-btn--small" onClick={onCancel}>{t('apiTester.cancel')}</button>
       </div>
@@ -256,6 +321,7 @@ const ResponseView = ({ res, onRetryServer, history, onPickHistory, sending, ela
   if (!res) {
     return (
       <div className="at-idle">
+        <Mascot pose="main" className="at-state__mascot" />
         <p className="at-idle__title">{t('apiTester.response.idleTitle')}</p>
         <p className="at-idle__text">{t('apiTester.response.idleText')}</p>
         {history.length > 0 && (
@@ -284,6 +350,7 @@ const ResponseView = ({ res, onRetryServer, history, onPickHistory, sending, ela
     const host = hostOf(res.url)
     return (
       <div className="at-fail" role="alert">
+        <Mascot pose="error" motion="wobble" className="at-state__mascot" />
         <p className="at-fail__title">{t(`apiTester.failure.${res.error}.title`, { host })}</p>
         <p className="at-fail__text">{t(`apiTester.failure.${res.error}.text`, { host })}</p>
         {res.error === 'network' && res.via === 'browser' && (
@@ -396,62 +463,88 @@ const ApiTester = () => {
   const hasBody = BODY_METHODS.includes(req.method) && req.bodyText.trim() !== ''
   const headers = useMemo(() => buildHeaders(req.headers, auth, { hasBody }), [req.headers, auth, hasBody])
 
+  const parsedBody = useMemo(() => parseJsonBody(req.bodyText), [req.bodyText])
+  const batchItems = req.batch && BODY_METHODS.includes(req.method) && parsedBody.ok && Array.isArray(parsedBody.value)
+    ? parsedBody.value
+    : null
+  const placeholders = useMemo(() => templateKeys(req.url), [req.url])
+  const [batch, setBatch] = useState(null)
+
+  const record = useCallback((method, url, status) => setHistory((h) => [
+    { id: newRowId(), method, url, status },
+    ...h.filter((x) => !(x.method === method && x.url === url)),
+  ].slice(0, HISTORY_SIZE)), [setHistory])
+
+  const sendBatch = useCallback(async (via, indexes) => {
+    // validate the URL with its placeholders filled in
+    const probe = fillTemplate(req.url, batchItems[0] ?? {}).url
+    if (!normalizeUrl(probe.replace(/\/\/+$/, '/x'))) { setErrors({ url: 'invalidUrl' }); urlInput.current?.focus(); return }
+    setErrors({})
+    const list = indexes ?? batchItems.map((_, i) => i)
+    const urls = batchItems.map((item) => normalizeUrl(fillTemplate(req.url, item).url) ?? fillTemplate(req.url, item).url)
+    const controller = new AbortController()
+    abort.current = controller
+    const started = performance.now()
+    setRes(null)
+    setBatch((prev) => ({
+      total: batchItems.length,
+      urls,
+      // a retry keeps the successful results of the previous run
+      results: indexes && prev ? prev.results.map((r, i) => (indexes.includes(i) ? undefined : r)) : new Array(batchItems.length).fill(undefined),
+      running: true,
+      stopped: false,
+    }))
+    const itemHeaders = buildHeaders(req.headers, auth, { hasBody: true })
+    await runBatch(list, async (index) => {
+      const item = batchItems[index]
+      const r = await performRequest({
+        method: req.method, url: urls[index], headers: itemHeaders, body: JSON.stringify(item), via, signal: controller.signal,
+      })
+      return { status: r.status, ms: r.ms, detail: r.status >= 300 ? shortBody(r.body) : undefined }
+    }, {
+      concurrency: req.concurrency ?? 2,
+      signal: controller.signal,
+      onResult: (result) => {
+        const index = list[result.index]
+        setBatch((b) => {
+          const results = [...b.results]
+          results[index] = { ...result, index }
+          return { ...b, results }
+        })
+      },
+    })
+    setBatch((b) => ({ ...b, running: false, stopped: controller.signal.aborted, ms: performance.now() - started }))
+    abort.current = null
+  }, [req, batchItems, auth])
+
   const send = useCallback(async (via = req.via) => {
+    if (batchItems) return sendBatch(via)
     const found = requestErrors(req)
     setErrors(found)
     if (found.url) { urlInput.current?.focus(); return }
     if (found.body) { setTab('body'); return }
 
     const url = normalizeUrl(req.url)
-    if (url !== req.url) update({ url })
+    if (url !== req.url && placeholders.length === 0) update({ url })
     const body = hasBody ? JSON.stringify(parseJsonBody(req.bodyText).value) : undefined
     const controller = new AbortController()
     abort.current = controller
     setSending(url)
     setRes(null)
-    const started = performance.now()
-    const record = (status) => setHistory((h) => [
-      { id: newRowId(), method: req.method, url, status },
-      ...h.filter((x) => !(x.method === req.method && x.url === url)),
-    ].slice(0, HISTORY_SIZE))
-
+    setBatch(null)
     try {
-      let result
-      if (via === 'server') {
-        const r = await fetch('/api/proxy', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ method: req.method, url, headers, body }),
-          signal: controller.signal,
-        })
-        const data = await r.json().catch(() => ({ error: 'unreachable' }))
-        if (r.status === 401) { window.location.href = `/login?sign-in&next=${encodeURIComponent('/test-api')}`; return }
-        if (data.error) throw Object.assign(new Error(data.error), { code: data.error })
-        const contentType = data.headers.find(([k]) => k.toLowerCase() === 'content-type')?.[1] ?? ''
-        result = { ...data, body: readBody(data.body, contentType) }
-      } else {
-        const r = await fetch(url, { method: req.method, headers, body, signal: controller.signal })
-        const raw = await r.text()
-        result = {
-          status: r.status,
-          statusText: r.statusText,
-          headers: [...r.headers.entries()],
-          body: readBody(raw, r.headers.get('content-type') ?? ''),
-          size: new TextEncoder().encode(raw).length,
-          ms: performance.now() - started,
-        }
-      }
+      const result = await performRequest({ method: req.method, url, headers, body, via, signal: controller.signal })
       setRes({ ...result, via, url })
-      record(result.status)
+      record(req.method, url, result.status)
     } catch (e) {
-      const code = e.name === 'AbortError' ? 'aborted' : e.code ?? 'network'
-      setRes({ error: code, via, url })
-      if (code !== 'aborted') record(null)
+      if (e.code === 'unauthorized') { window.location.href = `/login?sign-in&next=${encodeURIComponent('/test-api')}`; return }
+      setRes({ error: e.code, via, url })
+      if (e.code !== 'aborted') record(req.method, url, null)
     } finally {
       setSending(null)
       abort.current = null
     }
-  }, [req, headers, hasBody, update, setHistory])
+  }, [req, headers, hasBody, update, record, batchItems, sendBatch, placeholders])
 
   // elapsed time while waiting
   useEffect(() => {
@@ -466,7 +559,7 @@ const ApiTester = () => {
     const onKey = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault()
-        if (!sending) send()
+        if (!sending && !batch?.running) send()
       }
     }
     window.addEventListener('keydown', onKey)
@@ -483,7 +576,7 @@ const ApiTester = () => {
 
   return (
     <div className="cv at">
-      <form className="at-line" onSubmit={(e) => { e.preventDefault(); sending ? abort.current?.abort() : send() }}>
+      <form className="at-line" onSubmit={(e) => { e.preventDefault(); sending || batch?.running ? abort.current?.abort() : send() }}>
         <h1 className="visually-hidden">{t('nav.testApi')}</h1>
         <label className="visually-hidden" htmlFor={`${id}-method`}>{t('apiTester.method')}</label>
         <select id={`${id}-method`} className={`at-line__method at-method--${req.method.toLowerCase()}`} value={req.method}
@@ -505,15 +598,36 @@ const ApiTester = () => {
           aria-describedby={errors.url ? `${id}-url-err` : `${id}-hint`}
           onChange={(e) => update({ url: e.target.value })}
         />
-        <button type="submit" className={`cv-btn at-line__send${sending ? '' : ' cv-btn--primary'}`}>
-          {sending ? t('apiTester.cancel') : t('apiTester.send')}
+        <button type="submit" className={`cv-btn at-line__send${sending || batch?.running ? '' : ' cv-btn--primary'}`}>
+          {sending || batch?.running
+            ? t('apiTester.cancel')
+            : batchItems ? t('apiTester.batch.sendAll', { count: batchItems.length }) : t('apiTester.send')}
         </button>
       </form>
 
       <div className="at-under">
         {errors.url
           ? <p className="cv-field-error" id={`${id}-url-err`} role="alert">{t(`apiTester.errors.${errors.url}`)}</p>
-          : <p className="at-under__hint" id={`${id}-hint`}>{t('apiTester.hint')}</p>}
+          : <p className="at-under__hint" id={`${id}-hint`}>
+            {placeholders.length > 0
+              ? batchItems
+                ? t('apiTester.batch.placeholders', { names: placeholders.map((k) => `{{${k}}}`).join(', ') })
+                : t('apiTester.batch.placeholdersOff', { id: '{{id}}' })
+              : t('apiTester.hint')}
+          </p>}
+        <RequestsMenu
+          current={req}
+          onOpen={(item) => {
+            update({
+              method: item.method,
+              url: item.url,
+              headers: item.headers.map((h) => ({ ...h, id: newRowId() })),
+              ...(item.body !== null ? { bodyText: item.body } : {}),
+            })
+            setRes(null)
+            setBatch(null)
+          }}
+        />
         <fieldset className="at-via">
           <legend>{t('apiTester.via.label')}</legend>
           {['browser', 'server'].map((via) => (
@@ -549,8 +663,15 @@ const ApiTester = () => {
           </div>
         </section>
 
-        <section className="cv-panel at-resp" aria-label={t('apiTester.response.title')} aria-busy={!!sending}>
-          <ResponseView
+        <section className="cv-panel at-resp" aria-label={t('apiTester.response.title')} aria-busy={!!sending || !!batch?.running}>
+          {batch
+            ? <BatchView
+              batch={batch}
+              onStop={() => abort.current?.abort()}
+              onRetryFailed={() => sendBatch(req.via, batch.results.map((r, i) => (r && !r.ok) || !r ? i : -1).filter((i) => i >= 0))}
+              onClose={() => setBatch(null)}
+            />
+            : <ResponseView
             res={res}
             sending={sending}
             elapsed={elapsed}
@@ -558,7 +679,7 @@ const ApiTester = () => {
             onRetryServer={() => { update({ via: 'server' }); send('server') }}
             history={history}
             onPickHistory={(h) => update({ method: h.method, url: h.url })}
-          />
+          />}
         </section>
       </div>
     </div>

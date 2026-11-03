@@ -1,98 +1,99 @@
-# Excel → JSON (Next.js)
+# XLSX : Excel → JSON (Next.js)
 
-Application web **Next.js** (frontend et backend dans le même projet) qui convertit un fichier Excel en JSON, permet de modifier la structure de ce JSON, de l’envoyer à une API pour la tester, et de le visualiser sous forme de graphe ou de schéma de base de données.
+Application web **Next.js** (frontend et backend dans le même projet) qui convertit un fichier Excel en JSON, restructure ce JSON, l’envoie à une API pour la tester et le visualise sous forme de graphe ou de schéma de base de données.
 
-Cas d’usage typique : vous avez des données dans un tableur et une API REST qui attend un format JSON précis (par exemple `{ nom, adresse: { ville, cp } }`). L’application fait la conversion, la restructuration et l’envoi sans écrire de code.
+Cas d’usage typique : vos données sont dans un tableur et une API REST attend un format JSON précis (par exemple `{ nom, adresse: { ville, cp } }`). L’application fait la conversion, la restructuration et l’envoi sans écrire de code, et retient la structure pour le fichier du mois suivant.
 
-Réécriture de l’ancienne application React (create-react-app) : mêmes pages et mêmes fonctionnalités, mais l’authentification est maintenant fournie par l’application elle-même (routes API Next.js + PostgreSQL) au lieu d’un backend séparé.
+Les fichiers sont lus dans le navigateur et ne sont jamais envoyés au serveur. La base de données ne contient que les comptes et ce que l’utilisateur choisit d’enregistrer (structures, requêtes, messages de contact).
 
 ## Fonctionnalités
 
 ### 1. Excel → JSON (`/excel-to-json`)
-- Glisser-déposer ou sélection d'un fichier `.xlsx`, `.xlsm`, `.xlsb`, `.xls` ou `.xlam`.
-- Seule la **première feuille** est lue ([SheetJS](https://sheetjs.com/)). Chaque ligne devient un objet dont les clés sont les en-têtes de colonnes.
-- Affichage des données dans un tableau. Un double-clic sur un en-tête permet de renommer la colonne.
-- Aperçu du premier objet JSON, copie dans le presse-papiers, téléchargement de `data.json`.
+- Fichiers `.xlsx`, `.xlsm`, `.xlsb`, `.xls`, `.xlam`, `.csv` et `.ods`, glissés n’importe où sur la page ou choisis sur l’ordinateur ; données d’exemple pour essayer.
+- **Toutes les feuilles** du classeur, en onglets. Les lignes vides sont ignorées, les dates deviennent `2024-03-01`, les en-têtes vides ou en double reçoivent un nom unique.
+- **Ligne d’en-tête** : détectée automatiquement (un titre ou des notes au-dessus du tableau sont ignorés) et modifiable.
+- La feuille affiche, au-dessus de chaque colonne, la **clé JSON** qu’elle devient (`adresse.ville`).
+- **Clés** : renommer, regrouper dans un objet, sortir d’un groupe, dégrouper, réordonner, exclure, **concaténer** plusieurs colonnes en une clé (ordre et séparateur au choix, aperçu en direct).
+- **Type de chaque clé** : tel quel, texte, nombre, entier, vrai/faux, date. Les valeurs non convertibles sont signalées (elles deviennent `null`). `1 234,5`, `oui`/`non` et `31/12/2024` sont reconnus.
+- Cellules vides : `null`, clé omise ou texte vide. Résultat sous forme de liste, ou d’objet `{ "clé": [ … ] }`.
+- **Annuler** (Ctrl+Z) et réinitialiser. Le travail est conservé au rechargement de la page.
+- **Structures enregistrées** : la structure (clés, types, options) est enregistrée dans le compte et réappliquée à un nouveau fichier. Les colonnes sont retrouvées par leur en-tête, même déplacées ; les colonnes absentes et nouvelles sont signalées.
+- Aperçu JSON, **graphe** et **tables** (React Flow) ; copie ; téléchargement en JSON, **JSON Lines**, **CSV** ou Excel ; envoi vers *Test API* ou le visualiseur.
 
-### 2. Restructuration du JSON (`/json-structure`, et aussi dans la page Excel)
-- **Regrouper** : cochez des colonnes, donnez un nom de clé, puis cliquez sur *Generate*. Les colonnes cochées sont déplacées dans un sous-objet.
-  `{ nom, ville, cp }` → `{ nom, adresse: { ville, cp } }`
-- **Renommer** : double-clic sur une clé, puis Entrée ou clic ailleurs pour valider. Le renommage s'applique à tous les objets, y compris aux niveaux imbriqués.
-- **Annuler un regroupement** : le bouton ↶ remet une clé imbriquée au premier niveau et supprime les sous-objets devenus vides.
-- La page `/json-structure` fait la même chose à partir d'un fichier `.json` importé.
+### 2. Structure JSON (`/json-structure`)
+- JSON ouvert depuis un fichier `.json` ou collé (erreur indiquée par ligne et colonne). Tableau d’objets ou objet seul.
+- Mêmes outils que le convertisseur (clés, types, concaténation, annuler, structures enregistrées, formats).
+- Chaque clé déplacée ou renommée indique son origine (« depuis client.ville ») ; une clé présente dans une partie des objets seulement est signalée (« dans 1 sur 3 »).
+- Onglets Résultat, Original et Graphe pour comparer avant et après.
 
-### 3. Test d'API (`/test-api`)
-- Choix de la méthode (GET, POST, PUT, PATCH, DELETE) et de l'URL.
-- En-têtes modifiables : seuls les en-têtes cochés sont envoyés.
-- Corps de la requête pré-rempli avec le JSON généré (bouton *Send data*) et modifiable dans un éditeur avec validation JSON.
-- Affichage de la réponse ou de l'erreur.
+### 3. Test d’API (`/test-api`)
+- Ligne de requête (méthode, URL, Envoyer ; Ctrl+Entrée), corps JSON validé avec la ligne de l’erreur, en-têtes activables, authentification Bearer ou Basic (jamais enregistrée).
+- Réponse : statut, durée, taille, corps mis en forme, en-têtes ; copie, téléchargement, ouverture dans le visualiseur ; copie de la requête en cURL.
+- **Une requête par élément** : chaque objet d’un tableau est envoyé dans sa propre requête, avec des marqueurs dans l’URL (`/clients/{{id}}`). Progression, envois simultanés (1 à 8), arrêt, résultat par ligne avec le message de l’API, renvoi des échecs, rapport CSV.
+- **Envoi depuis le serveur XLSX** pour les API qui refusent les appels d’un navigateur (CORS) : utilisateurs connectés seulement, adresses publiques seulement (pas de localhost ni de réseau privé), redirections non suivies, 30 s et 5 Mo au plus, 120 requêtes par minute.
+- **Requêtes enregistrées** dans le compte et requêtes récentes.
 
 ### 4. Visualiseur (`/visualizer`)
-Page construite avec [React Flow (xyflow)](https://reactflow.dev/). Les données viennent des boutons **Visualize** des pages *Excel to json*, *json structure* et *Test API* (réponse de l'API), ou d'un fichier JSON / Excel déposé sur la page, d'un JSON collé ou de l'exemple fourni. Elles sont conservées si la page est rechargée (`sessionStorage`).
+Graphe JSON, schéma de base de données déduit des données ou d’un SQL `CREATE TABLE`, génération SQL (PostgreSQL, MySQL, SQLite, SQL Server), Mermaid et Excel, export PNG.
 
-- **Graphe JSON** : chaque objet et chaque tableau devient un nœud, relié à son parent. Placement automatique (dagre).
-  - Clic sur une clé imbriquée : replier ou déplier la branche. *Collapse all* / *Expand all* pour tout replier ou tout déplier.
-  - Clic sur une valeur : copie de son chemin (ex. `$[0].address.city`).
-  - Recherche dans les clés et les valeurs, avec navigation entre les résultats (Entrée / Maj+Entrée).
-  - Nombre d'éléments affichés par tableau réglable (5 à 100), mini-carte, zoom, export PNG.
-- **Schéma de base de données** : diagramme entité-relation.
-  - *From the JSON data* : les tables sont déduites des données. Un objet imbriqué donne une table liée en 1:1, un tableau d'objets une table liée en 1:N, un tableau de valeurs une table `<parent>_<clé>`. Types des colonnes, colonnes nullables, clé primaire (`id` réutilisé s'il est entier et unique, sinon ajouté) et clés étrangères `<parent>_id` sont déduits automatiquement.
-  - *From SQL* : collez des `CREATE TABLE` (PostgreSQL, MySQL, SQLite, SQL Server) ou ouvrez un fichier `.sql` pour dessiner le schéma d'une base existante. Les clés étrangères déclarées dans la colonne, en contrainte de table ou via `ALTER TABLE ... ADD FOREIGN KEY` sont reconnues.
-  - Double-clic sur le nom d'une table pour la renommer, sélecteur pour changer le type d'une colonne, sélection d'une table pour mettre ses relations en évidence, export PNG.
-- **SQL & export** :
-  - Génération du SQL `CREATE TABLE` (avec les `INSERT` des données si le schéma vient du JSON) pour PostgreSQL, MySQL / MariaDB, SQLite ou SQL Server. Cela permet aussi de convertir un schéma SQL d'une base à l'autre.
-  - Export du diagramme au format Mermaid (`erDiagram`), à coller dans GitHub, GitLab ou Notion.
-  - Export Excel : une feuille par table, ou le JSON aplati (`adresse.ville`, ...).
+### 5. Compte (`/account`) et contact (`/support`)
+- Modifier le nom et l’e-mail, changer le mot de passe (les autres sessions sont déconnectées), voir ce qui est enregistré, supprimer le compte et toutes ses données.
+- Formulaire de contact (sujet, message), prérempli pour un utilisateur connecté, protégé contre le spam ; les messages sont enregistrés dans la table `contact_messages`.
 
-Les pages *Excel to json* et *json structure* ont aussi un bouton **Download Excel file** (JSON → Excel).
+## Sécurité
 
-### Authentification
-Les pages *Excel to json*, *json structure*, *Test API* et *Visualiseur* sont protégées. Les comptes sont stockés dans PostgreSQL (table `users`, mots de passe hachés avec bcrypt) via [Prisma](https://www.prisma.io/).
+- Mots de passe hachés avec bcrypt. Session : JWT (HS256, `JWT_SECRET`) dans un cookie **httpOnly** `token`.
+- Le middleware (`src/middleware.js`) vérifie la signature et redirige vers `/login?next=…` ; après connexion, l’utilisateur revient sur la page demandée (chemins du site uniquement).
+- Les pages et les routes API vérifient aussi l’utilisateur en base (`src/lib/auth.js`) : un compte supprimé ou une session antérieure au dernier changement de mot de passe (`session_version`) n’est plus accepté.
+- Limites de fréquence (`src/lib/rateLimit.js`) : connexion (par adresse et par compte), inscription, contact, changement de mot de passe, envoi depuis le serveur. Elles sont gardées en mémoire : avec plusieurs instances, utiliser un stockage partagé.
+- Chaque donnée enregistrée appartient à un utilisateur ; les routes ne lisent et ne suppriment que celles de l’utilisateur connecté.
 
-| Méthode | Route | Corps | Réponse |
-|---|---|---|---|
-| `POST` | `/api/auth/register` | `{ username, email, pwd }` | `201` ; `400 { code: "invalidData" }` ; `409 { code: "emailTaken" }` |
-| `POST` | `/api/auth/login` | `{ email, pwd }` | `{ auth: true, user }` + cookie de session ; `400` / `401` sinon |
-| `POST` | `/api/auth/logout` | – | supprime le cookie |
-| `GET` | `/api/auth/me` | – | `{ auth: true, user }` si la session est valide, `401` sinon |
+## Routes API
 
-La session est un JWT (HS256, signé avec `JWT_SECRET`) placé dans un cookie **httpOnly** `token` : il n’est plus accessible au JavaScript de la page (contrairement à l’ancien `localStorage`). Le middleware (`src/middleware.js`) redirige vers `/login` les pages protégées sans session valide, et renvoie vers `/` un utilisateur déjà connecté qui ouvre `/login`.
+| Méthode | Route | Rôle |
+|---|---|---|
+| `POST` | `/api/auth/register` | Créer un compte `{ username, email, pwd }` |
+| `POST` | `/api/auth/login` | Connexion `{ email, pwd }` ; `429` après trop d’essais |
+| `POST` | `/api/auth/logout` | Déconnexion |
+| `GET` | `/api/auth/me` | Utilisateur connecté |
+| `GET` `PATCH` `DELETE` | `/api/account` | Profil ; modifier `{ username, email }` ; supprimer `{ password }` |
+| `POST` | `/api/account/password` | `{ current, next }` |
+| `GET` `POST` | `/api/mappings?kind=sheet\|json` | Structures enregistrées ; `{ kind, name, data, overwrite }` (`409` si le nom existe) |
+| `DELETE` | `/api/mappings/:id` | Supprimer une structure |
+| `GET` `POST` | `/api/requests` | Requêtes enregistrées ; `{ name, method, url, headers, body, overwrite }` |
+| `DELETE` | `/api/requests/:id` | Supprimer une requête |
+| `POST` | `/api/contact` | `{ name, email, topic, message }` |
+| `POST` | `/api/proxy` | Envoi depuis le serveur `{ method, url, headers, body }` |
 
 ## Langues
 
-L'interface est disponible en **anglais**, **français** et **arabe** (avec affichage de droite à gauche), grâce à [i18next](https://www.i18next.com/) et [react-i18next](https://react.i18next.com/).
+Anglais, français et arabe (de droite à gauche), avec [i18next](https://www.i18next.com/). La langue vient du cookie `lang`, sinon de l’en-tête `Accept-Language`. Les textes sont dans `src/i18n/locales/<langue>.json` ; un test vérifie que toutes les langues ont les mêmes clés, les bonnes formes plurielles et les mêmes variables, et que chaque clé utilisée dans le code existe.
 
-- La langue est choisie côté serveur : cookie `lang` s'il existe, sinon l'en-tête `Accept-Language` du navigateur. Elle est mémorisée dans ce cookie quand on la change avec le sélecteur de la barre de navigation, de l'accueil ou de la page de connexion. Le HTML arrive donc directement dans la bonne langue et le bon sens d'écriture.
-- En arabe, `<html dir="rtl">` est appliqué et Bootstrap est remplacé par sa version RTL. Les diagrammes, le code et les champs JSON / SQL / URL restent de gauche à droite.
-- Les textes sont dans `src/i18n/locales/<langue>.json`. Les nombres utilisent les formes plurielles d'i18next (`_one`, `_other`, et pour l'arabe `_zero`, `_one`, `_two`, `_few`, `_many`, `_other`).
-- Un test (`src/i18n/locales.test.js`) vérifie que toutes les langues ont les mêmes clés, les bonnes formes plurielles et les mêmes variables, et que chaque clé utilisée dans le code existe.
-
-Pour ajouter une langue : créer `src/i18n/locales/<code>.json` en copiant `en.json`, puis l'ajouter à `LANGUAGES` dans `src/i18n/settings.js` et à `resources` dans `src/i18n/index.js` (et à `PLURAL_FORMS` dans le test).
+Pour ajouter une langue : créer `src/i18n/locales/<code>.json` en copiant `en.json`, puis l’ajouter à `LANGUAGES` dans `src/i18n/settings.js`, à `resources` dans `src/i18n/index.js` et à `PLURAL_FORMS` dans le test.
 
 ## Structure du code
 
 ```
 prisma/
-├── schema.prisma               # Modèle User (table users)
-└── migrations/                 # Migrations SQL
+├── schema.prisma               # User, Mapping, SavedRequest, ContactMessage
+└── migrations/
 src/
-├── middleware.js               # Protection des routes (vérifie le JWT du cookie)
-├── lib/
-│   ├── prisma.js               # Client Prisma
-│   └── session.js              # Création / vérification du JWT, options du cookie
+├── middleware.js               # Protection des pages (signature du JWT)
+├── lib/                        # Serveur : auth, session, prisma, rateLimit, ssrf, validate, redirect
 ├── app/                        # Routes Next.js (App Router)
-│   ├── layout.jsx              # <html lang dir>, Bootstrap LTR/RTL, polices, fournisseurs
-│   ├── providers.jsx           # i18next + état partagé
-│   ├── app-state.jsx           # JSON envoyé à /test-api et données du visualiseur
-│   ├── page.jsx                # /  (accueil)
+│   ├── (protected)/            # excel-to-json, json-structure, test-api, visualizer, account
 │   ├── login/ support/         # Pages publiques
-│   ├── (protected)/            # Pages protégées + barre de navigation
-│   │   ├── excel-to-json/ json-structure/ test-api/ visualizer/
-│   └── api/auth/               # login, register, logout, me
-├── i18n/                       # settings.js (langues, détection), index.js (instance i18next), traductions
+│   └── api/                    # auth, account, mappings, requests, contact, proxy
+├── utils/                      # Logique pure et testée : converter, reshape, output, batch, http, schéma, SQL…
+├── Components/
+│   ├── Converter/              # Excel → JSON, et composants partagés (clés, concaténation, actions, structures)
+│   ├── Reshape/                # Structure JSON
+│   ├── ApiTester/              # Test d’API, envoi par élément, requêtes enregistrées
+│   ├── Account/                # Compte
+│   ├── Flow/ Visualizer/       # Graphe et schéma (React Flow)
+│   └── Login/ Navbar …
 ├── home/                       # Page d’accueil
-├── utils/                      # Logique pure, testée (*.test.js)
-└── Components/                 # Composants React (repris de l’ancienne application)
+└── i18n/                       # Langues et traductions
 ```
 
 ## Démarrage
@@ -103,13 +104,13 @@ Prérequis : Node.js 18.18 ou plus, et Docker (pour PostgreSQL) ou un serveur Po
 npm install
 cp .env.example .env          # puis remplir JWT_SECRET (et DATABASE_URL si besoin)
 docker compose up -d db       # PostgreSQL sur localhost:5432
-npm run db:migrate            # crée la table users
+npm run db:migrate            # crée les tables
 npm run dev                   # http://localhost:3000
 ```
 
 Autres scripts :
 - `npm run build` puis `npm start` : build et serveur de production
-- `npm test` : tests (logique du graphe, déduction du schéma, parseur et générateur SQL, traductions)
+- `npm test` : tests (conversion, types, structures, concaténation, envoi par élément, HTTP, limites, graphe, schéma, SQL, traductions)
 - `npm run db:deploy` : applique les migrations en production
 
 ### Variables d’environnement
@@ -130,4 +131,4 @@ docker compose --profile app up -d --build   # http://localhost:3000
 APP_PORT=8080 docker compose --profile app up -d --build   # sur un autre port
 ```
 
-`JWT_SECRET` est lu depuis le fichier `.env`.
+`JWT_SECRET` est lu depuis le fichier `.env`. Derrière un proxy inverse, transmettre l’en-tête `X-Forwarded-For` : il sert aux limites de fréquence.

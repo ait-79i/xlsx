@@ -1,0 +1,603 @@
+/* Load into a database. Builds on the converter's tokens and controls (converter.css). */
+
+.db {
+	display: grid;
+}
+
+.db-step {
+	display: grid;
+	gap: 0.75rem;
+	padding: 1.25rem 1.25rem 1.5rem;
+	border-bottom: 1px solid var(--cell-line);
+}
+
+.db-step:last-of-type {
+	border-bottom: 0;
+}
+
+.db-step__bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem 1rem;
+}
+
+.cv .db-step__title {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	margin: 0;
+	font-family: var(--font-display);
+	font-size: 1.125rem;
+	font-weight: 700;
+}
+
+/* the three steps are done in this order */
+.db-step__n {
+	display: grid;
+	place-items: center;
+	width: 1.625rem;
+	height: 1.625rem;
+	font: 700 0.8125rem/1 var(--font-ui);
+	color: #ffffff;
+	background: var(--cobalt);
+	border-radius: 50%;
+}
+
+.db-step__tools {
+	display: flex;
+	gap: 0.375rem;
+}
+
+.db-step__text {
+	max-width: 46rem;
+	font-size: 0.8125rem;
+	color: var(--muted);
+}
+
+.db-spacer {
+	flex: 1;
+}
+
+/* 1. databases */
+.db-targets {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem 2rem;
+}
+
+.db-targets__group {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.db-targets__group legend {
+	float: left;
+	width: 100%;
+	margin: 0 0 0.375rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--muted);
+}
+
+.db-targets__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.375rem;
+}
+
+.db-target {
+	position: relative;
+	margin: 0;
+	padding: 0.4375rem 0.875rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--ink);
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	cursor: pointer;
+}
+
+.db-target input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.db-target:hover {
+	border-color: var(--ink);
+}
+
+.db-target.is-on {
+	color: #ffffff;
+	background: var(--ink);
+	border-color: var(--ink);
+}
+
+.db-target:focus-within {
+	outline: 2px solid var(--cobalt);
+	outline-offset: 2px;
+}
+
+/* 2. tables */
+.db-map {
+	display: grid;
+	grid-template-columns: minmax(11rem, 14rem) minmax(0, 1fr);
+	gap: 1rem;
+	align-items: start;
+}
+
+.db-tables {
+	display: grid;
+	gap: 0.375rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.cv .db-table {
+	display: grid;
+	gap: 0.125rem;
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	font: inherit;
+	text-align: start;
+	color: var(--ink);
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.cv .db-table:hover {
+	border-color: var(--ink);
+}
+
+.cv .db-table.is-on {
+	background: var(--key-bg);
+	border-color: var(--cobalt);
+	box-shadow: inset 3px 0 0 var(--cobalt);
+}
+
+.db-table__name {
+	overflow: hidden;
+	font: 600 0.8125rem/1.4 var(--font-code);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.db-table__meta {
+	font-size: 0.75rem;
+	color: var(--muted);
+}
+
+.db-table__issue,
+.db-cols__issue {
+	font-size: 0.75rem;
+	color: #7a4600;
+}
+
+.cv .db-table--add {
+	justify-items: center;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--cobalt);
+	background: transparent;
+	border-style: dashed;
+}
+
+.db-editor {
+	display: grid;
+	gap: 0.75rem;
+	min-width: 0;
+}
+
+.db-editor__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 0.5rem 0.875rem;
+}
+
+.db-editor__name,
+.db-editor__rows {
+	display: grid;
+	gap: 0.25rem;
+	margin: 0;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--muted);
+}
+
+.db-editor__name .cv-input {
+	width: 14rem;
+	height: 2.125rem;
+}
+
+.db-editor__rows .cv-select {
+	height: 2.125rem;
+}
+
+.db-editor__remove {
+	margin-inline-start: auto;
+}
+
+.db-cols {
+	width: 100%;
+	font-size: 0.8125rem;
+	border-collapse: collapse;
+}
+
+.db-cols th {
+	padding: 0.375rem 0.375rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--muted);
+	text-align: start;
+	border-bottom: 1px solid var(--cell-line);
+}
+
+.db-cols td {
+	padding: 0.25rem 0.375rem;
+	vertical-align: top;
+	border-bottom: 1px solid var(--cell-line);
+}
+
+.db-cols tr.has-issue td {
+	background: #fffaf0;
+}
+
+.db-cols .db-cols__key {
+	width: 2.5rem;
+	text-align: center;
+}
+
+.db-cols__key .cv-check {
+	margin-top: 0.4375rem;
+}
+
+.cv .db-cols__name {
+	width: 100%;
+	min-width: 8rem;
+}
+
+.db-cols__issue {
+	display: block;
+	margin-top: 0.125rem;
+}
+
+.cv .db-cols__type {
+	width: 100%;
+	min-width: 6.5rem;
+}
+
+.db-source {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+}
+
+.cv .db-source__select {
+	max-width: 100%;
+	min-width: 10rem;
+	font-family: var(--font-code);
+	font-size: 0.75rem;
+}
+
+.cv .db-source__select.is-empty {
+	color: var(--muted);
+	font-style: italic;
+}
+
+.cv .db-source__const {
+	width: 9rem;
+}
+
+.db-cols__tools {
+	white-space: nowrap;
+	width: 1%;
+}
+
+.db-rows__title {
+	margin-bottom: 0.375rem !important;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--muted);
+}
+
+.db-rows__scroll {
+	overflow-x: auto;
+	border: 1px solid var(--cell-line);
+	border-radius: 8px;
+}
+
+.db-rows table {
+	min-width: 100%;
+	font-size: 0.75rem;
+	border-collapse: collapse;
+}
+
+.db-rows th,
+.db-rows td {
+	max-width: 14rem;
+	padding: 0.3125rem 0.5rem;
+	overflow: hidden;
+	text-align: start;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	border-right: 1px solid var(--cell-line);
+}
+
+.db-rows th {
+	font-family: var(--font-code);
+	font-weight: 600;
+	background: var(--head);
+}
+
+.db-rows td.is-null {
+	color: #9aa3b5;
+	font-style: italic;
+}
+
+/* 3. output */
+.db-options {
+	display: grid;
+	gap: 0.75rem;
+}
+
+.db-seg {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.5rem;
+	max-width: 44rem;
+}
+
+.db-seg label {
+	position: relative;
+	display: grid;
+	gap: 0.125rem;
+	margin: 0;
+	padding: 0.625rem 0.875rem;
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.db-seg label.is-on {
+	background: var(--key-bg);
+	border-color: var(--cobalt);
+}
+
+.db-seg label:focus-within {
+	outline: 2px solid var(--cobalt);
+	outline-offset: 1px;
+}
+
+.db-seg input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.db-seg strong {
+	font-size: 0.875rem;
+}
+
+.db-seg span {
+	font-size: 0.75rem;
+	color: var(--muted);
+}
+
+.db-options__row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.625rem 1.25rem;
+}
+
+.cv .db-options__ns {
+	width: 9rem;
+	height: 2rem;
+}
+
+.db-check {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin: 0;
+	font-size: 0.8125rem;
+	cursor: pointer;
+}
+
+.db-warn {
+	padding: 0.5rem 0.75rem;
+	font-size: 0.8125rem;
+	color: #7a4600;
+	background: #fdf5e7;
+	border-radius: 8px;
+}
+
+.db-out {
+	overflow: hidden;
+	border: 1px solid var(--line);
+	border-radius: 12px;
+}
+
+.db-out__bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	padding: 0.5rem 0.75rem;
+	background: var(--head);
+	border-bottom: 1px solid var(--line);
+}
+
+.db-out__files {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+}
+
+.cv .db-out__file {
+	padding: 0.25rem 0.625rem;
+	font: 500 0.75rem/1.4 var(--font-code);
+	color: var(--muted);
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.cv .db-out__file[aria-selected="true"] {
+	color: var(--ink);
+	background: var(--surface);
+	border-color: var(--line);
+}
+
+.db-out__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.375rem;
+}
+
+.cv .db-out__code {
+	max-height: 26rem;
+	border-radius: 0;
+	white-space: pre;
+}
+
+.db-cmd {
+	border-top: 1px solid var(--line);
+}
+
+.db-cmd__bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.375rem 0.75rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--muted);
+	background: var(--head);
+}
+
+.cv .db-cmd__code {
+	max-height: 12rem;
+	margin: 0;
+	padding: 0.75rem 1rem;
+	overflow: auto;
+	font: 0.75rem/1.6 var(--font-code);
+	color: var(--ink);
+	background: var(--surface);
+}
+
+.cv .db-import__sql {
+	height: 16rem;
+	padding: 0.75rem;
+	font: 0.8125rem/1.5 var(--font-code);
+	resize: vertical;
+}
+
+.db-import__foot {
+	align-items: center;
+}
+
+@media (max-width: 860px) {
+	.db-map,
+	.db-seg {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.cv .db-editor__name .cv-input {
+		width: 100%;
+	}
+
+	.cv .db-source__select {
+		min-width: 0;
+		width: 100%;
+	}
+
+	.db-cols thead {
+		display: none;
+	}
+
+	.db-cols,
+	.db-cols tbody {
+		display: block;
+	}
+
+	.db-cols tr {
+		display: grid;
+		grid-template-columns: 2.5rem minmax(0, 1fr);
+		padding: 0.375rem 0;
+		border-bottom: 1px solid var(--cell-line);
+	}
+
+	.db-cols td {
+		border: 0;
+	}
+
+	.db-cols td:not(.db-cols__key) {
+		grid-column: 2;
+	}
+}
+
+/* diagram | load into a database */
+.db-modes {
+	display: inline-flex;
+	gap: 0.25rem;
+	margin: 0.75rem 1.25rem 0;
+	padding: 0.1875rem;
+	font-size: 0.8125rem;
+	background: var(--head);
+	border-radius: 8px;
+}
+
+.db-modes label {
+	position: relative;
+	margin: 0;
+	padding: 0.3125rem 0.75rem;
+	font-weight: 600;
+	color: var(--muted);
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.db-modes label.is-on {
+	color: var(--ink);
+	background: var(--surface);
+	box-shadow: 0 1px 2px rgba(23, 32, 54, 0.12);
+}
+
+.db-modes input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.db-modes label:focus-within {
+	outline: 2px solid var(--cobalt);
+}
+
+.db-modes + .cv-note,
+.db-modes + .cv-canvas {
+	margin-top: 0.75rem;
+}
+
+/* grid columns may shrink below their content: wide tables and code scroll inside instead */
+.db,
+.db-step,
+.db-editor,
+.db-options {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.cv .db-cols__tools .cv-icon-btn {
+	display: inline-grid;
+}

@@ -10,7 +10,8 @@ const secretKey = () => {
 };
 
 export const createToken = (user) =>
-	new SignJWT({ username: user.username, email: user.email })
+	// v: the user's session version, compared with the database by getCurrentUser
+	new SignJWT({ username: user.username, email: user.email, v: user.sessionVersion ?? 0 })
 		.setProtectedHeader({ alg: "HS256" })
 		.setSubject(String(user.id))
 		.setIssuedAt()

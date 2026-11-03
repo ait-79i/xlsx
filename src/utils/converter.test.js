@@ -14,6 +14,15 @@ import {
 	moveOut,
 	readWorkbook,
 	renameNode,
+	sheetView,
+	convertValue,
+	typeIssues,
+	setFieldType,
+	mappingData,
+	applyMapping,
+	guessHeaderRow,
+	matchHeaderRow,
+	mappingColumns,
 	setIncluded,
 	ungroupNode,
 } from "./converter";
@@ -47,7 +56,9 @@ describe("reading", () => {
 		XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([]), "Empty");
 		const buffer = XLSX.write(wb, { type: "array", bookType: "xlsx" });
 
-		const [people, empty] = readWorkbook(buffer);
+		const [rawPeople, rawEmpty] = readWorkbook(buffer);
+		const people = sheetView(rawPeople);
+		const empty = sheetView(rawEmpty);
 		expect(people.name).toBe("People");
 		expect(people.columns.map((c) => c.name)).toEqual(["name", "note", "date"]);
 		expect(people.columns.map((c) => c.letter)).toEqual(["A", "B", "C"]);
@@ -192,5 +203,113 @@ describe("concatenation", () => {
 	test("values of any kind", () => {
 		expect(concatValues(["a", 1, true, ["x", "y"]], { separator: " / " })).toBe("a / 1 / true / x, y");
 		expect(concatValues(["", "  ", null])).toBeNull();
+	});
+});
+
+describe("header row", () => {
+	const sheet = {
+		name: "Report",
+		letters: ["A", "B"],
+		matrix: [["Sales report 2024", null], ["name", "total"], ["Amina", 10], ["Louis", 20]],
+		headerRow: 0,
+	};
+
+	test("the first row by default, any row when chosen", () => {
+		expect(sheetView(sheet).columns.map((c) => c.name)).toEqual(["Sales report 2024", "Column B"]);
+		const view = sheetView({ ...sheet, headerRow: 1 });
+		expect(view.columns.map((c) => c.name)).toEqual(["name", "total"]);
+		expect(view.rows).toEqual([["Amina", 10], ["Louis", 20]]);
+		expect(view.rowCount).toBe(2);
+	});
+
+	test("sheets saved before this option still open", () => {
+		const old = { name: "x", columns: [{ name: "a", letter: "A" }], rows: [[1]] };
+		expect(sheetView(old)).toMatchObject({ columns: old.columns, rows: old.rows, headerRow: 0 });
+	});
+});
+
+describe("value types", () => {
+	test.each([
+		["number", "1 234,5", 1234.5],
+		["number", "1,234.5", 1234.5],
+		["number", "1.234,5", 1234.5],
+		["number", " 42 ", 42],
+		["integer", "7", 7],
+		["text", 20250, "20250"],
+		["boolean", "Oui", true],
+		["boolean", "no", false],
+		["boolean", 1, true],
+		["date", "31/12/2024", "2024-12-31"],
+		["date", "2024-03-01T10:00:00", "2024-03-01"],
+		["date", 45292, "2024-01-01"],
+		["auto", "20250", "20250"],
+	])("%s: %p -> %p", (type, input, expected) => {
+		expect(convertValue(input, type)).toEqual({ value: expected, ok: true });
+	});
+
+	test.each([
+		["number", "abc"],
+		["integer", "1.5"],
+		["boolean", "maybe"],
+		["date", "13/13/2024"],
+	])("%s: %p cannot be converted and becomes null", (type, input) => {
+		expect(convertValue(input, type)).toEqual({ value: null, ok: false });
+	});
+
+	test("empty cells stay empty whatever the type", () => {
+		expect(convertValue(null, "number")).toEqual({ value: null, ok: true });
+	});
+
+	test("typed keys in the output, and the values that failed", () => {
+		const cols = [{ name: "zip" }, { name: "active" }];
+		const rows = [[10000, "yes"], ["n/a", "no"]];
+		let shape = initialShape(cols);
+		shape = setFieldType(shape, "c0", "text").nodes;
+		shape = setFieldType(shape, "c1", "boolean").nodes;
+		expect(buildJson(rows, shape)).toEqual([{ zip: "10000", active: true }, { zip: "n/a", active: false }]);
+
+		shape = setFieldType(shape, "c0", "integer").nodes;
+		expect(buildJson(rows, shape)[1].zip).toBeNull();
+		const issues = typeIssues((field) => rows.map((r) => r[field.source]), shape);
+		expect([...issues]).toEqual([["c0", 1]]);
+	});
+});
+
+describe("saved structures", () => {
+	const cols = [{ name: "first" }, { name: "last" }, { name: "city" }, { name: "zip" }];
+
+	test("applied by column name to a file with moved, missing and new columns", () => {
+		let shape = initialShape(cols);
+		shape = groupNodes(shape, ["c2", "c3"], "address").nodes;
+		shape = concatNodes(shape, ["c0", "c1"], { key: "name", separator: " " }).nodes;
+		shape = setFieldType(shape, "c3", "text").nodes;
+		const data = JSON.parse(JSON.stringify(mappingData(shape, cols, { emptyCells: "omit" })));
+		expect(data.options).toEqual({ emptyCells: "omit" });
+
+		// new file: columns in another order, no "last", a new "email"
+		const next = [{ name: "zip" }, { name: "email" }, { name: "first" }, { name: "city" }];
+		const { nodes, missing, added } = applyMapping(data, next);
+		expect(missing).toEqual(["last"]);
+		expect(added).toEqual(["email"]);
+		const rows = [[10000, "a@b.c", "Amina", "Rabat"]];
+		expect(buildJson(rows, nodes)).toEqual([{ name: "Amina", address: { city: "Rabat", zip: "10000" }, email: "a@b.c" }]);
+	});
+});
+
+describe("finding the header row", () => {
+	test("skips a title and notes above the table", () => {
+		expect(guessHeaderRow([["Orders report"], ["order", "customer", "zip"], [1, "Amina", 20250]])).toBe(1);
+		expect(guessHeaderRow([["Exported 2025-01-31", null, null], ["Source: CRM", null, null], ["id", "name", "city"], [1, "a", "b"]])).toBe(2);
+	});
+
+	test("keeps the first row for a plain table", () => {
+		expect(guessHeaderRow([["id", "name"], [1, "Amina"]])).toBe(0);
+		expect(guessHeaderRow([[1, 2], [3, 4]])).toBe(0);
+	});
+
+	test("a saved structure finds the row with its column names", () => {
+		const sheet = { letters: ["A", "B", "C"], matrix: [["Report", null, null], ["zip", "order", "email"], [1, 2, 3]] };
+		expect(matchHeaderRow(sheet, ["order", "zip", "paid"])).toBe(1);
+		expect(mappingColumns({ shape: [{ kind: "group", children: [{ kind: "field", column: "zip" }] }, { kind: "field", column: "order" }] })).toEqual(["zip", "order"]);
 	});
 });

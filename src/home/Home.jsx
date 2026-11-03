@@ -4,16 +4,19 @@ import React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '../Components/LanguageSwitcher'
+import { BrandMark } from '../Components/Mascot'
+import LiveScene from '../Components/LiveScene'
 import HomeDemo from './HomeDemo'
 import './home.css'
 
-const READS = ['.xlsx', '.xlsm', '.xlsb', '.xls', '.xlam', '.json', '.sql']
-const WRITES = ['JSON', 'PostgreSQL', 'MySQL', 'SQLite', 'SQL Server', 'Mermaid', 'Excel', 'PNG']
+const READS = ['.xlsx', '.xlsm', '.xlsb', '.xls', '.xlam', '.csv', '.ods', '.json', '.sql']
+const WRITES = ['JSON', 'JSON Lines', 'CSV', 'Excel', 'PostgreSQL', 'MySQL', 'SQLite', 'SQL Server', 'Mermaid', 'PNG']
 
 const Brand = () => {
   const { t } = useTranslation()
   return (
     <Link href="/" className="home-brand">
+      <BrandMark />
       {t('nav.logo')}
     </Link>
   )
@@ -37,6 +40,7 @@ const Home = ({ signedIn = false }) => {
 
   return (
     <div className="home">
+      <LiveScene count={16} className="home__live" />
       <header className="home-header">
         <Brand />
         <nav className="home-header__nav" aria-label={t('nav.home')}>
@@ -98,6 +102,7 @@ const Home = ({ signedIn = false }) => {
         </section>
 
         <section className="closing" aria-labelledby="closing-title">
+          <LiveScene theme="dark" count={9} stars={14} seed={3} className="closing__live" />
           <div>
             <h2 id="closing-title" className="closing__title">{t('home.closing.title')}</h2>
             <p className="closing__text">{t('home.closing.text')}</p>

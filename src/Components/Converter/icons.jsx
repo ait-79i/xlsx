@@ -35,3 +35,5 @@ export const ConcatIcon = () => <Icon><path d="M3 4.5h3.5v7H3M13 4.5H9.5v7H13" /
 export const GripIcon = () => <Icon><circle cx="6" cy="4" r=".6" /><circle cx="10" cy="4" r=".6" /><circle cx="6" cy="8" r=".6" /><circle cx="10" cy="8" r=".6" /><circle cx="6" cy="12" r=".6" /><circle cx="10" cy="12" r=".6" /></Icon>
 export const LeftIcon = () => <Icon><path d="M13 8H3M7 4L3 8l4 4" /></Icon>
 export const RightIcon = () => <Icon><path d="M3 8h10M9 4l4 4-4 4" /></Icon>
+export const BookmarkIcon = () => <Icon><path d="M4 2.5h8v11L8 10.5l-4 3z" /></Icon>
+export const SendIcon = () => <Icon><path d="M2.5 8L13.5 2.5 11 13.5 8 9z" /><path d="M8 9l5.5-6.5" /></Icon>

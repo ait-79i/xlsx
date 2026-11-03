@@ -1,0 +1,126 @@
+/* The brand sloth: shared sizing and motion. Placement lives with each page. */
+
+.mascot {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	user-select: none;
+	pointer-events: none;
+}
+
+.mascot--float {
+	animation: mascot-float 5s ease-in-out infinite;
+}
+
+/* hanging from a branch: swings from its top edge */
+.mascot--sway {
+	transform-origin: 50% 8%;
+	animation: mascot-sway 4.8s ease-in-out infinite;
+}
+
+.mascot--pop {
+	animation:
+		mascot-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+		mascot-float 5s ease-in-out 0.7s infinite;
+}
+
+.mascot--wobble {
+	transform-origin: 50% 100%;
+	animation: mascot-wobble 4s ease-in-out infinite;
+}
+
+.mascot--peek {
+	animation:
+		mascot-peek 0.9s cubic-bezier(0.22, 1, 0.36, 1) both,
+		mascot-float 5s ease-in-out 0.9s infinite;
+}
+
+@keyframes mascot-float {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-8px); }
+}
+
+/* hand over hand: reach and pull up, settle, reach with the other arm, settle back */
+@keyframes mascot-sway {
+	0%, 100% { transform: rotate(-3deg) translateY(0); }
+	18% { transform: rotate(2deg) translateY(-7px); }
+	30% { transform: rotate(1deg) translateY(-3px); }
+	50% { transform: rotate(4deg) translateY(1px); }
+	68% { transform: rotate(-2deg) translateY(-7px); }
+	80% { transform: rotate(-1deg) translateY(-3px); }
+}
+
+@keyframes mascot-pop {
+	from { opacity: 0; transform: scale(0.6) translateY(12px); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes mascot-wobble {
+	0%, 60%, 100% { transform: rotate(0); }
+	70% { transform: rotate(-4deg); }
+	80% { transform: rotate(3deg); }
+	90% { transform: rotate(-2deg); }
+}
+
+@keyframes mascot-peek {
+	from { opacity: 0; transform: translateY(30px); }
+	to { opacity: 1; transform: none; }
+}
+
+/* the sloth face next to the product name in headers */
+.brand-mark {
+	flex: none;
+	width: 2.125rem;
+	height: auto;
+	transform-origin: 50% 90%;
+	transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+	animation: brand-nod 9s ease-in-out 2s infinite;
+}
+
+/* every few seconds the sloth gives a slow, relaxed nod */
+@keyframes brand-nod {
+	0%, 88%, 100% { rotate: 0deg; }
+	91% { rotate: -9deg; }
+	95% { rotate: 6deg; }
+	98% { rotate: -2deg; }
+}
+
+a:hover > .brand-mark,
+a:focus-visible > .brand-mark {
+	transform: rotate(-10deg) scale(1.08);
+}
+
+/* visualizer with nothing loaded yet */
+.viz-empty {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	display: grid;
+	justify-items: center;
+	gap: 1.25rem;
+	padding: 3rem 1rem;
+	text-align: center;
+	border: 1px dashed #cdd4e0;
+	border-radius: 1rem;
+	background-color: #f5f7fa;
+	background-image: linear-gradient(rgba(245, 247, 250, 0.6), rgba(245, 247, 250, 0.6)), url("/images/brand/pattern-tile.webp");
+	background-size: auto, 280px 280px;
+}
+
+.viz-empty__mascot {
+	width: min(18rem, 70%);
+}
+
+.viz-empty__text {
+	max-width: 36rem;
+	margin: 0;
+	color: #5b6478;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mascot,
+	.brand-mark {
+		animation: none !important;
+		transition: none;
+	}
+}

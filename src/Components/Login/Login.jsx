@@ -6,21 +6,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../LanguageSwitcher";
+import Mascot, { BrandMark } from "../Mascot";
+import LiveScene from "../LiveScene";
 import { safeNext } from "@/lib/redirect";
+import { passwordScore } from "../../utils/password";
 import "./Login.css";
+
+export { passwordScore };
 
 const MIN_PASSWORD_LENGTH = 8;
 
-// 0 (empty) to 4 (strong)
-export const passwordScore = (pwd) => {
-  if (!pwd) return 0;
-  let score = 0;
-  if (pwd.length >= MIN_PASSWORD_LENGTH) score++;
-  if (pwd.length >= 12) score++;
-  if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score++;
-  if (/\d/.test(pwd) && /[^A-Za-z0-9]/.test(pwd)) score++;
-  return Math.max(1, Math.min(4, score));
-};
 const STRENGTH = ["", "weak", "fair", "good", "strong"];
 
 const EyeIcon = ({ crossed }) => (
@@ -98,7 +93,9 @@ const Showcase = () => {
   ];
   return (
     <aside className="auth-showcase">
+      <LiveScene theme="dark" count={14} stars={8} seed={11} />
       <Link href="/" className="auth-brand">
+        <BrandMark />
         {t("nav.logo")}
       </Link>
 
@@ -141,6 +138,8 @@ const Showcase = () => {
           </code>
         </pre>
       </figure>
+
+      <Mascot pose="main" motion="peek" className="auth-showcase__mascot" />
     </aside>
   );
 };
@@ -215,6 +214,7 @@ function Login() {
       if (!err?.response) setLoginError(t("login.errors.noServerResponse"));
       else if (err.response.status === 400) setLoginError(t("login.errors.missingCredentials"));
       else if (err.response.status === 401) setLoginError(t("login.errors.unauthorized"));
+      else if (err.response.status === 429) setLoginError(t("login.errors.tooManyAttempts", { minutes: Math.max(1, Math.ceil((err.response.data?.retryAfter ?? 60) / 60)) }));
       else setLoginError(t("login.errors.loginFailed"));
     }).finally(() => setLoginPending(false));
   };
@@ -244,6 +244,7 @@ function Login() {
       const code = err?.response?.data?.code;
       if (!err?.response) setRegisterError(t("login.errors.noServerResponse"));
       else if (code === "emailTaken") setRegisterError(t("login.errors.emailTaken"));
+      else if (err.response.status === 429) setRegisterError(t("login.errors.tooManyAttempts", { minutes: Math.max(1, Math.ceil((err.response.data?.retryAfter ?? 60) / 60)) }));
       else if (code === "invalidData") setRegisterError(t("login.errors.invalidData", { min: MIN_PASSWORD_LENGTH }));
       else setRegisterError(t("login.errors.registrationFailed"));
     }).finally(() => setRegisterPending(false));
@@ -280,6 +281,7 @@ function Login() {
       <section className="auth-main">
         <div className="auth-main__bar">
           <Link href="/" className="auth-brand auth-brand--compact">
+            <BrandMark />
             {t("nav.logo")}
           </Link>
           <LanguageSwitcher />

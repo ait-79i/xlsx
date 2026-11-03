@@ -9,11 +9,66 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String
-  email     String   @unique
-  password  String // bcrypt hash
-  createdAt DateTime @default(now()) @map("created_at")
+  id             Int      @id @default(autoincrement())
+  username       String
+  email          String   @unique
+  password       String // bcrypt hash
+  // bumped when the password changes: older session tokens stop working
+  sessionVersion Int      @default(0) @map("session_version")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  mappings Mapping[]
+  requests SavedRequest[]
+  messages ContactMessage[]
 
   @@map("users")
+}
+
+// A saved key structure, applied again to new files with the same columns or keys
+model Mapping {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  kind      String // "sheet" (Excel to JSON) or "json" (JSON structure)
+  name      String
+  data      Json // { shape, options, sources }
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind, name])
+  @@map("mappings")
+}
+
+// A request saved in the API tester
+model SavedRequest {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  name      String
+  method    String
+  url       String
+  headers   Json // [{ key, value, on }]
+  body      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
+  @@map("saved_requests")
+}
+
+// Messages sent from the contact page
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  userId    Int?     @map("user_id")
+  name      String
+  email     String
+  topic     String
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("contact_messages")
 }

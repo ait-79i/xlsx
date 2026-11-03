@@ -1,4 +1,6 @@
-import { inferShape, normalizeInput, presence, reshape } from "./reshape";
+import { applyJsonMapping, inferShape, normalizeInput, presence, reshape } from "./reshape";
+import { setFieldType } from "./converter";
+import { toCsv, toJsonLines, wrapOutput } from "./output";
 import { concatNodes, groupNodes, moveOut, renameNode, setIncluded, ungroupNode } from "./converter";
 
 const items = [
@@ -64,4 +66,29 @@ test("combine keys from different nested objects after flattening", () => {
 	shape = concatNodes(shape, [byKey("zip"), byKey("city")], { key: "place", separator: " " }).nodes;
 	expect(reshape(items, shape)[0].place).toBe("10000 Rabat");
 	expect(reshape(items, shape)[1].place).toBe("Lyon");
+});
+
+test("types apply to JSON values too", () => {
+	let shape = inferShape(items);
+	shape = setFieldType(shape, shape[0].id, "text").nodes;
+	expect(reshape(items, shape)[0].id).toBe("1");
+});
+
+test("a saved structure applied to new JSON keeps its keys and adds the new ones", () => {
+	let shape = inferShape(items);
+	shape = ungroupNode(shape, shape[2].id).nodes;
+	const data = JSON.parse(JSON.stringify({ shape }));
+	const next = [{ id: 3, name: "Sara", customer: { city: "Tanger" }, phone: "0600" }];
+	const { nodes, added } = applyJsonMapping(data, inferShape(next));
+	expect(added).toEqual(["phone"]);
+	expect(reshape(next, nodes)).toEqual([{ id: 3, name: "Sara", city: "Tanger", phone: "0600" }]);
+});
+
+test("output formats", () => {
+	const list = [{ a: 1, b: { c: "x" } }, { a: 2 }];
+	expect(wrapOutput(list, { root: "array" })).toBe(list);
+	expect(wrapOutput(list, { root: "object", rootKey: " customers " })).toEqual({ customers: list });
+	expect(wrapOutput(list, { root: "object", rootKey: "" })).toBe(list);
+	expect(toJsonLines(list)).toBe('{"a":1,"b":{"c":"x"}}\n{"a":2}\n');
+	expect(toCsv(list).split("\n")).toEqual(["a,b.c", "1,x", "2,"]);
 });

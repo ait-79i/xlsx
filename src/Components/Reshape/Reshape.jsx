@@ -3,10 +3,14 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import KeysPanel from '../Converter/KeysPanel'
-import { Actions } from '../Converter/Converter'
+import MappingsMenu from '../Converter/MappingsMenu'
+import Actions from '../Converter/Actions'
 import JsonGraph from '../Flow/JsonGraph'
+import { Tables } from '../Converter/Preview'
 import { highlightJson } from '../JsonCode'
 import { UndoIcon } from '../Converter/icons'
+import Mascot from '../Mascot'
+import LiveScene from '../LiveScene'
 import {
   groupNodes,
   includedCount,
@@ -18,8 +22,11 @@ import {
   renameNode,
   setIncluded,
   ungroupNode,
+  setFieldType,
+  typeIssues,
 } from '../../utils/converter'
-import { getPath, inferShape, normalizeInput, originOf, presence, reshape } from '../../utils/reshape'
+import { wrapOutput } from '../../utils/output'
+import { applyJsonMapping, getPath, inferShape, normalizeInput, originOf, presence, reshape } from '../../utils/reshape'
 import { parseJsonBody } from '../../utils/http'
 import { useSessionState } from '../../utils/useSessionState'
 import '../Converter/converter.css'
@@ -52,8 +59,10 @@ const OpenJson = ({ onText, onSample, error, setError }) => {
 
   return (
     <section className="cv-open rs-open">
+      <LiveScene count={12} seed={9} />
       <div className="cv-open__grid rs-open__grid" aria-hidden="true" />
       <div className="cv-open__body">
+        <Mascot pose="main" motion="peek" className="cv-open__mascot" />
         <h1 className="cv-open__title">{t('reshape.empty.title')}</h1>
         <p className="cv-open__text">{t('reshape.empty.text')}</p>
 
@@ -107,12 +116,12 @@ const Code = ({ value, total }) => {
   )
 }
 
-const VIEWS = ['result', 'original', 'graph']
+const VIEWS = ['result', 'original', 'graph', 'tables']
 
-const Preview = ({ result, original, single, missing, setMissing, view, setView }) => {
+const Preview = ({ result, original, single, missing, setMissing, view, setView, output, setOutput, rootName }) => {
   const { t } = useTranslation()
   const id = useId()
-  const sample = (list) => (single ? list[0] : list.slice(0, PREVIEW_ITEMS))
+  const sample = (list, wrap = false) => (single ? list[0] : wrap ? wrapOutput(list.slice(0, PREVIEW_ITEMS), output) : list.slice(0, PREVIEW_ITEMS))
   const graphData = useMemo(() => (single ? result[0] : result.slice(0, GRAPH_ITEMS)), [result, single])
 
   const onKey = (e) => {
@@ -142,10 +151,27 @@ const Preview = ({ result, original, single, missing, setMissing, view, setView 
             <option value="null">{t('reshape.missing.null')}</option>
           </select>
         </label>
+        {setOutput && (
+          <label className="cv-select-label cv-root">
+            <span>{t('converter.preview.root')}</span>
+            <select className="cv-select" value={output.root} onChange={(e) => setOutput({ ...output, root: e.target.value })}>
+              <option value="array">{t('converter.preview.rootArray')}</option>
+              <option value="object">{t('converter.preview.rootObject')}</option>
+            </select>
+            {output.root === 'object' && (
+              <input className="cv-input cv-input--key cv-root__key" value={output.rootKey ?? ''} dir="ltr" spellCheck="false"
+                aria-label={t('converter.preview.rootKey')} placeholder="data"
+                onChange={(e) => setOutput({ ...output, rootKey: e.target.value })} />
+            )}
+          </label>
+        )}
       </header>
       <div className="cv-preview__body" role="tabpanel" aria-labelledby={`${id}-${view}`}>
-        {view === 'result' && <Code value={sample(result)} total={single ? 1 : result.length} />}
+        {view === 'result' && <Code value={sample(result, true)} total={single ? 1 : result.length} />}
         {view === 'original' && <Code value={sample(original)} total={single ? 1 : original.length} />}
+        {view === 'tables' && (
+          <Tables data={result.slice(0, 500)} all={result} total={result.length} rootName={rootName} stateKey="dbLoad:reshape" />
+        )}
         {view === 'graph' && (
           <>
             {!single && result.length > GRAPH_ITEMS && <p className="cv-note">{t('converter.preview.sample', { count: GRAPH_ITEMS })}</p>}
@@ -200,7 +226,28 @@ const Reshape = () => {
   const shape = work?.shape
   const result = useMemo(() => (work ? reshape(work.items, work.shape, { missing: work.missing }) : []), [work])
   const counts = useMemo(() => (work ? presence(work.items, work.shape) : new Map()), [work?.items, work?.shape]) // eslint-disable-line react-hooks/exhaustive-deps
-  const output = work?.single ? result[0] : result
+  const rootOutput = work?.output ?? { root: 'array', rootKey: 'data' }
+  const output = useMemo(() => (work?.single ? result[0] : wrapOutput(result, rootOutput)), [result, work?.single, rootOutput])
+  const issues = useMemo(
+    () => (work ? typeIssues((field) => work.items.map((item) => getPath(item, field.source)).filter((v) => v !== undefined), work.shape) : new Map()),
+    [work?.items, work?.shape] // eslint-disable-line react-hooks/exhaustive-deps
+  )
+  const [applied, setApplied] = useState(null)
+
+  const applySaved = (data, name) => {
+    const { nodes, added } = applyJsonMapping(data, inferShape(work.items))
+    commit(nodes)
+    setWork((w) => ({ ...w, missing: data.options?.missing ?? w.missing, output: data.options?.output ?? w.output }))
+    setSelected(new Set())
+    const counts = presence(work.items, nodes)
+    const absent = []
+    const visit = (list, prefix) => list.forEach((n) => {
+      if (n.kind === 'group') visit(n.children, [...prefix, n.key])
+      else if (n.kind === 'field' && counts.get(n.id) === 0) absent.push([...prefix, n.key].join('.'))
+    })
+    visit(nodes, [])
+    setApplied({ name, missing: absent, added })
+  }
   const hasFields = shape ? includedCount(shape) > 0 : false
 
   // ---- edits
@@ -239,6 +286,10 @@ const Reshape = () => {
       if (r.nodes !== shape) commit(r.nodes)
     },
     setInclude: (ids, include) => commit(setIncluded(shape, ids, include)),
+    setType: (nodeId, type) => {
+      const r = setFieldType(shape, nodeId, type)
+      if (!r.error) commit(r.nodes)
+    },
     concat: (ids, options) => {
       const r = concatNodes(shape, ids, options)
       if (r.error) return errorText(r.error)
@@ -354,14 +405,30 @@ const Reshape = () => {
               <button type="button" className="cv-btn cv-btn--quiet" onClick={reset} disabled={history.length === 0 && work.shape === work.initial}>
                 {t('converter.file.reset')}
               </button>
-              <button type="button" className="cv-btn cv-btn--quiet" onClick={() => { setWork(null); setError('') }}>
+              <MappingsMenu
+                kind="json"
+                defaultName={work.fileName.replace(/\.[^.]+$/, '')}
+                getData={() => ({ shape: work.shape, options: { missing: work.missing, output: rootOutput } })}
+                onApply={applySaved}
+              />
+              <button type="button" className="cv-btn cv-btn--quiet" onClick={() => { setWork(null); setError(''); setApplied(null) }}>
                 {t('reshape.close')}
               </button>
             </div>
-            <Actions json={output} fileName={work.fileName} disabled={!hasFields} />
+            <Actions json={output} items={result} fileName={work.fileName} disabled={!hasFields} />
           </header>
 
           {error && <p className="cv-banner cv-banner--error" role="alert">{error}</p>}
+          {applied && (
+            <div className="cv-banner cv-banner--ok" role="status">
+              <span>
+                {t('mappings.applied', { name: applied.name })}
+                {applied.missing.length > 0 && <> {t('mappings.missingKeys', { count: applied.missing.length, names: applied.missing.join(', ') })}</>}
+                {applied.added.length > 0 && <> {t('mappings.addedKeys', { count: applied.added.length, names: applied.added.join(', ') })}</>}
+              </span>
+              <button type="button" className="cv-link" onClick={() => setApplied(null)}>{t('mappings.dismiss')}</button>
+            </div>
+          )}
 
           <div className="rs-grid">
             <div className="rs-grid__keys">
@@ -372,6 +439,7 @@ const Reshape = () => {
                 setSelected={setSelected}
                 actions={actions}
                 sourceInfo={sourceInfo}
+                issues={issues}
                 title={t('reshape.keysTitle')}
                 help={t('reshape.keysHelp')}
                 sample={(parts) => work.items.slice(0, 3).map((item) => parts.map((p) => getPath(item, p.source)))}
@@ -383,6 +451,9 @@ const Reshape = () => {
               single={work.single}
               missing={work.missing}
               setMissing={(missing) => setWork((w) => ({ ...w, missing }))}
+              output={rootOutput}
+              rootName={work.fileName.replace(/\.[^.]+$/, '') || 'data'}
+              setOutput={work.single ? null : (o) => setWork((w) => ({ ...w, output: o }))}
               view={view}
               setView={setView}
             />

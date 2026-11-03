@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { clientIp } from "@/lib/auth";
+import { LIMITS, hit } from "@/lib/rateLimit";
 
 const MIN_PASSWORD_LENGTH = 8;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // POST { username, email, pwd } -> 201 when the account is created
 export async function POST(request) {
+	const limit = hit(`register:${clientIp(request)}`, LIMITS.register);
+	if (!limit.ok) {
+		return NextResponse.json(
+			{ code: "tooManyAttempts", retryAfter: limit.retryAfter },
+			{ status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+		);
+	}
 	const body = await request.json().catch(() => ({}));
 	const username = String(body.username ?? "").trim();
 	const email = String(body.email ?? "").trim().toLowerCase();

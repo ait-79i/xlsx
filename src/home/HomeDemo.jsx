@@ -2,6 +2,7 @@
 
 import React, { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import Mascot from '../Components/Mascot'
 
 const COLUMNS = ['name', 'email', 'city', 'zip']
 const LETTERS = ['A', 'B', 'C', 'D']
@@ -129,6 +130,8 @@ const HomeDemo = () => {
             <span className="sheet__tab">{t('home.demo.sheet')}</span>
           </figcaption>
         </figure>
+
+        <Mascot pose="main" className="demo__mascot" />
 
         <svg className="demo__arrow" viewBox="0 0 48 24" width="48" height="24" aria-hidden="true" focusable="false">
           <path d="M2 12h40M33 4l9 8-9 8" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

@@ -27,12 +27,27 @@
 	--gutter: clamp(1rem, 4vw, 3rem);
 	--max: 76rem;
 
+	position: relative;
+	isolation: isolate;
 	min-height: 100vh;
 	font-family: var(--font-ui);
 	font-size: 1rem;
 	line-height: 1.55;
 	color: var(--ink);
 	background: var(--paper);
+}
+
+/* the brand pattern behind the header and hero, fading into the page */
+.home::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto;
+	z-index: -1;
+	height: 46rem;
+	background: url("/images/brand/pattern-tile.webp") 0 0 / 280px 280px;
+	mask-image: linear-gradient(#000 30%, transparent);
+	-webkit-mask-image: linear-gradient(#000 30%, transparent);
+	opacity: 0.8;
 }
 
 .home :focus-visible {
@@ -288,6 +303,10 @@
 	grid-template-columns: minmax(0, 1fr);
 	gap: 0.75rem;
 	align-items: start;
+}
+
+.demo__mascot {
+	display: none;
 }
 
 .demo__arrow {
@@ -602,16 +621,57 @@
 
 /* ----------------------------------------------------------------- closing */
 
+/* falling leaves and data over the header and hero only */
+.home .home__live {
+	bottom: auto;
+	height: 46rem;
+	mask-image: linear-gradient(#000 55%, transparent);
+	-webkit-mask-image: linear-gradient(#000 55%, transparent);
+}
+
+/* night cover: the sloth hangs on the end side, the text keeps the start side */
 .closing {
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
 	display: grid;
 	gap: 1.5rem;
+	align-content: center;
 	width: calc(100% - 2 * var(--gutter));
 	max-width: calc(var(--max) - 2 * var(--gutter));
+	min-height: 18rem;
 	margin: 0 auto clamp(3rem, 6vw, 4.5rem);
 	padding: clamp(1.75rem, 4vw, 3rem);
+	padding-inline-end: 40%;
 	color: #ffffff;
-	background: var(--cobalt-deep);
+	background: #1a2440 url("/images/brand/cover-dark.webp") 100% 45% / cover no-repeat;
 	border-radius: 1rem;
+}
+
+[dir="rtl"] .closing {
+	background-image: none;
+}
+
+/* the night scene comes alive around the sloth, the text side stays quiet */
+.closing .closing__live {
+	mask-image: linear-gradient(to right, transparent 30%, #000 65%);
+	-webkit-mask-image: linear-gradient(to right, transparent 30%, #000 65%);
+}
+
+[dir="rtl"] .closing .closing__live {
+	mask-image: linear-gradient(to left, transparent 30%, #000 65%);
+	-webkit-mask-image: linear-gradient(to left, transparent 30%, #000 65%);
+}
+
+/* mirror the cover for right-to-left so the sloth stays on the end side */
+[dir="rtl"] .closing::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: url("/images/brand/cover-dark.webp") 100% 45% / cover no-repeat;
+	border-radius: inherit;
+	transform: scaleX(-1);
 }
 
 .home .closing__title {
@@ -696,9 +756,17 @@
 		grid-template-columns: 6rem minmax(0, 1fr);
 	}
 
+}
+
+/* phones and small tablets: the text sits over the cover, so dim it */
+@media (max-width: 47.99rem) {
 	.closing {
-		grid-template-columns: minmax(0, 1fr) auto;
-		align-items: center;
+		padding-inline-end: clamp(1.75rem, 4vw, 3rem);
+		background-image: linear-gradient(rgba(26, 36, 64, 0.82), rgba(26, 36, 64, 0.82)), url("/images/brand/cover-dark.webp");
+	}
+
+	[dir="rtl"] .closing::before {
+		display: none;
 	}
 }
 
@@ -727,6 +795,19 @@
 
 	.demo__arrow {
 		transform: none;
+	}
+
+	/* the sloth sits in the space the short sheet leaves under it, sharing the sheet's cell */
+	.demo__panes > .sheet { grid-area: 1 / 1; }
+	.demo__panes > .demo__arrow { grid-area: 1 / 2; }
+	.demo__panes > .code { grid-area: 1 / 3; }
+
+	.demo__mascot {
+		display: block;
+		grid-area: 1 / 1;
+		align-self: end;
+		justify-self: center;
+		width: clamp(8rem, 11vw, 10rem);
 	}
 
 	[dir="rtl"] .demo__arrow {

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from './LanguageSwitcher'
+import { BrandMark } from './Mascot'
 import './Navbar.css'
 
 const LINKS = [
@@ -16,7 +17,7 @@ const LINKS = [
   ['/support', 'nav.contactUs'],
 ]
 
-const Navbar = () => {
+const Navbar = ({ username }) => {
   const { t } = useTranslation()
   const pathname = usePathname()
 
@@ -28,7 +29,7 @@ const Navbar = () => {
 
   return (
     <header className='app-nav'>
-      <Link href='/' className='app-nav__logo'>{t('nav.logo')}</Link>
+      <Link href='/' className='app-nav__logo'><BrandMark />{t('nav.logo')}</Link>
 
       <nav className='app-nav__links' aria-label={t('nav.home')}>
         {LINKS.map(([href, key]) => (
@@ -38,6 +39,13 @@ const Navbar = () => {
 
       <div className='app-nav__account'>
         <LanguageSwitcher />
+        {username && (
+          <Link href='/account' className='app-nav__account-link' aria-current={pathname === '/account' ? 'page' : undefined}
+            title={t('nav.account')}>
+            <span className='app-nav__avatar' aria-hidden='true'>{username.trim().charAt(0).toUpperCase()}</span>
+            <span className='app-nav__username'>{username}</span>
+          </Link>
+        )}
         <a href='/login' className='app-nav__logout' onClick={logOut}>{t('nav.logout')}</a>
       </div>
     </header>

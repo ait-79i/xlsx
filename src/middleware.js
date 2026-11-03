@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { SESSION_COOKIE, verifyToken } from "@/lib/session";
 import { safeNext } from "@/lib/redirect";
 
-const PROTECTED = ["/excel-to-json", "/json-structure", "/test-api", "/visualizer"];
+const PROTECTED = ["/excel-to-json", "/json-structure", "/test-api", "/visualizer", "/account"];
 
 export async function middleware(request) {
 	const { pathname, search, searchParams } = request.nextUrl;
@@ -27,5 +27,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-	matcher: ["/login", "/excel-to-json/:path*", "/json-structure/:path*", "/test-api/:path*", "/visualizer/:path*"],
+	matcher: ["/login", "/excel-to-json/:path*", "/json-structure/:path*", "/test-api/:path*", "/visualizer/:path*", "/account/:path*"],
 };

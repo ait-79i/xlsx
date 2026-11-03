@@ -13,6 +13,9 @@
 }
 
 .app-nav .app-nav__logo {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
 	font-family: "Bricolage Grotesque", "IBM Plex Sans Arabic", system-ui, sans-serif;
 	font-size: 1.375rem;
 	font-weight: 700;
@@ -62,4 +65,46 @@
 	outline: 2px solid #2f45d8;
 	outline-offset: 2px;
 	border-radius: 2px;
+}
+
+.app-nav .app-nav__account-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.25rem 0.625rem 0.25rem 0.25rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: #172036;
+	text-decoration: none;
+	border: 1px solid #cdd4e0;
+	border-radius: 999px;
+}
+
+.app-nav .app-nav__account-link:hover,
+.app-nav .app-nav__account-link[aria-current="page"] {
+	border-color: #2f45d8;
+}
+
+.app-nav__avatar {
+	display: grid;
+	place-items: center;
+	width: 1.75rem;
+	height: 1.75rem;
+	font-size: 0.8125rem;
+	color: #ffffff;
+	background: #2f45d8;
+	border-radius: 50%;
+}
+
+.app-nav__username {
+	max-width: 10rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+	.app-nav__username {
+		display: none;
+	}
 }

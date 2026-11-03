@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import Sheet from './Sheet'
 import KeysPanel from './KeysPanel'
 import Preview from './Preview'
-import { CheckIcon, CopyIcon, DownloadIcon, FileIcon, UndoIcon } from './icons'
+import Actions from './Actions'
+import MappingsMenu from './MappingsMenu'
+import { FileIcon, UndoIcon } from './icons'
+import Mascot from '../Mascot'
+import LiveScene from '../LiveScene'
 import {
   EXCEL_EXTENSIONS,
   buildJson,
@@ -24,11 +27,19 @@ import {
   renameNode,
   setIncluded,
   ungroupNode,
+  sheetView,
+  setFieldType,
+  typeIssues,
+  mappingData,
+  applyMapping,
+  matchHeaderRow,
+  mappingColumns,
 } from '../../utils/converter'
-import { downloadJsonAsExcel } from '../../utils/excelExport'
+import { wrapOutput } from '../../utils/output'
 import { useSessionState } from '../../utils/useSessionState'
-import { useAppState } from '@/app/app-state'
 import './converter.css'
+
+const DEFAULT_OUTPUT = { root: 'array', rootKey: 'data' }
 
 const SAMPLE = {
   fileName: 'customers-sample.xlsx',
@@ -46,17 +57,6 @@ const SAMPLE = {
   }],
 }
 
-const download = (text, name, type) => {
-  const url = URL.createObjectURL(new Blob([text], { type }))
-  const a = document.createElement('a')
-  a.href = url
-  a.download = name
-  a.click()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
-
-const baseName = (name = 'data') => name.replace(/\.[^.]+$/, '') || 'data'
-
 // ------------------------------------------------------------------ empty state
 
 const OpenFile = ({ onFile, onSample, error, reading }) => {
@@ -64,8 +64,10 @@ const OpenFile = ({ onFile, onSample, error, reading }) => {
   const input = useRef(null)
   return (
     <section className="cv-open">
+      <LiveScene count={12} seed={2} />
       <div className="cv-open__grid" aria-hidden="true" />
       <div className="cv-open__body">
+        <Mascot pose="empty" motion="peek" className="cv-open__mascot cv-open__mascot--wide" />
         <h1 className="cv-open__title">{t('converter.empty.title')}</h1>
         <p className="cv-open__text">{t('converter.empty.text')}</p>
         <div className="cv-open__actions">
@@ -95,56 +97,7 @@ const OpenFile = ({ onFile, onSample, error, reading }) => {
   )
 }
 
-// ------------------------------------------------------------------ actions
-
-export const Actions = ({ json, fileName, disabled }) => {
-  const { t } = useTranslation()
-  const { setBodyRequestData, setVisualData } = useAppState()
-  const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    if (!copied) return
-    const timer = setTimeout(() => setCopied(false), 2000)
-    return () => clearTimeout(timer)
-  }, [copied])
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(JSON.stringify(json, null, 2))
-      setCopied(true)
-    } catch {
-      setCopied(false)
-    }
-  }
-
-  return (
-    <div className="cv-actions">
-      <button type="button" className="cv-btn" onClick={copy} disabled={disabled} aria-live="polite">
-        {copied ? <CheckIcon /> : <CopyIcon />}
-        {copied ? t('converter.actions.copied') : t('converter.actions.copy')}
-      </button>
-      <button type="button" className="cv-btn cv-btn--primary" disabled={disabled}
-        onClick={() => download(JSON.stringify(json, null, 2), `${baseName(fileName)}.json`, 'application/json')}>
-        <DownloadIcon />{t('converter.actions.downloadJson')}
-      </button>
-      <button type="button" className="cv-btn" disabled={disabled}
-        onClick={() => downloadJsonAsExcel(json, `${baseName(fileName)}-json.xlsx`)}>
-        <DownloadIcon />{t('converter.actions.downloadExcel')}
-      </button>
-      <span className="cv-actions__sep" aria-hidden="true" />
-      <Link href="/test-api" className={`cv-btn cv-btn--quiet${disabled ? ' is-disabled' : ''}`}
-        aria-disabled={disabled || undefined}
-        onClick={(e) => (disabled ? e.preventDefault() : setBodyRequestData(json))}>
-        {t('converter.actions.send')}
-      </Link>
-      <Link href="/visualizer" className={`cv-btn cv-btn--quiet${disabled ? ' is-disabled' : ''}`}
-        aria-disabled={disabled || undefined}
-        onClick={(e) => (disabled ? e.preventDefault() : setVisualData(json))}>
-        {t('converter.actions.visualize')}
-      </Link>
-    </div>
-  )
-}
+export { Actions }
 
 // ------------------------------------------------------------------ page
 
@@ -159,27 +112,37 @@ const Converter = () => {
   const [notice, setNotice] = useState('')
   const [reading, setReading] = useState('')
   const [dragging, setDragging] = useState(false)
+  const [applied, setApplied] = useState(null) // report of the last saved structure applied
   const dragDepth = useRef(0)
 
-  const sheet = work?.sheets[work.active]
+  const stored = work?.sheets[work.active]
+  const sheet = useMemo(() => (stored ? sheetView(stored) : null), [stored])
   const shape = work?.shapes[work.active]
   const emptyCells = work?.emptyCells ?? 'null'
+  const output = work?.output ?? DEFAULT_OUTPUT
 
   const json = useMemo(
     () => (sheet && shape ? buildJson(sheet.rows, shape, { emptyCells }) : []),
     [sheet, shape, emptyCells]
   )
+  const delivered = useMemo(() => wrapOutput(json, output), [json, output])
+  const issues = useMemo(
+    () => (sheet && shape ? typeIssues((field) => sheet.rows.map((r) => r[field.source]), shape) : new Map()),
+    [sheet, shape]
+  )
   const fields = useMemo(() => (shape ? fieldsBySource(shape) : new Map()), [shape])
   const hasFields = shape ? includedCount(shape) > 0 : false
 
   const load = useCallback((fileName, sheets) => {
-    const first = Math.max(0, sheets.findIndex((s) => s.rows.length > 0))
+    const views = sheets.map(sheetView)
+    const first = Math.max(0, views.findIndex((v) => v.rowCount > 0))
     setWork({
       fileName,
       sheets,
       active: first,
-      shapes: Object.fromEntries(sheets.map((s, i) => [i, initialShape(s.columns)])),
+      shapes: Object.fromEntries(views.map((v, i) => [i, initialShape(v.columns)])),
       emptyCells: 'null',
+      output: DEFAULT_OUTPUT,
     })
     setHistory([])
     setSelected(new Set())
@@ -206,10 +169,10 @@ const Converter = () => {
 
   // ---- structure edits (each one can be undone)
   const commit = useCallback((next) => {
-    setHistory((h) => [...h.slice(-49), { sheet: work.active, shape }])
+    setHistory((h) => [...h.slice(-49), { sheet: work.active, shape, headerRow: sheet.headerRow }])
     setWork((w) => ({ ...w, shapes: { ...w.shapes, [w.active]: next } }))
     setNotice('')
-  }, [work?.active, shape, setWork])
+  }, [work?.active, shape, sheet?.headerRow, setWork])
 
   const errorText = (code) => t(`converter.errors.${code}`)
 
@@ -241,6 +204,10 @@ const Converter = () => {
       if (r.nodes !== shape) commit(r.nodes)
     },
     setInclude: (ids, include) => commit(setIncluded(shape, ids, include)),
+    setType: (id, type) => {
+      const r = setFieldType(shape, id, type)
+      if (!r.error) commit(r.nodes)
+    },
     concat: (ids, options) => {
       const r = concatNodes(shape, ids, options)
       if (r.error) return errorText(r.error)
@@ -263,7 +230,12 @@ const Converter = () => {
   const undo = useCallback(() => {
     const last = history[history.length - 1]
     if (!last) return
-    setWork((w) => ({ ...w, active: last.sheet, shapes: { ...w.shapes, [last.sheet]: last.shape } }))
+    setWork((w) => ({
+      ...w,
+      active: last.sheet,
+      shapes: { ...w.shapes, [last.sheet]: last.shape },
+      sheets: w.sheets.map((sh, i) => (i === last.sheet && sh.matrix ? { ...sh, headerRow: last.headerRow } : sh)),
+    }))
     setHistory(history.slice(0, -1))
     setSelected(new Set())
   }, [history, setWork])
@@ -285,6 +257,34 @@ const Converter = () => {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [undo])
+
+  // the headers are in another row: the columns change, so the keys start again from them
+  const changeHeaderRow = (row) => {
+    const columns = sheetView({ ...stored, headerRow: row }).columns
+    setHistory((h) => [...h.slice(-49), { sheet: work.active, shape, headerRow: sheet.headerRow }])
+    setWork((w) => ({
+      ...w,
+      sheets: w.sheets.map((sh, i) => (i === w.active ? { ...sh, headerRow: row } : sh)),
+      shapes: { ...w.shapes, [w.active]: initialShape(columns) },
+    }))
+    setSelected(new Set())
+  }
+
+  const applySaved = (data, name) => {
+    // the file may have its headers in another row than the one shown: use the row that matches best
+    const row = matchHeaderRow(stored, mappingColumns(data))
+    const target = row !== null && row !== sheet.headerRow ? sheetView({ ...stored, headerRow: row }) : sheet
+    const { nodes, missing, added } = applyMapping(data, target.columns)
+    commit(nodes)
+    setWork((w) => ({
+      ...w,
+      sheets: w.sheets.map((sh, i) => (i === w.active && sh.matrix ? { ...sh, headerRow: target.headerRow } : sh)),
+      emptyCells: data.options?.emptyCells ?? w.emptyCells,
+      output: data.options?.output ?? w.output,
+    }))
+    setSelected(new Set())
+    setApplied({ name, missing, added })
+  }
 
   const changeSheet = (i) => {
     setWork((w) => ({ ...w, active: i }))
@@ -336,7 +336,7 @@ const Converter = () => {
               <div className="cv-file__text">
                 <h1 className="cv-file__name" dir="auto">{work.fileName}</h1>
                 <p className="cv-file__meta">
-                  {t('converter.file.rows', { count: sheet.rows.length })}, {t('converter.file.columns', { count: sheet.columns.length })}
+                  {t('converter.file.rows', { count: sheet.rowCount })}, {t('converter.file.columns', { count: sheet.columns.length })}
                 </p>
               </div>
               <button type="button" className="cv-link" onClick={() => fileInput.current?.click()}>
@@ -357,10 +357,28 @@ const Converter = () => {
               <button type="button" className="cv-btn cv-btn--quiet" onClick={reset} disabled={sheet.columns.length === 0}>
                 {t('converter.file.reset')}
               </button>
+              <MappingsMenu
+                kind="sheet"
+                defaultName={work.fileName.replace(/\.[^.]+$/, '')}
+                disabled={sheet.columns.length === 0}
+                getData={() => mappingData(shape, sheet.columns, { emptyCells, output })}
+                onApply={applySaved}
+              />
             </div>
 
-            <Actions json={json} fileName={work.fileName} disabled={!hasFields || json.length === 0} />
+            <Actions json={delivered} items={json} fileName={work.fileName} disabled={!hasFields || json.length === 0} />
           </header>
+
+          {applied && (
+            <div className="cv-banner cv-banner--ok" role="status">
+              <span>
+                {t('mappings.applied', { name: applied.name })}
+                {applied.missing.length > 0 && <> {t('mappings.missing', { count: applied.missing.length, names: applied.missing.join(', ') })}</>}
+                {applied.added.length > 0 && <> {t('mappings.added', { count: applied.added.length, names: applied.added.join(', ') })}</>}
+              </span>
+              <button type="button" className="cv-link" onClick={() => setApplied(null)}>{t('mappings.dismiss')}</button>
+            </div>
+          )}
 
           {(error || reading) && (
             <p className={error ? 'cv-banner cv-banner--error' : 'cv-banner'} role={error ? 'alert' : 'status'}>
@@ -372,16 +390,18 @@ const Converter = () => {
             ? <>
               <p className="cv-banner">{t('converter.errors.emptySheet')}</p>
               <Sheet sheet={sheet} fields={fields} selected={selected} onToggle={toggle}
-                sheets={work.sheets} active={work.active} onSheetChange={changeSheet} />
+                sheets={work.sheets} active={work.active} onSheetChange={changeSheet}
+                headerRows={stored.matrix?.length ?? 0} onHeaderRowChange={changeHeaderRow} />
             </>
             : <div className="cv-work">
               <Sheet sheet={sheet} fields={fields} selected={selected} onToggle={toggle}
-                sheets={work.sheets} active={work.active} onSheetChange={changeSheet} />
+                sheets={work.sheets} active={work.active} onSheetChange={changeSheet}
+                headerRows={stored.matrix?.length ?? 0} onHeaderRowChange={changeHeaderRow} />
 
               <div className="cv-lower">
                 <div className="cv-lower__keys">
                   {notice && <p className="cv-banner cv-banner--error" role="alert">{notice}</p>}
-                  <KeysPanel shape={shape} selected={selected} setSelected={setSelected} actions={actions}
+                  <KeysPanel shape={shape} selected={selected} setSelected={setSelected} actions={actions} issues={issues}
                     sample={(parts) => sheet.rows.slice(0, 3).map((row) => parts.map((p) => row[p.source]))}
                     sourceInfo={(node) => node.kind === 'field' && {
                       label: sheet.columns[node.source]?.letter,
@@ -392,6 +412,10 @@ const Converter = () => {
                   json={json}
                   emptyCells={emptyCells}
                   setEmptyCells={(v) => setWork((w) => ({ ...w, emptyCells: v }))}
+                  output={output}
+                  setOutput={(o) => setWork((w) => ({ ...w, output: o }))}
+                  delivered={delivered}
+                  tableName={sheet.name}
                   view={view}
                   setView={setView}
                   hasFields={hasFields}

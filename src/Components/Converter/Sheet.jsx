@@ -11,7 +11,7 @@ const display = (v) => (v === null || v === undefined ? '' : String(v))
  * The spreadsheet, with an extra header row showing the JSON key every column ends up under.
  * Ticking a column header selects its key in the structure.
  */
-const Sheet = ({ sheet, fields, selected, onToggle, sheets, active, onSheetChange }) => {
+const Sheet = ({ sheet, fields, selected, onToggle, sheets, active, onSheetChange, headerRows = 0, onHeaderRowChange }) => {
   const { t } = useTranslation()
   const [limit, setLimit] = useState(PAGE)
   const rows = sheet.rows.slice(0, limit)
@@ -47,7 +47,7 @@ const Sheet = ({ sheet, fields, selected, onToggle, sheets, active, onSheetChang
               ))}
             </tr>
             <tr>
-              <th className="cv-sheet__rownum" aria-hidden="true">1</th>
+              <th className="cv-sheet__rownum" aria-hidden="true">{sheet.headerRow + 1}</th>
               {sheet.columns.map((col, i) => {
                 const field = fields.get(i)
                 return (
@@ -70,7 +70,7 @@ const Sheet = ({ sheet, fields, selected, onToggle, sheets, active, onSheetChang
           <tbody>
             {rows.map((row, r) => (
               <tr key={r}>
-                <th className="cv-sheet__rownum" scope="row">{r + 2}</th>
+                <th className="cv-sheet__rownum" scope="row">{sheet.headerRow + r + 2}</th>
                 {row.map((cell, i) => (
                   <td key={i}
                     className={[isPicked(i) && 'is-picked', fields.get(i)?.include === false && 'is-out', typeof cell === 'number' && 'is-num'].filter(Boolean).join(' ') || undefined}>
@@ -93,12 +93,22 @@ const Sheet = ({ sheet, fields, selected, onToggle, sheets, active, onSheetChang
               aria-selected={i === active}
               className="cv-sheet__tab"
               onClick={() => { setLimit(PAGE); onSheetChange(i) }}
-              title={t('converter.file.rows', { count: s.rows.length })}
+              title={t('converter.file.rows', { count: s.rows ? s.rows.length : Math.max(0, (s.matrix?.length ?? 1) - (s.headerRow ?? 0) - 1) })}
             >
               {s.name}
             </button>
           ))}
         </div>
+        {headerRows > 1 && onHeaderRowChange && (
+          <label className="cv-sheet__header-row">
+            <span>{t('converter.sheet.headerRow')}</span>
+            <select className="cv-select" value={sheet.headerRow} onChange={(e) => onHeaderRowChange(Number(e.target.value))}>
+              {Array.from({ length: Math.min(headerRows - 1, 20) }, (_, i) => (
+                <option key={i} value={i}>{t('converter.sheet.rowNumber', { row: i + 1 })}</option>
+              ))}
+            </select>
+          </label>
+        )}
         <div className="cv-sheet__count">
           {sheet.rows.length > rows.length && (
             <>

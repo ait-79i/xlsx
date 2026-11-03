@@ -4,7 +4,7 @@ import React, { useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CaretIcon, ConcatIcon, DownIcon, EyeIcon, OutIcon, PencilIcon, SplitIcon, UngroupIcon, UpIcon } from './icons'
 import ConcatDialog from './ConcatDialog'
-import { findNode, suggestConcatKey } from '../../utils/converter'
+import { VALUE_TYPES, findNode, suggestConcatKey } from '../../utils/converter'
 
 const RenameInput = ({ initial, onSave, onCancel, label }) => {
   const [value, setValue] = useState(initial)
@@ -51,7 +51,8 @@ const IconButton = ({ label, onClick, disabled, children }) => (
 
 const KeyItem = ({ node, index, count, parent, path, ctx }) => {
   const { t } = useTranslation()
-  const { selected, toggle, editing, setEditing, rename, move, moveOut, ungroup, setInclude, sourceInfo, folded, fold, editConcat, split } = ctx
+  const { selected, toggle, editing, setEditing, rename, move, moveOut, ungroup, setInclude, sourceInfo, folded, fold, editConcat, split, setType, issues } = ctx
+  const issue = issues?.get(node.id)
   const isGroup = node.kind === 'group'
   const isConcat = node.kind === 'concat'
   const sep = isConcat ? (node.separator === '' ? ' + ' : ` ${node.separator.replace(/ /g, '␣')} `) : ''
@@ -113,6 +114,20 @@ const KeyItem = ({ node, index, count, parent, path, ctx }) => {
           </span>
         )}
 
+        {node.kind === 'field' && setType && (
+          <select
+            className={`cv-key__type${(node.type ?? 'auto') !== 'auto' ? ' is-set' : ''}${issue ? ' has-issue' : ''}`}
+            value={node.type ?? 'auto'}
+            aria-label={t('converter.types.label', { key: node.key })}
+            title={issue
+              ? t('converter.types.issue', { count: issue, type: t(`converter.types.${node.type}`) })
+              : t('converter.types.label', { key: node.key })}
+            onChange={(e) => setType(node.id, e.target.value)}
+          >
+            {VALUE_TYPES.map((type) => <option key={type} value={type}>{t(`converter.types.${type}`)}</option>)}
+          </select>
+        )}
+
         <span className="cv-key__tools">
           {!isGroup && (
             <IconButton
@@ -154,7 +169,7 @@ const KeyItem = ({ node, index, count, parent, path, ctx }) => {
  * The structure of the output: rename, group, reorder and leave out keys.
  * sourceInfo(node, path) -> { label, title, changed } describes where a key comes from.
  */
-const KeysPanel = ({ shape, sourceInfo, selected, setSelected, actions, title, help, toolbar, sample }) => {
+const KeysPanel = ({ shape, sourceInfo, selected, setSelected, actions, title, help, toolbar, sample, issues }) => {
   const { t } = useTranslation()
   const [editing, setEditing] = useState(null)
   const [folded, setFolded] = useState(() => new Set())
@@ -228,7 +243,7 @@ const KeysPanel = ({ shape, sourceInfo, selected, setSelected, actions, title, h
     else { setGroupKey(''); setSelected(new Set()) }
   }
 
-  const ctx = { selected, toggle, editing, setEditing, rename, sourceInfo, folded, fold, editConcat, ...actions }
+  const ctx = { selected, toggle, editing, setEditing, rename, sourceInfo, folded, fold, editConcat, issues, ...actions }
   const count = selected.size
 
   return (

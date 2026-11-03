@@ -2,7 +2,7 @@
 // (see converter.js). Here a field's `source` is the path of the value in the original items,
 // e.g. ["customer", "city"], and groups are inferred from the nested objects of the input.
 import { isPlainObject } from "./jsonGraph";
-import { concatValues } from "./converter";
+import { concatValues, convertValue, newId, walk } from "./converter";
 
 /**
  * Input JSON -> the list of objects to reshape.
@@ -82,10 +82,11 @@ export function reshape(items, shape, { missing = "omit" } = {}) {
 			const value = node.kind === "concat"
 				? concatValues(node.parts.map((p) => getPath(item, p.source)), node) ?? undefined
 				: getPath(item, node.source);
-			if (value === undefined) {
+			const typed = value === undefined ? undefined : convertValue(value, node.type).value;
+			if (typed === undefined) {
 				if (missing === "null") out[node.key] = null;
 			} else {
-				out[node.key] = value;
+				out[node.key] = typed;
 			}
 		}
 		return out;
@@ -108,4 +109,33 @@ export function presence(items, shape) {
 	};
 	visit(shape);
 	return counts;
+}
+
+const dotted = (path) => path.join("\u0000");
+
+/**
+ * Applies a saved structure to newly loaded JSON: the saved keys are kept as they are,
+ * and the keys of the new data that the structure does not mention are added at the end.
+ * @returns {{ nodes, added: string[] }} added: dotted paths of the new keys
+ */
+export function applyJsonMapping(data, inferred) {
+	const used = [];
+	const collect = (list) => list.forEach((node) => {
+		if (node.kind === "group") collect(node.children);
+		else if (node.kind === "concat") node.parts.forEach((p) => used.push(dotted(p.source)));
+		else used.push(dotted(node.source));
+	});
+	collect(data.shape);
+	const covered = (path) => used.some((u) => u === dotted(path) || u.startsWith(dotted(path) + "\u0000") || dotted(path).startsWith(u + "\u0000"));
+
+	const nodes = JSON.parse(JSON.stringify(data.shape));
+	const added = [];
+	walk(inferred, (node) => {
+		if (node.kind !== "field" || covered(node.source)) return;
+		added.push(node.source.join("."));
+		let key = node.key;
+		for (let n = 2; nodes.some((x) => x.key === key); n++) key = `${node.key}_${n}`;
+		nodes.push({ ...node, id: newId("f"), key });
+	});
+	return { nodes, added };
 }

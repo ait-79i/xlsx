@@ -5,6 +5,8 @@ import JsonGraph from '../Flow/JsonGraph'
 import SchemaDiagram from '../Flow/SchemaDiagram'
 import DataSourceBar from './DataSourceBar'
 import ExportPanel from './ExportPanel'
+import Mascot from '../Mascot'
+import LiveScene from '../LiveScene'
 import { EXAMPLE_SQL } from './examples'
 import { applySchemaOverrides, inferSchema } from '../../utils/schemaInference'
 import { parseSqlSchema } from '../../utils/sqlParser'
@@ -74,8 +76,12 @@ const VisualizerPage = ({ data, setData }) => {
       {tab === 'graph' && (
         hasData(data)
           ? <JsonGraph data={data} />
-          : <div className="alert alert-secondary">
-            <Trans i18nKey="visualizer.emptyGraph" components={{ strong: <strong /> }} />
+          : <div className="viz-empty">
+            <LiveScene count={10} seed={4} />
+            <Mascot pose="empty" motion="peek" className="viz-empty__mascot" />
+            <p className="viz-empty__text">
+              <Trans i18nKey="visualizer.emptyGraph" components={{ strong: <strong /> }} />
+            </p>
           </div>
       )}
 

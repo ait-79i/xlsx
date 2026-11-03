@@ -19,7 +19,8 @@
 		"contactUs": "Contact",
 		"logout": "Déconnexion",
 		"signIn": "Connexion",
-		"signUp": "Inscription"
+		"signUp": "Inscription",
+		"account": "Votre compte"
 	},
 	"home": {
 		"title": "Excel → JSON",
@@ -113,7 +114,8 @@
 			"noServerResponse": "Le serveur ne répond pas. Vérifiez votre connexion et réessayez.",
 			"missingCredentials": "Saisissez votre e-mail et votre mot de passe.",
 			"unauthorized": "E-mail ou mot de passe incorrect.",
-			"loginFailed": "La connexion a échoué"
+			"loginFailed": "La connexion a échoué",
+			"tooManyAttempts": "Trop de tentatives. Réessayez dans {{minutes}} min."
 		}
 	},
 	"dropzone": {
@@ -296,7 +298,9 @@
 			"notIncluded": "exclue",
 			"showMore": "Afficher plus de lignes",
 			"shown": "{{shown}} lignes affichées sur {{total}}",
-			"selectColumn": "Sélectionner la colonne {{name}}"
+			"selectColumn": "Sélectionner la colonne {{name}}",
+			"headerRow": "En-têtes en",
+			"rowNumber": "ligne {{row}}"
 		},
 		"keys": {
 			"title": "Clés JSON",
@@ -335,7 +339,11 @@
 			"emptyEmpty": "Texte vide",
 			"firstItems": "Les {{shown}} premiers objets sur {{total}}. La copie et le téléchargement les contiennent tous.",
 			"sample": "Construit à partir des {{count}} premiers objets.",
-			"nothing": "Toutes les colonnes sont exclues. Incluez-en au moins une pour voir le résultat."
+			"nothing": "Toutes les colonnes sont exclues. Incluez-en au moins une pour voir le résultat.",
+			"root": "Résultat sous forme de",
+			"rootArray": "Liste [ … ]",
+			"rootObject": "Objet { clé: [ … ] }",
+			"rootKey": "Clé contenant la liste"
 		},
 		"actions": {
 			"copy": "Copier le JSON",
@@ -343,7 +351,16 @@
 			"downloadJson": "Télécharger le JSON",
 			"downloadExcel": "Télécharger en Excel",
 			"send": "Envoyer à une API",
-			"visualize": "Ouvrir dans le visualiseur"
+			"visualize": "Ouvrir dans le visualiseur",
+			"otherFormats": "Autres formats",
+			"formats": {
+				"jsonl": "JSON Lines (.jsonl)",
+				"jsonlHint": "Un objet par ligne, pour les imports en masse et les outils de logs",
+				"csv": "CSV (.csv)",
+				"csvHint": "Les clés imbriquées deviennent des colonnes adresse.ville",
+				"excel": "Excel (.xlsx)",
+				"excelHint": "Une ligne par objet, clés imbriquées aplaties"
+			}
 		},
 		"concat": {
 			"open": "Concaténer…",
@@ -375,6 +392,17 @@
 			"split": "Séparer {{key}} en ses clés d’origine",
 			"partsTitle": "{{parts}}, joints par {{separator}}. Cliquez pour modifier.",
 			"keyEdit": "Nom de la clé"
+		},
+		"types": {
+			"label": "Type de {{key}}",
+			"issue_one": "{{count}} valeur ne peut pas être lue comme {{type}} : elle devient null",
+			"issue_other": "{{count}} valeurs ne peuvent pas être lues comme {{type}} : elles deviennent null",
+			"auto": "tel quel",
+			"text": "texte",
+			"number": "nombre",
+			"integer": "entier",
+			"boolean": "vrai/faux",
+			"date": "date"
 		}
 	},
 	"apiTester": {
@@ -494,6 +522,51 @@
 			"unauthorized": {
 				"title": "Votre session a expiré",
 				"text": "Reconnectez-vous pour continuer."
+			},
+			"tooManyRequests": {
+				"title": "Trop de requêtes via le serveur XLSX",
+				"text": "Patientez une minute avant d’en envoyer d’autres, ou envoyez depuis ce navigateur."
+			}
+		},
+		"batch": {
+			"switch_one": "Une requête par élément ({{count}} requête)",
+			"switch_other": "Une requête par élément ({{count}} requêtes)",
+			"switchHint": "Chaque élément du tableau devient le corps de sa propre requête. Utilisez {{id}} dans l’URL pour y placer une valeur de l’élément.",
+			"concurrency": "En même temps",
+			"sendAll_one": "Envoyer {{count}}",
+			"sendAll_other": "Envoyer {{count}}",
+			"placeholders": "{{names}} remplis à partir de chaque élément.",
+			"placeholdersOff": "Les marqueurs comme {{id}} ne sont remplis qu’en envoyant une requête par élément.",
+			"running": "requêtes envoyées",
+			"stopped": "Arrêté",
+			"finished": "Terminé",
+			"ok_one": "{{count}} réussie",
+			"ok_other": "{{count}} réussies",
+			"failed_one": "{{count}} en échec",
+			"failed_other": "{{count}} en échec",
+			"progress": "Requêtes envoyées",
+			"stop": "Arrêter",
+			"retry_one": "Renvoyer celle en échec",
+			"retry_other": "Renvoyer les {{count}} en échec",
+			"report": "Télécharger le rapport",
+			"onlyFailed": "Échecs seulement",
+			"colStatus": "Statut",
+			"colUrl": "URL et réponse",
+			"colTime": "Durée",
+			"notSent": "non envoyée",
+			"noFailed": "Aucun échec.",
+			"starting": "Démarrage…",
+			"errors": {
+				"network": "pas de réponse",
+				"aborted": "arrêtée",
+				"timeout": "délai dépassé",
+				"privateAddress": "adresse privée",
+				"dnsFailed": "hôte introuvable",
+				"unreachable": "injoignable",
+				"invalidUrl": "URL invalide",
+				"invalidRequest": "requête invalide",
+				"tooManyRequests": "trop de requêtes",
+				"unauthorized": "déconnecté"
 			}
 		}
 	},
@@ -517,7 +590,8 @@
 		"views": {
 			"result": "Résultat",
 			"original": "Original",
-			"graph": "Graphe"
+			"graph": "Graphe",
+			"tables": "Tables"
 		},
 		"missing": {
 			"label": "Clés absentes",
@@ -539,5 +613,280 @@
 			"notJsonFile": "{{name}} n’est pas un fichier .json. Pour convertir un classeur, utilisez Excel vers JSON."
 		},
 		"keysHelp": "Cochez des clés pour les regrouper sous une nouvelle clé, ou dégroupez un objet imbriqué pour l’aplatir. Cliquez sur une clé pour la renommer."
+	},
+	"mappings": {
+		"button": "Structures enregistrées",
+		"title": "Structures enregistrées",
+		"help": {
+			"sheet": "Enregistrez les clés construites pour les appliquer au fichier du mois prochain. Les colonnes sont retrouvées par leur en-tête.",
+			"json": "Enregistrez les clés construites pour les appliquer à d’autres JSON ayant les mêmes clés."
+		},
+		"name": "Nom de la structure",
+		"save": "Enregistrer",
+		"saved": "Enregistrée sous {{name}}.",
+		"replaceQuestion": "Une structure nommée {{name}} existe. La remplacer ?",
+		"replace": "Remplacer",
+		"savedTitle": "Vos structures",
+		"none": "Rien d’enregistré pour l’instant.",
+		"updated": "Enregistrée le {{date}}",
+		"apply": "Appliquer",
+		"delete": "Supprimer",
+		"deleteNamed": "Supprimer {{name}}",
+		"deleted": "{{name}} supprimée.",
+		"applied": "{{name}} appliquée.",
+		"missing_one": "Absente de ce fichier : {{names}}.",
+		"missing_other": "Absentes de ce fichier ({{count}}) : {{names}}.",
+		"added_one": "Nouvelle colonne ajoutée à la fin : {{names}}.",
+		"added_other": "Nouvelles colonnes ajoutées à la fin ({{count}}) : {{names}}.",
+		"missingKeys_one": "Aucun objet n’a la clé {{names}}.",
+		"missingKeys_other": "Aucun objet n’a ces clés ({{count}}) : {{names}}.",
+		"addedKeys_one": "Nouvelle clé ajoutée à la fin : {{names}}.",
+		"addedKeys_other": "Nouvelles clés ajoutées à la fin ({{count}}) : {{names}}.",
+		"dismiss": "Fermer",
+		"errors": {
+			"load": "Impossible de charger vos structures. Vérifiez votre connexion.",
+			"name": "Donnez un nom à la structure.",
+			"save": "La structure n’a pas pu être enregistrée. Réessayez.",
+			"delete": "La structure n’a pas pu être supprimée. Réessayez.",
+			"tooLarge": "Cette structure est trop volumineuse pour être enregistrée.",
+			"tooMany": "Vous avez 200 éléments enregistrés, le maximum. Supprimez-en d’abord."
+		}
+	},
+	"savedRequests": {
+		"button": "Requêtes enregistrées",
+		"title": "Requêtes enregistrées",
+		"name": "Nom de la requête",
+		"withBody": "Enregistrer aussi le corps",
+		"noAuth": "La méthode, l’URL et les en-têtes sont enregistrés. Les jetons et mots de passe de l’onglet Authentification ne le sont jamais.",
+		"listTitle": "Vos requêtes",
+		"none": "Aucune requête enregistrée.",
+		"open": "Ouvrir",
+		"errors": {
+			"load": "Impossible de charger vos requêtes. Vérifiez votre connexion.",
+			"name": "Donnez un nom à la requête.",
+			"save": "La requête n’a pas pu être enregistrée. Réessayez.",
+			"delete": "La requête n’a pas pu être supprimée. Réessayez.",
+			"tooLarge": "Le corps est trop volumineux. Enregistrez la requête sans son corps.",
+			"tooMany": "Vous avez 200 éléments enregistrés, le maximum. Supprimez-en d’abord."
+		}
+	},
+	"account": {
+		"since": "Membre depuis le {{date}}",
+		"profile": {
+			"title": "Profil",
+			"save": "Enregistrer",
+			"saved": "Profil enregistré."
+		},
+		"password": {
+			"title": "Mot de passe",
+			"text": "Le changer vous déconnecte de vos autres appareils.",
+			"current": "Mot de passe actuel",
+			"new": "Nouveau mot de passe",
+			"save": "Changer le mot de passe",
+			"changed": "Mot de passe changé. Vos autres appareils sont déconnectés."
+		},
+		"saved": {
+			"title": "Enregistré dans votre compte",
+			"mappings": "Structures",
+			"requests": "Requêtes API",
+			"note": "Vos fichiers et vos données ne sont jamais stockés : seulement les structures et requêtes que vous enregistrez.",
+			"emptyStructures": "Aucune structure enregistrée. Créez-en une dans",
+			"emptyRequests": "Aucune requête enregistrée. Enregistrez-en une dans",
+			"loadError": "Impossible de charger votre travail enregistré. Rechargez la page.",
+			"deleteError": "{{name}} n’a pas pu être supprimé. Réessayez."
+		},
+		"delete": {
+			"title": "Supprimer le compte",
+			"text": "Votre compte, {{mappings}} structures et {{requests}} requêtes enregistrées sont supprimés définitivement. C’est irréversible.",
+			"open": "Supprimer mon compte",
+			"password": "Saisissez votre mot de passe pour confirmer",
+			"confirm": "Je comprends que tout est supprimé définitivement.",
+			"submit": "Supprimer le compte"
+		},
+		"errors": {
+			"load": "Impossible de charger votre compte. Rechargez la page.",
+			"failed": "Cela n’a pas fonctionné. Réessayez.",
+			"invalidUsername": "Saisissez un nom d’utilisateur de 60 caractères au plus.",
+			"invalidEmail": "Saisissez une adresse e-mail valide.",
+			"emailTaken": "Un autre compte utilise déjà cet e-mail.",
+			"wrongPassword": "Le mot de passe est incorrect.",
+			"weakPassword": "Utilisez au moins {{min}} caractères.",
+			"tooManyAttempts": "Trop de tentatives. Patientez 15 minutes et réessayez."
+		},
+		"hero": {
+			"text": "Votre compte, en JSON. Modifiez le nom ou l’e-mail directement dedans, puis enregistrez.",
+			"hint": "Cliquez sur une valeur pour la modifier",
+			"clean": "Enregistré",
+			"unsaved": "Modifications non enregistrées",
+			"discard": "Annuler"
+		}
+	},
+	"contact": {
+		"title": "Contactez-nous",
+		"text": "Une question, un bug, une idée pour le convertisseur ? Écrivez-nous, nous répondons par e-mail.",
+		"tips": {
+			"bug": "Pour un bug, indiquez ce que vous avez fait, ce que vous attendiez et ce qui s’est passé. Le type de fichier aide aussi.",
+			"privacy": "Ne collez pas de données personnelles ou confidentielles issues de vos fichiers."
+		},
+		"name": "Votre nom",
+		"email": "Votre e-mail",
+		"topic": "Sujet",
+		"topics": {
+			"question": "Question",
+			"bug": "Bug",
+			"idea": "Idée",
+			"account": "Compte",
+			"other": "Autre"
+		},
+		"message": "Message",
+		"bugPlaceholder": "Qu’avez-vous fait, qu’attendiez-vous, que s’est-il passé ?",
+		"count": "{{count}} / {{max}}",
+		"send": "Envoyer le message",
+		"sending": "Envoi…",
+		"sentTitle": "Message envoyé",
+		"sentText": "Merci. Nous répondons à {{email}}.",
+		"another": "Envoyer un autre message",
+		"errors": {
+			"required": "Ce champ est obligatoire.",
+			"invalidEmail": "Saisissez une adresse e-mail valide.",
+			"messageLength": "Écrivez au moins 10 caractères.",
+			"tooMany": "Trop de messages envoyés. Réessayez dans une heure.",
+			"failed": "Le message n’a pas pu être envoyé. Vérifiez votre connexion et réessayez."
+		}
+	},
+	"dbLoad": {
+		"steps": {
+			"target": "Base de données",
+			"tables": "Tables",
+			"collections": "Collections",
+			"output": "Script ou fichiers"
+		},
+		"groups": {
+			"sql": "SQL",
+			"nosql": "NoSQL et recherche"
+		},
+		"modes": {
+			"label": "Vue des tables",
+			"load": "Charger dans une base",
+			"diagram": "Diagramme",
+			"insert": "Insérer toutes les lignes",
+			"upsert": "Insérer ou mettre à jour (par clé)",
+			"skip": "Insérer seulement les nouvelles (par clé)"
+		},
+		"import": {
+			"button": "Utiliser mes tables (CREATE TABLE)",
+			"title": "Utiliser vos propres tables",
+			"text": "Collez les CREATE TABLE de votre base. Les colonnes sont associées aux données par leur nom ; une table nommée comme une liste des données (lines, order_lines) reçoit une ligne par élément de cette liste.",
+			"openFile": "Ouvrir un fichier .sql",
+			"submit": "Associer les données à ces tables"
+		},
+		"table": {
+			"name": "Table",
+			"rowsFrom": "Une ligne par",
+			"eachItem": "élément",
+			"eachOf": "élément de {{list}}",
+			"remove": "Supprimer cette table",
+			"auto": "Revenir aux tables automatiques",
+			"autoText": "Tables construites à partir des données : les objets imbriqués deviennent des colonnes, les listes d’objets ont leur propre table liée à leur parent. Modifiez ce que vous voulez.",
+			"customText": "Vos tables. Choisissez pour chaque colonne d’où vient sa valeur.",
+			"add": "Ajouter une table",
+			"none": "Ajoutez une table pour choisir ce qu’elle contient.",
+			"preview_one": "Premières lignes ({{count}} ligne au total)",
+			"preview_other": "Premières lignes ({{count}} lignes au total)",
+			"rows_one": "{{count}} ligne",
+			"rows_other": "{{count}} lignes",
+			"columns_one": "{{count}} colonne",
+			"columns_other": "{{count}} colonnes",
+			"autoTextDocs": "Une collection avec chaque élément comme document, objets imbriqués et listes conservés. Ajoutez des collections ou modifiez les champs pour la découper."
+		},
+		"column": {
+			"key": "Clé",
+			"keyTitle": "Clé primaire : sert à mettre à jour ou ignorer les lignes existantes",
+			"keyOf": "{{column}} est une clé",
+			"name": "Colonne",
+			"type": "Type",
+			"typeOf": "Type de {{column}}",
+			"source": "Valeur depuis",
+			"sourceOf": "Valeur de {{column}}",
+			"tools": "Ordre et suppression",
+			"remove": "Supprimer {{column}}",
+			"add": "Ajouter une colonne",
+			"issue_one": "{{count}} valeur non convertible (NULL)",
+			"issue_other": "{{count}} valeurs non convertibles (NULL)"
+		},
+		"source": {
+			"inRow": "Dans la ligne",
+			"inParent": "Dans la ligne parente",
+			"generated": "Généré",
+			"itself": "la valeur elle-même",
+			"row": "Numéro (1, 2, 3…)",
+			"parentRow": "Numéro de la ligne parente",
+			"index": "Position dans sa liste",
+			"const": "Valeur fixe…",
+			"none": "Rien (NULL)",
+			"constPlaceholder": "valeur",
+			"constLabel": "Valeur fixe de {{column}}"
+		},
+		"types": {
+			"integer": "entier",
+			"bigint": "grand entier",
+			"float": "nombre décimal",
+			"decimal": "décimal exact",
+			"boolean": "vrai/faux",
+			"date": "date",
+			"datetime": "date et heure",
+			"string": "texte court",
+			"text": "texte long",
+			"json": "JSON"
+		},
+		"output": {
+			"kind": "À générer",
+			"files": "Fichiers générés",
+			"download": "Télécharger {{name}}",
+			"commands": "Commandes pour importer les fichiers",
+			"truncated": "{{shown}} premières lignes sur {{total}}. La copie et le téléchargement contiennent tout.",
+			"downloadAll_one": "Télécharger {{count}} fichier",
+			"downloadAll_other": "Télécharger les {{count}} fichiers",
+			"sql": {
+				"script": "Script SQL",
+				"scriptHint": "À exécuter dans votre client SQL : tables créées si absentes, puis les lignes.",
+				"files": "Fichiers CSV",
+				"filesHint": "Un fichier par table, avec la commande d’import de votre base. Idéal pour de gros volumes."
+			},
+			"mongo": {
+				"script": "Script mongosh",
+				"scriptHint": "À exécuter avec mongosh : insertMany, ou bulkWrite pour mettre à jour par clé.",
+				"files": "Fichiers pour mongoimport",
+				"filesHint": "Un fichier par collection, avec la commande mongoimport."
+			},
+			"cql": {
+				"script": "Script CQL",
+				"scriptHint": "À exécuter avec cqlsh : tables créées si absentes, lignes par lots.",
+				"files": "Fichiers CSV",
+				"filesHint": "Un fichier par table, avec la commande COPY de cqlsh."
+			},
+			"es": {
+				"script": "Fichier bulk",
+				"scriptHint": "À envoyer à l’API _bulk ; les commandes créent aussi les index avec les types des champs."
+			}
+		},
+		"options": {
+			"mode": "Lignes existantes",
+			"createTables": "Créer les tables si elles n’existent pas",
+			"transaction": "Tout ou rien (transaction)",
+			"batch": "Lignes par instruction"
+		},
+		"namespace": {
+			"schema": "Schéma",
+			"database": "Base",
+			"keyspace": "Keyspace",
+			"optional": "facultatif",
+			"indexPrefix": "Préfixe des index"
+		},
+		"warnings": {
+			"noKey": "Pas de colonne clé dans {{tables}} : leurs lignes sont simplement insérées. Cochez les colonnes clés pour mettre à jour ou ignorer les lignes existantes.",
+			"issues_one": "{{count}} valeur ne peut pas être convertie dans le type de sa colonne et devient NULL. Vérifiez les types à l’étape 2.",
+			"issues_other": "{{count}} valeurs ne peuvent pas être converties dans le type de leur colonne et deviennent NULL. Vérifiez les types à l’étape 2."
+		}
 	}
 }

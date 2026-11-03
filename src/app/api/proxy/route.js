@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { SESSION_COOKIE, verifyToken } from "@/lib/session";
+import { getCurrentUser } from "@/lib/auth";
+import { LIMITS, hit } from "@/lib/rateLimit";
 import { assertPublicHost } from "@/lib/ssrf";
 import { METHODS } from "@/utils/http";
 
@@ -36,8 +36,9 @@ async function readLimited(response) {
 }
 
 export async function POST(request) {
-	const session = await verifyToken((await cookies()).get(SESSION_COOKIE)?.value);
-	if (!session) return fail("unauthorized", 401);
+	const user = await getCurrentUser();
+	if (!user) return fail("unauthorized", 401);
+	if (!hit(`proxy:${user.id}`, LIMITS.proxy).ok) return fail("tooManyRequests", 429);
 
 	let input;
 	try {

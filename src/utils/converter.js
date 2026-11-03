@@ -49,23 +49,86 @@ export function columnNames(headerRow, letters) {
 	});
 }
 
-/** One worksheet -> { name, columns: [{ name, letter }], rows: [[...cells]] } (first row = headers). */
+/**
+ * One worksheet -> { name, letters, matrix, headerRow }: every non blank row, cells already cleaned.
+ * The headers are in matrix[headerRow] (the first row unless the user picks another one).
+ */
 export function readSheet(ws, name) {
 	const ref = ws?.["!ref"];
-	if (!ref) return { name, columns: [], rows: [] };
+	if (!ref) return { name, letters: [], matrix: [], headerRow: 0 };
 	const range = XLSX.utils.decode_range(ref);
-	const matrix = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null, blankrows: false, raw: true });
-	if (matrix.length === 0) return { name, columns: [], rows: [] };
+	const raw = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null, blankrows: false, raw: true });
+	if (raw.length === 0) return { name, letters: [], matrix: [], headerRow: 0 };
 
-	const width = Math.max(...matrix.map((r) => r.length));
+	const width = Math.max(...raw.map((r) => r.length));
 	const letters = Array.from({ length: width }, (_, i) => XLSX.utils.encode_col(range.s.c + i));
-	const names = columnNames(matrix[0], letters);
-	const rows = matrix
-		.slice(1)
+	const matrix = raw
 		.map((r) => letters.map((_, i) => cellValue(r[i])))
 		.filter((r) => r.some((v) => v !== null));
+	return { name, letters, matrix, headerRow: guessHeaderRow(matrix) };
+}
 
-	return { name, columns: names.map((n, i) => ({ name: n, letter: letters[i] })), rows };
+const isLabel = (v) => typeof v === "string" && v.trim() !== "";
+
+/**
+ * Row that most likely holds the headers: the first of the first 10 rows where most cells are text,
+ * which skips titles and notes written above a table. 0 when nothing looks better.
+ */
+export function guessHeaderRow(matrix) {
+	if (matrix.length < 2) return 0;
+	const width = Math.max(...matrix.map((r) => r.filter((v) => v !== null).length));
+	if (width < 2) return 0;
+	const limit = Math.min(10, matrix.length - 1);
+	for (let i = 0; i < limit; i++) {
+		const labels = matrix[i].filter(isLabel).length;
+		if (labels >= 2 && labels >= Math.ceil(width * 0.6)) return i;
+	}
+	return 0;
+}
+
+/** Row whose cells match the most of the given column names (for a saved structure), or null. */
+export function matchHeaderRow(sheet, names) {
+	if (!sheet.matrix) return null;
+	const wanted = new Set(names);
+	let best = null;
+	let bestScore = 0;
+	sheet.matrix.slice(0, 20).forEach((row, i) => {
+		const score = columnNames(row, sheet.letters).filter((n) => wanted.has(n)).length;
+		if (score > bestScore) {
+			best = i;
+			bestScore = score;
+		}
+	});
+	return best;
+}
+
+/** Column names referenced by a saved structure. */
+export function mappingColumns(data) {
+	const names = [];
+	const visit = (node) => {
+		if (node.kind === "group") node.children.forEach(visit);
+		else if (node.kind === "concat") node.parts.forEach(visit);
+		else if (node.column !== undefined) names.push(node.column);
+	};
+	data.shape.forEach(visit);
+	return names;
+}
+
+/** Stored sheet -> { name, columns: [{ name, letter }], rows, headerRow, rowCount } using its header row. */
+export function sheetView(sheet) {
+	// sheets stored before the header row could be chosen
+	if (!sheet.matrix) return { ...sheet, headerRow: 0, rowCount: sheet.rows.length };
+	const { name, letters, matrix, headerRow = 0 } = sheet;
+	if (matrix.length === 0) return { name, columns: [], rows: [], headerRow: 0, rowCount: 0 };
+	const header = Math.min(headerRow, matrix.length - 1);
+	const names = columnNames(matrix[header], letters);
+	return {
+		name,
+		headerRow: header,
+		columns: names.map((n, i) => ({ name: n, letter: letters[i] })),
+		rows: matrix.slice(header + 1),
+		rowCount: matrix.length - header - 1,
+	};
 }
 
 /** ArrayBuffer of an Excel / CSV / ODS file -> every sheet of the workbook. */
@@ -81,7 +144,7 @@ export const newId = (prefix = "n") => `${prefix}${Date.now().toString(36)}${(co
 
 /** The default shape: one key per column, in the sheet order. */
 export const initialShape = (columns) =>
-	columns.map((c, i) => ({ id: `c${i}`, kind: "field", source: i, key: c.name, include: true }));
+	columns.map((c, i) => ({ id: `c${i}`, kind: "field", source: i, key: c.name, include: true, type: "auto" }));
 
 /** Calls fn(node, parentId, index, siblings) for every node, depth first. */
 export function walk(nodes, fn, parentId = null) {
@@ -272,7 +335,7 @@ export function buildJson(rows, shape, { emptyCells = "null" } = {}) {
 			if (!node.include) continue;
 			const value = node.kind === "concat"
 				? concatValues(node.parts.map((p) => row[p.source]), node)
-				: row[node.source] ?? null;
+				: convertValue(row[node.source] ?? null, node.type).value;
 			if (value === null) {
 				if (emptyCells === "omit") continue;
 				obj[node.key] = emptyCells === "empty" ? "" : null;
@@ -383,4 +446,148 @@ export function splitConcat(nodes, id) {
 			list.flatMap((node) => (node.id === id ? node.parts : [node]))
 		)
 	);
+}
+
+// ------------------------------------------------------------------ value types
+
+// "auto" keeps the value as read from the sheet (numbers stay numbers, text stays text)
+export const VALUE_TYPES = ["auto", "text", "number", "integer", "boolean", "date"];
+
+const TRUE_WORDS = ["true", "yes", "y", "oui", "o", "vrai", "1", "x", "on"];
+const FALSE_WORDS = ["false", "no", "n", "non", "faux", "0", "off"];
+
+const toNumber = (v) => {
+	if (typeof v === "number") return v;
+	if (typeof v === "boolean") return v ? 1 : 0;
+	let text = String(v).trim().replace(/[\s  ]/g, "");
+	// 1.234,56 or 1234,56: comma as the decimal mark
+	if (/^-?[\d.]*,\d+$/.test(text)) text = text.replace(/\./g, "").replace(",", ".");
+	// 1,234.56: comma between thousands
+	else text = text.replace(/,(?=\d{3}(\D|$))/g, "");
+	if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(text)) return NaN;
+	return Number(text);
+};
+
+// Excel stores dates as days since 1899-12-30
+const fromSerial = (n) => {
+	const d = new Date(Math.round((n - 25569) * 86400000));
+	return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+};
+
+const toDate = (v) => {
+	if (typeof v === "number") return v > 0 && v < 2958466 ? fromSerial(v) : null;
+	const text = String(v).trim();
+	if (/^\d{4}-\d{2}-\d{2}([T ][\d:.]+Z?)?$/.test(text)) return text.slice(0, 10);
+	// day first, as written in most countries: 31/12/2024, 31.12.2024, 31-12-2024
+	const m = /^(\d{1,2})[/.-](\d{1,2})[/.-](\d{2}|\d{4})$/.exec(text);
+	if (m) {
+		const [, d, mo, y] = m.map(Number);
+		const year = y < 100 ? 2000 + y : y;
+		if (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) return `${year}-${pad(mo)}-${pad(d)}`;
+	}
+	return null;
+};
+
+/**
+ * Converts a cell to the chosen type.
+ * @returns {{ value, ok: boolean }} ok is false when the value could not be converted (it becomes null)
+ */
+export function convertValue(v, type = "auto") {
+	if (v === null || v === undefined || !type || type === "auto") return { value: v ?? null, ok: true };
+	switch (type) {
+		case "text":
+			return { value: typeof v === "object" ? JSON.stringify(v) : String(v), ok: true };
+		case "number":
+		case "integer": {
+			const n = toNumber(v);
+			if (Number.isNaN(n) || (type === "integer" && !Number.isInteger(n))) return { value: null, ok: false };
+			return { value: n, ok: true };
+		}
+		case "boolean": {
+			if (typeof v === "boolean") return { value: v, ok: true };
+			const word = String(v).trim().toLowerCase();
+			if (TRUE_WORDS.includes(word)) return { value: true, ok: true };
+			if (FALSE_WORDS.includes(word)) return { value: false, ok: true };
+			return { value: null, ok: false };
+		}
+		case "date": {
+			const d = toDate(v);
+			return d ? { value: d, ok: true } : { value: null, ok: false };
+		}
+		default:
+			return { value: v, ok: true };
+	}
+}
+
+/** Sets the type of a field. */
+export function setFieldType(nodes, id, type) {
+	const found = findNode(nodes, id);
+	if (!found || found.node.kind !== "field" || !VALUE_TYPES.includes(type)) return fail("notFound");
+	return ok(updateNode(nodes, id, { type }));
+}
+
+/** Number of values each typed field could not convert, by field id. values(field) lists its values. */
+export function typeIssues(values, shape) {
+	const issues = new Map();
+	walk(shape, (node) => {
+		if (node.kind !== "field" || !node.type || node.type === "auto") return;
+		let bad = 0;
+		for (const v of values(node)) if (!convertValue(v, node.type).ok) bad++;
+		if (bad > 0) issues.set(node.id, bad);
+	});
+	return issues;
+}
+
+// ------------------------------------------------------------------ saved structures
+
+/** What is stored for a saved structure: the shape with column names instead of positions. */
+export function mappingData(shape, columns, options = {}) {
+	const named = (node) => {
+		if (node.kind === "group") return { ...node, children: node.children.map(named) };
+		if (node.kind === "concat") return { ...node, parts: node.parts.map(named) };
+		return { ...node, column: columns[node.source]?.name };
+	};
+	return { shape: shape.map(named), options };
+}
+
+/**
+ * Applies a saved structure to new columns, matching them by name.
+ * Keys whose column is gone are dropped; new columns are added at the end.
+ * @returns {{ nodes, missing: string[], added: string[] }}
+ */
+export function applyMapping(data, columns) {
+	const index = new Map(columns.map((c, i) => [c.name, i]));
+	const used = new Set();
+	const missing = [];
+	const place = (node) => {
+		if (node.kind === "group") {
+			const children = node.children.map(place).filter(Boolean);
+			return children.length ? { ...node, id: newId("g"), children } : null;
+		}
+		if (node.kind === "concat") {
+			const parts = node.parts.map(place).filter(Boolean);
+			if (parts.length === 0) return null;
+			if (parts.length === 1) return { ...parts[0], key: node.key };
+			return { ...node, id: newId("k"), parts };
+		}
+		const source = index.get(node.column);
+		if (source === undefined || used.has(source)) {
+			missing.push(node.column);
+			return null;
+		}
+		used.add(source);
+		const { column, ...field } = node;
+		return { ...field, id: `c${source}`, source };
+	};
+	const nodes = data.shape.map(place).filter(Boolean);
+	const added = [];
+	columns.forEach((c, i) => {
+		if (used.has(i)) return;
+		added.push(c.name);
+		// a new column whose name is already a top level key gets a unique one
+		let key = c.name;
+		for (let n = 2; nodes.some((x) => x.key === key); n++) key = `${c.name}_${n}`;
+		nodes.push({ id: `c${i}`, kind: "field", source: i, key, include: true, type: "auto" });
+	});
+	return { nodes, missing, added };
 }

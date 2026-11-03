@@ -1,16 +1,16 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { SESSION_COOKIE, verifyToken } from "@/lib/session";
+import { getCurrentUser } from "@/lib/auth";
 import Navbar from "@/Components/Navbar";
 
-// Pages that need a signed in user (the middleware already redirects, this is a second check)
+// Pages that need a signed in user. The middleware already checks the token signature;
+// this also signs out deleted accounts and sessions older than the last password change.
 export default async function ProtectedLayout({ children }) {
-	const session = await verifyToken((await cookies()).get(SESSION_COOKIE)?.value);
-	if (!session) redirect("/login");
+	const user = await getCurrentUser();
+	if (!user) redirect("/login?sign-in");
 
 	return (
 		<>
-			<Navbar />
+			<Navbar username={user.username} />
 			{children}
 		</>
 	);

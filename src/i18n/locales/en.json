@@ -19,7 +19,8 @@
 		"contactUs": "Contact us",
 		"logout": "Log out",
 		"signIn": "Sign in",
-		"signUp": "Sign up"
+		"signUp": "Sign up",
+		"account": "Your account"
 	},
 	"home": {
 		"title": "Excel → JSON",
@@ -113,7 +114,8 @@
 			"noServerResponse": "The server didn't respond. Check your connection and try again.",
 			"missingCredentials": "Enter your email and password.",
 			"unauthorized": "Email or password is incorrect.",
-			"loginFailed": "Login failed"
+			"loginFailed": "Login failed",
+			"tooManyAttempts": "Too many attempts. Try again in {{minutes}} min."
 		}
 	},
 	"dropzone": {
@@ -296,7 +298,9 @@
 			"notIncluded": "left out",
 			"showMore": "Show more rows",
 			"shown": "{{shown}} of {{total}} rows shown",
-			"selectColumn": "Select the column {{name}}"
+			"selectColumn": "Select the column {{name}}",
+			"headerRow": "Headers in",
+			"rowNumber": "row {{row}}"
 		},
 		"keys": {
 			"title": "JSON keys",
@@ -335,7 +339,11 @@
 			"emptyEmpty": "Empty text",
 			"firstItems": "The first {{shown}} of {{total}} objects. Copy and download include all of them.",
 			"sample": "Built from the first {{count}} objects.",
-			"nothing": "Every column is left out. Include at least one to see the result."
+			"nothing": "Every column is left out. Include at least one to see the result.",
+			"root": "Result as",
+			"rootArray": "A list [ … ]",
+			"rootObject": "An object { key: [ … ] }",
+			"rootKey": "Key holding the list"
 		},
 		"actions": {
 			"copy": "Copy JSON",
@@ -343,7 +351,16 @@
 			"downloadJson": "Download JSON",
 			"downloadExcel": "Download Excel",
 			"send": "Send to an API",
-			"visualize": "Open in visualizer"
+			"visualize": "Open in visualizer",
+			"otherFormats": "Other formats",
+			"formats": {
+				"jsonl": "JSON Lines (.jsonl)",
+				"jsonlHint": "One object per line, for bulk imports and log tools",
+				"csv": "CSV (.csv)",
+				"csvHint": "Nested keys become address.city columns",
+				"excel": "Excel (.xlsx)",
+				"excelHint": "One row per object, nested keys flattened"
+			}
 		},
 		"concat": {
 			"open": "Combine…",
@@ -375,6 +392,17 @@
 			"split": "Split {{key}} back into its keys",
 			"partsTitle": "{{parts}}, joined with {{separator}}. Click to edit.",
 			"keyEdit": "Name of the key"
+		},
+		"types": {
+			"label": "Type of {{key}}",
+			"issue_one": "{{count}} value can't be read as {{type}}: it becomes null",
+			"issue_other": "{{count}} values can't be read as {{type}}: they become null",
+			"auto": "as is",
+			"text": "text",
+			"number": "number",
+			"integer": "integer",
+			"boolean": "true/false",
+			"date": "date"
 		}
 	},
 	"apiTester": {
@@ -494,6 +522,51 @@
 			"unauthorized": {
 				"title": "Your session has expired",
 				"text": "Sign in again to keep testing."
+			},
+			"tooManyRequests": {
+				"title": "Too many requests through the XLSX server",
+				"text": "Wait a minute before sending more, or send from this browser."
+			}
+		},
+		"batch": {
+			"switch_one": "Send one request per item ({{count}} request)",
+			"switch_other": "Send one request per item ({{count}} requests)",
+			"switchHint": "Each item of the array becomes the body of its own request. Use {{id}} in the URL to put a value of the item in it.",
+			"concurrency": "At the same time",
+			"sendAll_one": "Send {{count}}",
+			"sendAll_other": "Send {{count}}",
+			"placeholders": "{{names}} filled from each item.",
+			"placeholdersOff": "Placeholders like {{id}} are only filled when sending one request per item.",
+			"running": "requests sent",
+			"stopped": "Stopped",
+			"finished": "Finished",
+			"ok_one": "{{count}} succeeded",
+			"ok_other": "{{count}} succeeded",
+			"failed_one": "{{count}} failed",
+			"failed_other": "{{count}} failed",
+			"progress": "Requests sent",
+			"stop": "Stop",
+			"retry_one": "Retry the failed one",
+			"retry_other": "Retry the {{count}} failed",
+			"report": "Download the report",
+			"onlyFailed": "Failures only",
+			"colStatus": "Status",
+			"colUrl": "URL and answer",
+			"colTime": "Time",
+			"notSent": "not sent",
+			"noFailed": "No failure.",
+			"starting": "Starting…",
+			"errors": {
+				"network": "no response",
+				"aborted": "stopped",
+				"timeout": "timeout",
+				"privateAddress": "private address",
+				"dnsFailed": "host not found",
+				"unreachable": "unreachable",
+				"invalidUrl": "invalid URL",
+				"invalidRequest": "invalid request",
+				"tooManyRequests": "too many requests",
+				"unauthorized": "signed out"
 			}
 		}
 	},
@@ -517,7 +590,8 @@
 		"views": {
 			"result": "Result",
 			"original": "Original",
-			"graph": "Graph"
+			"graph": "Graph",
+			"tables": "Tables"
 		},
 		"missing": {
 			"label": "Missing keys",
@@ -539,5 +613,280 @@
 			"notJsonFile": "{{name}} isn't a .json file. To convert a spreadsheet, use Excel to JSON."
 		},
 		"keysHelp": "Tick keys to group them under a new key, or ungroup a nested object to flatten it. Click a key to rename it."
+	},
+	"mappings": {
+		"button": "Saved structures",
+		"title": "Saved structures",
+		"help": {
+			"sheet": "Save the keys you built to apply them to next month's file. Columns are matched by their header.",
+			"json": "Save the keys you built to apply them to other JSON with the same keys."
+		},
+		"name": "Name of the structure",
+		"save": "Save",
+		"saved": "Saved as {{name}}.",
+		"replaceQuestion": "A structure named {{name}} exists. Replace it?",
+		"replace": "Replace",
+		"savedTitle": "Your structures",
+		"none": "Nothing saved yet.",
+		"updated": "Saved {{date}}",
+		"apply": "Apply",
+		"delete": "Delete",
+		"deleteNamed": "Delete {{name}}",
+		"deleted": "{{name}} deleted.",
+		"applied": "Applied {{name}}.",
+		"missing_one": "Not in this file: {{names}}.",
+		"missing_other": "Not in this file ({{count}}): {{names}}.",
+		"added_one": "New column added at the end: {{names}}.",
+		"added_other": "New columns added at the end ({{count}}): {{names}}.",
+		"missingKeys_one": "No object has the key {{names}}.",
+		"missingKeys_other": "No object has these keys ({{count}}): {{names}}.",
+		"addedKeys_one": "New key added at the end: {{names}}.",
+		"addedKeys_other": "New keys added at the end ({{count}}): {{names}}.",
+		"dismiss": "Dismiss",
+		"errors": {
+			"load": "Your saved structures couldn't be loaded. Check your connection.",
+			"name": "Give the structure a name.",
+			"save": "The structure couldn't be saved. Try again.",
+			"delete": "The structure couldn't be deleted. Try again.",
+			"tooLarge": "This structure is too large to be saved.",
+			"tooMany": "You have 200 saved items, the maximum. Delete some first."
+		}
+	},
+	"savedRequests": {
+		"button": "Saved requests",
+		"title": "Saved requests",
+		"name": "Name of the request",
+		"withBody": "Save the body too",
+		"noAuth": "The method, URL and headers are saved. Tokens and passwords of the Auth tab are never saved.",
+		"listTitle": "Your requests",
+		"none": "No saved request yet.",
+		"open": "Open",
+		"errors": {
+			"load": "Your saved requests couldn't be loaded. Check your connection.",
+			"name": "Give the request a name.",
+			"save": "The request couldn't be saved. Try again.",
+			"delete": "The request couldn't be deleted. Try again.",
+			"tooLarge": "The body is too large to be saved. Save the request without its body.",
+			"tooMany": "You have 200 saved items, the maximum. Delete some first."
+		}
+	},
+	"account": {
+		"since": "Member since {{date}}",
+		"profile": {
+			"title": "Profile",
+			"save": "Save changes",
+			"saved": "Profile saved."
+		},
+		"password": {
+			"title": "Password",
+			"text": "Changing it signs you out on your other devices.",
+			"current": "Current password",
+			"new": "New password",
+			"save": "Change password",
+			"changed": "Password changed. Your other devices are signed out."
+		},
+		"saved": {
+			"title": "Saved in your account",
+			"mappings": "Structures",
+			"requests": "API requests",
+			"note": "Your files and data are never stored: only the structures and requests you save.",
+			"emptyStructures": "No structure saved yet. Build one in",
+			"emptyRequests": "No request saved yet. Save one in",
+			"loadError": "Your saved work couldn't be loaded. Reload the page.",
+			"deleteError": "{{name}} couldn't be deleted. Try again."
+		},
+		"delete": {
+			"title": "Delete the account",
+			"text": "Your account, {{mappings}} saved structures and {{requests}} saved requests are deleted for good. This can't be undone.",
+			"open": "Delete my account",
+			"password": "Enter your password to confirm",
+			"confirm": "I understand that everything is deleted for good.",
+			"submit": "Delete the account"
+		},
+		"errors": {
+			"load": "Your account couldn't be loaded. Reload the page.",
+			"failed": "That didn't work. Try again.",
+			"invalidUsername": "Enter a user name of 60 characters at most.",
+			"invalidEmail": "Enter a valid email address.",
+			"emailTaken": "Another account already uses this email.",
+			"wrongPassword": "The password is incorrect.",
+			"weakPassword": "Use at least {{min}} characters.",
+			"tooManyAttempts": "Too many attempts. Wait 15 minutes and try again."
+		},
+		"hero": {
+			"text": "Your account, as JSON. Edit the name or email right in it, then save.",
+			"hint": "Click a value to edit it",
+			"clean": "Saved",
+			"unsaved": "Unsaved changes",
+			"discard": "Discard"
+		}
+	},
+	"contact": {
+		"title": "Contact us",
+		"text": "A question, a bug, an idea for the converter? Write to us and we answer by email.",
+		"tips": {
+			"bug": "For a bug, say what you did, what you expected and what happened. The file type helps too.",
+			"privacy": "Don't paste personal or confidential data from your files."
+		},
+		"name": "Your name",
+		"email": "Your email",
+		"topic": "Topic",
+		"topics": {
+			"question": "Question",
+			"bug": "Bug",
+			"idea": "Idea",
+			"account": "Account",
+			"other": "Other"
+		},
+		"message": "Message",
+		"bugPlaceholder": "What did you do, what did you expect, what happened?",
+		"count": "{{count}} / {{max}}",
+		"send": "Send the message",
+		"sending": "Sending…",
+		"sentTitle": "Message sent",
+		"sentText": "Thank you. We answer at {{email}}.",
+		"another": "Send another message",
+		"errors": {
+			"required": "This field is required.",
+			"invalidEmail": "Enter a valid email address.",
+			"messageLength": "Write at least 10 characters.",
+			"tooMany": "Too many messages sent. Try again in an hour.",
+			"failed": "The message couldn't be sent. Check your connection and try again."
+		}
+	},
+	"dbLoad": {
+		"steps": {
+			"target": "Database",
+			"tables": "Tables",
+			"collections": "Collections",
+			"output": "Script or files"
+		},
+		"groups": {
+			"sql": "SQL",
+			"nosql": "NoSQL and search"
+		},
+		"modes": {
+			"label": "Tables view",
+			"load": "Load into a database",
+			"diagram": "Diagram",
+			"insert": "Insert all rows",
+			"upsert": "Insert or update (by key)",
+			"skip": "Insert new rows only (by key)"
+		},
+		"import": {
+			"button": "Use my tables (CREATE TABLE)",
+			"title": "Use your own tables",
+			"text": "Paste the CREATE TABLE statements of your database. Columns are matched to the data by name; a table named like a list of the data (lines, order_lines) takes one row per element of that list.",
+			"openFile": "Open a .sql file",
+			"submit": "Map the data onto these tables"
+		},
+		"table": {
+			"name": "Table",
+			"rowsFrom": "One row per",
+			"eachItem": "item",
+			"eachOf": "element of {{list}}",
+			"remove": "Remove this table",
+			"auto": "Back to automatic tables",
+			"autoText": "Tables built from the data: nested objects become columns, lists of objects get their own table linked to their parent. Edit anything to adjust it.",
+			"customText": "Your tables. Choose for each column where its value comes from.",
+			"add": "Add a table",
+			"none": "Add a table to choose what goes into it.",
+			"preview_one": "First rows ({{count}} row in all)",
+			"preview_other": "First rows ({{count}} rows in all)",
+			"rows_one": "{{count}} row",
+			"rows_other": "{{count}} rows",
+			"columns_one": "{{count}} column",
+			"columns_other": "{{count}} columns",
+			"autoTextDocs": "One collection with each item as a document, nested objects and lists kept inside. Add collections or change the fields to split it."
+		},
+		"column": {
+			"key": "Key",
+			"keyTitle": "Primary key: used to update or skip existing rows",
+			"keyOf": "{{column}} is a key",
+			"name": "Column",
+			"type": "Type",
+			"typeOf": "Type of {{column}}",
+			"source": "Value from",
+			"sourceOf": "Value of {{column}}",
+			"tools": "Order and removal",
+			"remove": "Remove {{column}}",
+			"add": "Add a column",
+			"issue_one": "{{count}} value can't be converted (NULL)",
+			"issue_other": "{{count}} values can't be converted (NULL)"
+		},
+		"source": {
+			"inRow": "In the row",
+			"inParent": "In the parent row",
+			"generated": "Generated",
+			"itself": "the value itself",
+			"row": "Running number (1, 2, 3…)",
+			"parentRow": "Running number of the parent row",
+			"index": "Position in its list",
+			"const": "Fixed value…",
+			"none": "Nothing (NULL)",
+			"constPlaceholder": "value",
+			"constLabel": "Fixed value of {{column}}"
+		},
+		"types": {
+			"integer": "integer",
+			"bigint": "big integer",
+			"float": "decimal number",
+			"decimal": "exact decimal",
+			"boolean": "true/false",
+			"date": "date",
+			"datetime": "date and time",
+			"string": "short text",
+			"text": "long text",
+			"json": "JSON"
+		},
+		"output": {
+			"kind": "What to generate",
+			"files": "Generated files",
+			"download": "Download {{name}}",
+			"commands": "Commands to import the files",
+			"truncated": "First {{shown}} lines of {{total}}. Copy and download contain everything.",
+			"downloadAll_one": "Download {{count}} file",
+			"downloadAll_other": "Download the {{count}} files",
+			"sql": {
+				"script": "SQL script",
+				"scriptHint": "Run it in your SQL client: tables created if missing, then the rows.",
+				"files": "CSV files",
+				"filesHint": "One file per table, with the import command of your database. Best for large data."
+			},
+			"mongo": {
+				"script": "mongosh script",
+				"scriptHint": "Run it with mongosh: insertMany, or bulkWrite to update by key.",
+				"files": "Files for mongoimport",
+				"filesHint": "One file per collection, with the mongoimport command."
+			},
+			"cql": {
+				"script": "CQL script",
+				"scriptHint": "Run it with cqlsh: tables created if missing, rows in batches.",
+				"files": "CSV files",
+				"filesHint": "One file per table, with the cqlsh COPY command."
+			},
+			"es": {
+				"script": "Bulk file",
+				"scriptHint": "Send it to the _bulk API; the commands also create the indexes with their field types."
+			}
+		},
+		"options": {
+			"mode": "Existing rows",
+			"createTables": "Create the tables if they don't exist",
+			"transaction": "All or nothing (transaction)",
+			"batch": "Rows per statement"
+		},
+		"namespace": {
+			"schema": "Schema",
+			"database": "Database",
+			"keyspace": "Keyspace",
+			"optional": "optional",
+			"indexPrefix": "Index prefix"
+		},
+		"warnings": {
+			"noKey": "No key column in {{tables}}: their rows are simply inserted. Tick the key columns to update or skip existing rows.",
+			"issues_one": "{{count}} value can't be converted to its column type and becomes NULL. Check the types in step 2.",
+			"issues_other": "{{count}} values can't be converted to their column type and become NULL. Check the types in step 2."
+		}
 	}
 }

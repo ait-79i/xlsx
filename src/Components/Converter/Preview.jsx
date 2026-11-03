@@ -6,6 +6,9 @@ import JsonGraph from '../Flow/JsonGraph'
 import SchemaDiagram from '../Flow/SchemaDiagram'
 import { applySchemaOverrides, inferSchema } from '../../utils/schemaInference'
 import { highlightJson } from '../JsonCode'
+import { wrapOutput } from '../../utils/output'
+import { useSessionState } from '../../utils/useSessionState'
+import DbLoad from '../DbLoad/DbLoad'
 
 const VIEWS = ['json', 'graph', 'tables']
 const JSON_ITEMS = 20
@@ -15,7 +18,7 @@ const TABLE_ITEMS = 500
 
 const NO_OVERRIDES = { tableNames: {}, columnTypes: {} }
 
-const Tables = ({ data, total }) => {
+const Diagram = ({ data, total }) => {
   const { t } = useTranslation()
   const [overrides, setOverrides] = useState(NO_OVERRIDES)
   const base = useMemo(() => inferSchema(data, { rootName: 'rows' }), [data])
@@ -41,10 +44,31 @@ const Tables = ({ data, total }) => {
   )
 }
 
-const Preview = ({ json, emptyCells, setEmptyCells, view, setView, hasFields }) => {
+/** Tables: the diagram of the tables found in the data, or loading the data into a database. */
+export const Tables = ({ data, all, total, rootName, stateKey }) => {
+  const { t } = useTranslation()
+  const [mode, setMode] = useSessionState(`${stateKey}:mode`, 'load')
+  return (
+    <>
+      <div className="db-modes" role="radiogroup" aria-label={t('dbLoad.modes.label')}>
+        {['load', 'diagram'].map((m) => (
+          <label key={m} className={mode === m ? 'is-on' : undefined}>
+            <input type="radio" name={`${stateKey}-mode`} checked={mode === m} onChange={() => setMode(m)} />
+            {t(`dbLoad.modes.${m}`)}
+          </label>
+        ))}
+      </div>
+      {mode === 'diagram'
+        ? <Diagram data={data} total={total} />
+        : <DbLoad items={all} rootName={rootName} stateKey={stateKey} />}
+    </>
+  )
+}
+
+const Preview = ({ json, emptyCells, setEmptyCells, view, setView, hasFields, output = { root: 'array' }, setOutput, tableName = 'data' }) => {
   const { t } = useTranslation()
   const id = useId()
-  const text = useMemo(() => JSON.stringify(json.slice(0, JSON_ITEMS), null, 2), [json])
+  const text = useMemo(() => JSON.stringify(wrapOutput(json.slice(0, JSON_ITEMS), output), null, 2), [json, output])
   const graphData = useMemo(() => json.slice(0, GRAPH_ITEMS), [json])
   const tableData = useMemo(() => json.slice(0, TABLE_ITEMS), [json])
 
@@ -86,6 +110,21 @@ const Preview = ({ json, emptyCells, setEmptyCells, view, setView, hasFields }) 
             <option value="empty">{t('converter.preview.emptyEmpty')}</option>
           </select>
         </label>
+        {setOutput && (
+          <div className="cv-select-label cv-root">
+            <label htmlFor={`${id}-root`}>{t('converter.preview.root')}</label>
+            <select id={`${id}-root`} className="cv-select" value={output.root}
+              onChange={(e) => setOutput({ ...output, root: e.target.value })}>
+              <option value="array">{t('converter.preview.rootArray')}</option>
+              <option value="object">{t('converter.preview.rootObject')}</option>
+            </select>
+            {output.root === 'object' && (
+              <input className="cv-input cv-input--key cv-root__key" value={output.rootKey ?? ''} dir="ltr" spellCheck="false"
+                aria-label={t('converter.preview.rootKey')} placeholder="data"
+                onChange={(e) => setOutput({ ...output, rootKey: e.target.value })} />
+            )}
+          </div>
+        )}
       </header>
 
       <div className="cv-preview__body" role="tabpanel" id={`${id}-panel`} aria-labelledby={`${id}-${view}`}>
@@ -103,7 +142,7 @@ const Preview = ({ json, emptyCells, setEmptyCells, view, setView, hasFields }) 
                 {json.length > GRAPH_ITEMS && <p className="cv-note">{t('converter.preview.sample', { count: GRAPH_ITEMS })}</p>}
                 <div className="cv-canvas"><JsonGraph data={graphData} /></div>
               </>
-              : <Tables data={tableData} total={json.length} />}
+              : <Tables data={tableData} all={json} total={json.length} rootName={tableName} stateKey="dbLoad:converter" />}
       </div>
     </section>
   )
